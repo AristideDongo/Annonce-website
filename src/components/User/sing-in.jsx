@@ -1,23 +1,14 @@
-import { FcGoogle } from "react-icons/fc"
-import { ImFacebook2 } from "react-icons/im"
-import { Link } from "react-router-dom"
+import { FcGoogle } from "react-icons/fc";
+import { ImFacebook2 } from "react-icons/im";
+import { Link } from "react-router-dom";
 
-
-const Singup = () => {
- return(
-  <>
-   <div className="min-h-screen flex items-center justify-center bg-gray-100">
+const Singin = () => {
+  return (
+    <>
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
           <h2 className="text-2xl font-bold mb-6 text-center">Connexion</h2>
           <form>
-            <div className="mb-4">
-              <label className="block text-gray-700">Nom</label>
-              <input
-                type="text"
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-                placeholder="Votre nom"
-              />
-            </div>
             <div className="mb-4">
               <label className="block text-gray-700">Email</label>
               <input
@@ -27,27 +18,11 @@ const Singup = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700">Numéro</label>
-              <input
-                type="text"
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-                placeholder="Votre numéro"
-              />
-            </div>
-            <div className="mb-4">
               <label className="block text-gray-700">Mot de passe</label>
               <input
                 type="password"
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Votre mot de passe"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Confirmation du mot de passe</label>
-              <input
-                type="password"
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-                placeholder="Confirmez votre mot de passe"
               />
             </div>
             <button
@@ -71,14 +46,14 @@ const Singup = () => {
             </Link>
           </div>
           <div className="mt-2 text-center">
-            <Link to="/src/components/User/sing-in.jsx" className="text-blue-500 hover:underline">
-              Connexion
+            <Link to="/src/components/User/sing-up.jsx" className="text-blue-500 hover:underline">
+              Inscription
             </Link>
           </div>
         </div>
       </div>
-  </>
- )
-}
+    </>
+  );
+};
 
-export default Singup
+export default Singin;

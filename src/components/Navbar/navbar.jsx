@@ -30,7 +30,7 @@ const Navbar = () => {
           <Link to="/">SITE ANNNONCE</Link>
         </div>
         <div className="flex space-x-4">
-          <Link to="#" className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+          <Link to="/" className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium flex items-center">
             <FaHome className="mr-2"/> Acceuil
           </Link>
           <div className="relative">
@@ -63,8 +63,8 @@ const Navbar = () => {
             {isAccountMenuOpen && (
               <ul className="absolute bg-gray-800 mt-2 rounded-md shadow-lg z-10">
                 <li><Link to="/src/components/User/profile.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><FaRegUser className="mr-2"/> Profile</Link></li>
-                <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><IoSettingsOutline className="mr-2"/> Paramètres</Link></li>
-                <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><IoLogInOutline className="mr-2"/> Connexion</Link></li>
+                <li><Link to="/src/components/User/setting.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><IoSettingsOutline className="mr-2"/> Paramètres</Link></li>
+                <li><Link to="/src/components/User/sing-in.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><IoLogInOutline className="mr-2"/> Connexion</Link></li>
               </ul>
             )}
           </div>
