@@ -8,7 +8,7 @@ const Singup = () => {
   <>
    <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-6 text-center">Connexion</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center">INSCRIPTION</h2>
           <form>
             <div className="mb-4">
               <label className="block text-gray-700">Nom</label>
@@ -52,9 +52,9 @@ const Singup = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-200"
+              className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-green-600 transition duration-200"
             >
-              Connexion
+              INSCRIPTION
             </button>
           </form>
           <div className="mt-6 flex justify-between items-center">
@@ -66,7 +66,7 @@ const Singup = () => {
             </button>
           </div>
           <div className="mt-6 text-center">
-            <Link to="#" className="text-blue-500 hover:underline">
+            <Link to="/src/components/User/mdpoublie.jsx" className="text-blue-500 hover:underline">
               Mot de passe oublié ?
             </Link>
           </div>
