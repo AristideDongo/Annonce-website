@@ -29,7 +29,7 @@ const Navbar = () => {
         <div className="text-white text-lg font-bold">
           <Link to="/">SITE ANNNONCE</Link>
         </div>
-        <div className="flex space-x-4">
+        <div className="hidden md:flex space-x-4">
           <Link to="/" className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium flex items-center">
             <FaHome className="mr-2"/> Acceuil
           </Link>
@@ -72,7 +72,38 @@ const Navbar = () => {
             <IoDuplicateOutline className="mr-2"/> Déposer une annonce
           </Link>
         </div>
+        <div className="md:hidden flex items-center">
+          <button className="text-white" onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}>
+            <BiCategory className="text-2xl"/>
+          </button>
+          <button className="text-white ml-4" onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}>
+            <FaRegUserCircle className="text-2xl"/>
+          </button>
+        </div>
       </div>
+      {isCategoriesOpen && (
+        <div className="md:hidden bg-gray-800 p-4">
+          <ul>
+            <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><IoIosHome className="mr-2"/> IMMOBILIER</Link></li>
+            <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><FaCar className="mr-2"/> VEHICULE</Link></li>
+            <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><TbRazorElectric className="mr-2"/> ELECTROMENAGER</Link></li>
+            <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><MdComputer className="mr-2"/> ELECTRONIQUE</Link></li>
+            <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><SlUser className="mr-2"/> MODE HOMME</Link></li>
+            <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><SlUserFemale className="mr-2"/> MODE FEMME</Link></li>
+            <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><FaBaby className="mr-2"/> MODE ENFANT</Link></li>
+            <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><MdOutlineOtherHouses className="mr-2"/> AUTRES</Link></li>
+          </ul>
+        </div>
+      )}
+      {isAccountMenuOpen && (
+        <div className="md:hidden bg-gray-800 p-4">
+          <ul>
+            <li><Link to="/src/components/User/profile.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><FaRegUser className="mr-2"/> Profile</Link></li>
+            <li><Link to="/src/components/User/setting.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><IoSettingsOutline className="mr-2"/> Paramètres</Link></li>
+            <li><Link to="/src/components/User/sing-in.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><IoLogInOutline className="mr-2"/> Connexion</Link></li>
+          </ul>
+        </div>
+      )}
     </nav>
   );
 };

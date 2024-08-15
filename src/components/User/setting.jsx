@@ -117,7 +117,7 @@ const Setting = () => {
       <h1 className="text-2xl font-bold mb-4">Paramètres du compte</h1>
       
       <div className="flex flex-wrap -mx-2">
-        <div className="w-full md:w-1/2 px-2">
+        <div className="w-full lg:w-1/2 px-2">
           <form onSubmit={handleSubmitUserInfo} className="mb-6">
             <h2 className="text-xl font-semibold mb-2">Informations personnelles</h2>
             <div className="mb-4">
@@ -179,7 +179,7 @@ const Setting = () => {
           </form>
         </div>
 
-        <div className="w-full md:w-1/2 px-2">
+        <div className="w-full lg:w-1/2 px-2">
           <form onSubmit={handleSubmitPassword} className="mb-6">
             <h2 className="text-xl font-semibold mb-2">Changer le mot de passe</h2>
             <div className="mb-4">
@@ -220,4 +220,4 @@ const Setting = () => {
   );
 };
 
-export default Setting
+export default Setting;

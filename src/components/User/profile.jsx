@@ -10,22 +10,22 @@ const Profile = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-100 flex flex-col items-center">
-        <div className="bg-white shadow-md rounded-lg p-6 mt-10 w-full max-w-2xl">
-          <div className="flex items-center space-x-4">
+      <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4 sm:p-6 lg:p-8">
+        <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 lg:p-8 mt-10 w-full max-w-2xl">
+          <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
             <img
-              className="w-24 h-24 rounded-full"
+              className="w-24 h-24 sm:w-32 sm:h-32 rounded-full"
               src="https://via.placeholder.com/150"
               alt="Profile"
             />
-            <div>
-              <h2 className="text-2xl font-bold">John Doe</h2>
+            <div className="text-center sm:text-left">
+              <h2 className="text-2xl sm:text-3xl font-bold">John Doe</h2>
               <p className="text-gray-600">+225 0102030405</p>
               <p className="text-gray-600">john.doe@example.com</p>
             </div>
           </div>
           <div className="mt-6">
-            <h3 className="text-xl font-semibold">Mes annonces</h3>
+            <h3 className="text-xl sm:text-2xl font-semibold">Mes annonces</h3>
             <div className="mt-4">
               <label htmlFor="sort" className="block text-gray-700">Trier par:</label>
               <select
@@ -47,11 +47,11 @@ const Profile = () => {
             </div>
             <ul className="mt-4 space-y-4">
               <li className="bg-gray-50 p-4 rounded-lg shadow">
-                <h4 className="text-lg font-bold">Annonce 1</h4>
+                <h4 className="text-lg sm:text-xl font-bold">Annonce 1</h4>
                 <p className="text-gray-600">Description de l'annonce 1...</p>
               </li>
               <li className="bg-gray-50 p-4 rounded-lg shadow">
-                <h4 className="text-lg font-bold">Annonce 2</h4>
+                <h4 className="text-lg sm:text-xl font-bold">Annonce 2</h4>
                 <p className="text-gray-600">Description de l'annonce 2...</p>
               </li>
             </ul>
