@@ -68,7 +68,7 @@ const Navbar = () => {
               </ul>
             )}
           </div>
-          <Link to="#" className="bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 flex items-center">
+          <Link to="/src/components/Annonce/annonce.jsx" className="bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 flex items-center">
             <IoDuplicateOutline className="mr-2"/> Déposer une annonce
           </Link>
         </div>

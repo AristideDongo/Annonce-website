@@ -5,7 +5,7 @@ const Home = () => {
         <div className="grid grid-cols-12 gap-4">
           {/* Section de tri des produits */}
           <aside className="col-span-2 bg-gray-100 p-2 rounded-s-lg shadow-md max-h-72 overflow-auto">
-            <h2 className="text-lg font-bold mb-2 text-center">Trier les produits</h2>
+            <h2 className="text-lg font-bold mb-2 text-center">Trier par</h2>
             <div className="flex flex-col space-y-1">
               <button className="text-gray-900 bg-white p-1 rounded-lg shadow-md hover:bg-blue-100">
                 Prix Haut

@@ -5,6 +5,7 @@ import Setting from "./User/setting";
  import Singin from "./User/sing-in";
 import Singup from "./User/sing-up";
 import Mdpoublie from "./User/mdpoublie";
+import Annonce from "./Annonce/annonce";
 
 const Rout = () =>{
  return(
@@ -15,7 +16,8 @@ const Rout = () =>{
   <Route path="/src/components/User/setting.jsx" element={<Setting/>}/>
   <Route path="/src/components/User/sing-in.jsx" element={<Singin/>}/>
   <Route path="/src/components/User/sing-up.jsx" element={<Singup/>}/>
-  <Route path="/src/components/User/mdpoublie.jsx" element={<Mdpoublie/>} />
+  <Route path="/src/components/User/mdpoublie.jsx" element={<Mdpoublie/>}/>
+  <Route path="/src/components/Annonce/annonce.jsx" element={<Annonce/>} />
   </Routes>
   </>
  )
