@@ -6,8 +6,12 @@ import Setting from "./User/setting";
 import Singup from "./User/sing-up";
 import Mdpoublie from "./User/mdpoublie";
 import Annonce from "./Annonce/annonce";
+import Conditions from "./Confidentilite/conditions";
+import Politique from "./Confidentilite/Politique";
+import Faq from "./Confidentilite/faq";
+import About from "./Confidentilite/about";
 
-const Rout = () =>{
+const Rout = () => {
  return(
   <>
   <Routes>
@@ -18,6 +22,10 @@ const Rout = () =>{
   <Route path="/src/components/User/sing-up.jsx" element={<Singup/>}/>
   <Route path="/src/components/User/mdpoublie.jsx" element={<Mdpoublie/>}/>
   <Route path="/src/components/Annonce/annonce.jsx" element={<Annonce/>} />
+  <Route path="/src/components/Confidentilite/conditions.jsx" element= {<Conditions/>}/>
+  <Route path="/src/components/Confidentilite/Politique.jsx" element={ <Politique/>}/>
+  <Route path="/src/components/Confidentilite/faq.jsx" element={<Faq/>}/> 
+  <Route path="/src/components/Confidentilite/about.jsx" element={<About/>} />
   </Routes>
   </>
  )
