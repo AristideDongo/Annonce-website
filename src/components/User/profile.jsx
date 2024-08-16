@@ -2,10 +2,23 @@ import React, { useState } from 'react';
 
 const Profile = () => {
   const [sortOption, setSortOption] = useState('');
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [photoURL, setPhotoURL] = useState('https://via.placeholder.com/150');
 
   const handleSortChange = (event) => {
     setSortOption(event.target.value);
     // Ajoutez ici la logique de tri en fonction de l'option sélectionnée
+  };
+
+  const handlePhotoChange = (event) => {
+    const file = event.target.files[0];
+    setProfilePhoto(file);
+    setPhotoURL(URL.createObjectURL(file));
+  };
+
+  const handlePhotoUpload = () => {
+    // Ajoutez ici la logique pour télécharger la photo de profil
+    console.log('Photo de profil téléchargée:', profilePhoto);
   };
 
   return (
@@ -15,7 +28,7 @@ const Profile = () => {
           <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
             <img
               className="w-24 h-24 sm:w-32 sm:h-32 rounded-full"
-              src="https://via.placeholder.com/150"
+              src={photoURL}
               alt="Profile"
             />
             <div className="text-center sm:text-left">
@@ -23,6 +36,20 @@ const Profile = () => {
               <p className="text-gray-600">+225 0102030405</p>
               <p className="text-gray-600">john.doe@example.com</p>
             </div>
+          </div>
+          <div className="mt-4">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handlePhotoChange}
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+            />
+            <button
+              onClick={handlePhotoUpload}
+              className="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+            >
+              Télécharger la photo de profil
+            </button>
           </div>
           <div className="mt-6">
             <h3 className="text-xl sm:text-2xl font-semibold">Mes annonces</h3>
