@@ -18,6 +18,7 @@ import Menfant from "./Category/mode-enfant";
 import Mfemme from "./Category/mode-femme";
 import Mhomme from "./Category/mode-home";
 import Vehicule from "./Category/vehicule";
+import Detail from "./Detail/detail";
 
 const Rout = () => {
  return(
@@ -42,6 +43,7 @@ const Rout = () => {
   <Route path="/src/components/Category/mode-femme.jsx" element={<Mfemme/>}/>
   <Route path="/src/components/Category/mode-home.jsx" element={<Mhomme/>} />
   <Route path="/src/components/Category/vehicule.jsx" element={<Vehicule/>} />
+  <Route path="/src/components/Detail/detail.jsx" element={<Detail/>}/>
   </Routes>
   </>
  )

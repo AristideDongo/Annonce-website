@@ -37,9 +37,11 @@ const Electronique= () => {
           <h2 className="text-xl font-bold mb-2">Titre de l'annonce</h2>
           <p className="text-gray-700">Description de l'annonce...</p>
           <p className="text-gray-500 mt-2">Prix: 100€</p>
+          <Link to="/src/components/Detail/detail.jsx">
           <button className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 mt-2">
             Détail
           </button>
+          </Link>
         </div>
         {/* Répétez ce bloc pour chaque annonce */}
       </div>

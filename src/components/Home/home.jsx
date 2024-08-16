@@ -1,4 +1,5 @@
 import { BsTelephone, BsArrowUp, BsArrowDown, BsStar, BsStarHalf, BsClock } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -38,9 +39,11 @@ const Home = () => {
                   <img src="url_de_votre_image" alt="Description de l'image" className="w-full h-48 object-cover rounded-t-lg" />
                   <h3 className="text-xl font-semibold mt-4">Titre de l'annonce</h3>
                   <p className="text-gray-600">Description de l'annonce...</p>
-                  <button className="text-blue-500 bg-white p-2 rounded-lg shadow-md hover:bg-blue-100 flex items-center">
-                    <BsTelephone className="mr-2"/> Contacter-Moi
-                  </button>
+                  <Link to="/src/components/Detail/detail.jsx">
+                    <button className="text-white bg-blue-500 p-2 rounded-lg shadow-md hover:bg-green-600 flex items-center">
+                      Détails
+                    </button>
+                  </Link>
                 </div>
               </div>
             </section>
@@ -54,9 +57,11 @@ const Home = () => {
                   <img src="url_de_votre_image" alt="Description de l'image" className="w-full h-48 object-cover rounded-t-lg" />
                   <h3 className="text-xl font-semibold mt-4">Titre de l'annonce</h3>
                   <p className="text-gray-600">Description de l'annonce...</p>
-                  <button className="text-blue-500 bg-white p-2 rounded-lg shadow-md hover:bg-blue-100 flex items-center">
-                    <BsTelephone className="mr-2"/> Contacter-Moi
-                  </button>
+                  <Link to="/src/components/Detail/detail.jsx">
+                    <button className="text-white bg-blue-500 p-2 rounded-lg shadow-md hover:bg-green-600 flex items-center">
+                      Détails
+                    </button>
+                  </Link>
                 </div>
                 {/* Ajouter d'autres annonces ici */}
               </div>
