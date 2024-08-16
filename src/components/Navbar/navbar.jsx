@@ -42,14 +42,14 @@ const Navbar = () => {
             </button>
             {isCategoriesOpen && (
               <ul className="absolute bg-gray-800 mt-2 rounded-md shadow-lg z-10">
-                <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><IoIosHome className="mr-2"/> IMMOBILIER</Link></li>
-                <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><FaCar className="mr-2"/> VEHICULE</Link></li>
-                <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><TbRazorElectric className="mr-2"/> ELECTROMENAGER</Link></li>
-                <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><MdComputer className="mr-2"/> ELECTRONIQUE</Link></li>
-                <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><SlUser className="mr-2"/> MODE HOMME</Link></li>
-                <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><SlUserFemale className="mr-2"/> MODE FEMME</Link></li>
-                <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><FaBaby className="mr-2"/> MODE ENFANT</Link></li>
-                <li><Link to="#" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><MdOutlineOtherHouses className="mr-2"/> AUTRES</Link></li>
+                <li><Link to="/src/components/Category/immobilier.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><IoIosHome className="mr-2"/> IMMOBILIER</Link></li>
+                <li><Link to="/src/components/Category/vehicule.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><FaCar className="mr-2"/> VEHICULE</Link></li>
+                <li><Link to="/src/components/Category/electromenager.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><TbRazorElectric className="mr-2"/> ELECTROMENAGER</Link></li>
+                <li><Link to="/src/components/Category/electronique.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><MdComputer className="mr-2"/> ELECTRONIQUE</Link></li>
+                <li><Link to="/src/components/Category/mode-home.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><SlUser className="mr-2"/> MODE HOMME</Link></li>
+                <li><Link to="/src/components/Category/mode-femme.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><SlUserFemale className="mr-2"/> MODE FEMME</Link></li>
+                <li><Link to="/src/components/Category/mode-enfant.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><FaBaby className="mr-2"/> MODE ENFANT</Link></li>
+                <li><Link to="/src/components/Category/autres.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"><MdOutlineOtherHouses className="mr-2"/> AUTRES</Link></li>
               </ul>
             )}
           </div>
