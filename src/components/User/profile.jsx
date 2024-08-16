@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Profile = () => {
   const [sortOption, setSortOption] = useState('');
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [photoURL, setPhotoURL] = useState('https://via.placeholder.com/150');
+
+  useEffect(() => {
+    const savedPhotoURL = localStorage.getItem('photoURL');
+    if (savedPhotoURL) {
+      setPhotoURL(savedPhotoURL);
+    }
+  }, []);
 
   const handleSortChange = (event) => {
     setSortOption(event.target.value);
@@ -13,7 +20,9 @@ const Profile = () => {
   const handlePhotoChange = (event) => {
     const file = event.target.files[0];
     setProfilePhoto(file);
-    setPhotoURL(URL.createObjectURL(file));
+    const newPhotoURL = URL.createObjectURL(file);
+    setPhotoURL(newPhotoURL);
+    localStorage.setItem('photoURL', newPhotoURL);
   };
 
   const handlePhotoUpload = () => {

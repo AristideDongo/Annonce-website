@@ -11,6 +11,7 @@ const Annonce = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [photoPreviews, setPhotoPreviews] = useState(['', '']); // État pour les aperçus des photos
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,14 +19,37 @@ const Annonce = () => {
       ...formData,
       [name]: value
     });
+    // Clear the error for the field being changed
+    setErrors({
+      ...errors,
+      [name]: ''
+    });
   };
 
   const handlePhotoChange = (index, e) => {
+    const file = e.target.files[0];
     const newPhotos = [...formData.photos];
-    newPhotos[index] = e.target.files[0];
+    newPhotos[index] = file;
     setFormData({
       ...formData,
       photos: newPhotos
+    });
+
+    // Lire le fichier et mettre à jour l'aperçu
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const newPreviews = [...photoPreviews];
+      newPreviews[index] = reader.result;
+      setPhotoPreviews(newPreviews);
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+
+    // Clear the error for photos if any photo is changed
+    setErrors({
+      ...errors,
+      photos: ''
     });
   };
 
@@ -34,6 +58,11 @@ const Annonce = () => {
     setFormData({
       ...formData,
       [name]: value
+    });
+    // Clear the error for the field being changed
+    setErrors({
+      ...errors,
+      [name]: ''
     });
   };
 
@@ -51,7 +80,7 @@ const Annonce = () => {
       newErrors.description = 'La description ne doit pas dépasser 100 caractères';
     }
 
-    if (!formData.photos[0]) {
+    if (!formData.photos[1]) {
       newErrors.photos = 'Deux photos requise';
     }
 
@@ -112,12 +141,20 @@ const Annonce = () => {
             <div className="mb-4">
               <label className="block text-gray-700">Photos</label>
               {formData.photos.map((photo, index) => (
-                <input
-                  key={index}
-                  type="file"
-                  onChange={(e) => handlePhotoChange(index, e)}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300 mb-2"
-                />
+                <div key={index} className="mb-2">
+                  <input
+                    type="file"
+                    onChange={(e) => handlePhotoChange(index, e)}
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300 mb-2"
+                  />
+                  {photoPreviews[index] && (
+                    <img
+                      src={photoPreviews[index]}
+                      alt={`Preview ${index}`}
+                      className="w-full h-32 object-cover mt-2"
+                    />
+                  )}
+                </div>
               ))}
               {errors.photos && <p className="text-red-500 text-sm">{errors.photos}</p>}
             </div>

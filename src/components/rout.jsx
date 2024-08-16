@@ -43,7 +43,7 @@ const Rout = () => {
   <Route path="/src/components/Category/mode-femme.jsx" element={<Mfemme/>}/>
   <Route path="/src/components/Category/mode-home.jsx" element={<Mhomme/>} />
   <Route path="/src/components/Category/vehicule.jsx" element={<Vehicule/>} />
-  <Route path="/src/components/Detail/detail.jsx" element={<Detail/>}/>
+  <Route path="/src/components/Detail/detail.jsx/" element={<Detail/>}/>
   </Routes>
   </>
  )

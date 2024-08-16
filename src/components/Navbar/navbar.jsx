@@ -78,14 +78,44 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="md:hidden flex items-center">
-          <button className="text-white" onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}>
+          <button className="text-white" onClick={() => {
+            setIsCategoriesOpen(!isCategoriesOpen);
+            setIsAccountMenuOpen(false);
+          }}>
             <BiCategory className="text-2xl"/>
           </button>
-          <button className="text-white ml-4" onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}>
+          <button className="text-white ml-4" onClick={() => {
+            setIsAccountMenuOpen(!isAccountMenuOpen);
+            setIsCategoriesOpen(false);
+          }}>
             <FaRegUserCircle className="text-2xl"/>
           </button>
         </div>
       </div>
+      {/* Mobile menu */}
+      {isCategoriesOpen && (
+        <div className="md:hidden">
+          <ul className="bg-gray-800 mt-2 rounded-md shadow-lg z-10">
+            <li><Link to="/src/components/Category/immobilier.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><IoIosHome className="mr-2"/> IMMOBILIER</Link></li>
+            <li><Link to="/src/components/Category/vehicule.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><FaCar className="mr-2"/> VEHICULE</Link></li>
+            <li><Link to="/src/components/Category/electromenager.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><TbRazorElectric className="mr-2"/> ELECTROMENAGER</Link></li>
+            <li><Link to="/src/components/Category/electronique.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><MdComputer className="mr-2"/> ELECTRONIQUE</Link></li>
+            <li><Link to="/src/components/Category/mode-home.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><SlUser className="mr-2"/> MODE HOMME</Link></li>
+            <li><Link to="/src/components/Category/mode-femme.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><SlUserFemale className="mr-2"/> MODE FEMME</Link></li>
+            <li><Link to="/src/components/Category/mode-enfant.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><FaBaby className="mr-2"/> MODE ENFANT</Link></li>
+            <li><Link to="/src/components/Category/autres.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><MdOutlineOtherHouses className="mr-2"/> AUTRES</Link></li>
+          </ul>
+        </div>
+      )}
+      {isAccountMenuOpen && (
+        <div className="md:hidden">
+          <ul className="bg-gray-800 mt-2 rounded-md shadow-lg z-10">
+            <li><Link to="/src/components/User/profile.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><FaRegUser className="mr-2"/> Profile</Link></li>
+            <li><Link to="/src/components/User/setting.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><IoSettingsOutline className="mr-2"/> Paramètres</Link></li>
+            <li><Link to="/src/components/User/sing-in.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><IoLogInOutline className="mr-2"/> Connexion</Link></li>
+          </ul>
+        </div>
+      )}
     </nav>
   );
 };

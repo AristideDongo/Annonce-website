@@ -1,7 +1,44 @@
+import React, { useState, useEffect } from 'react';
 import { BsTelephone, BsArrowUp, BsArrowDown, BsStar, BsStarHalf, BsClock } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
 const Home = () => {
+  const [annonces, setAnnonces] = useState([
+    // Exemple d'annonces
+    { id: 1, titre: "Annonce 1", description: "Description 1", prix: 100, popularite: 5, date: new Date('2023-01-01') },
+    { id: 2, titre: "Annonce 2", description: "Description 2", prix: 50, popularite: 3, date: new Date('2023-02-01') },
+    // Ajoutez plus d'annonces ici
+  ]);
+  const [sortedAnnonces, setSortedAnnonces] = useState([...annonces]);
+
+  const trierAnnonces = (critere) => {
+    let sorted = [...annonces];
+    switch (critere) {
+      case 'prixHaut':
+        sorted.sort((a, b) => b.prix - a.prix);
+        break;
+      case 'prixBas':
+        sorted.sort((a, b) => a.prix - b.prix);
+        break;
+      case 'plusPopulaire':
+        sorted.sort((a, b) => b.popularite - a.popularite);
+        break;
+      case 'moinsPopulaire':
+        sorted.sort((a, b) => a.popularite - b.popularite);
+        break;
+      case 'plusRecente':
+        sorted.sort((a, b) => b.date - a.date);
+        break;
+      default:
+        break;
+    }
+    setSortedAnnonces(sorted);
+  };
+
+  useEffect(() => {
+    setSortedAnnonces([...annonces]);
+  }, [annonces]);
+
   return (
     <>
       <div className="container mx-auto p-4">
@@ -10,19 +47,19 @@ const Home = () => {
           <aside className="bg-gray-100 p-2 rounded-s-lg shadow-md max-h-72 overflow-auto md:col-span-2">
             <h2 className="text-lg font-bold mb-2 text-center">Trier par</h2>
             <div className="flex flex-col space-y-1">
-              <button className="text-gray-900 bg-white p-1 rounded-lg shadow-md hover:bg-blue-100 flex items-center">
+              <button onClick={() => trierAnnonces('prixHaut')} className="text-gray-900 bg-white p-1 rounded-lg shadow-md hover:bg-blue-100 flex items-center">
                 <BsArrowUp className="mr-2"/> Prix Haut
               </button>
-              <button className="text-gray-900 bg-white p-1 rounded-lg shadow-md hover:bg-blue-100 flex items-center">
+              <button onClick={() => trierAnnonces('prixBas')} className="text-gray-900 bg-white p-1 rounded-lg shadow-md hover:bg-blue-100 flex items-center">
                 <BsArrowDown className="mr-2"/> Prix Bas
               </button>
-              <button className="text-gray-900 bg-white p-1 rounded-lg shadow-md hover:bg-blue-100 flex items-center">
+              <button onClick={() => trierAnnonces('plusPopulaire')} className="text-gray-900 bg-white p-1 rounded-lg shadow-md hover:bg-blue-100 flex items-center">
                 <BsStar className="mr-2"/> Plus Populaire
               </button>
-              <button className="text-gray-900 bg-white p-1 rounded-lg shadow-md hover:bg-blue-100 flex items-center">
+              <button onClick={() => trierAnnonces('moinsPopulaire')} className="text-gray-900 bg-white p-1 rounded-lg shadow-md hover:bg-blue-100 flex items-center">
                 <BsStarHalf className="mr-2"/> Moins Populaire
               </button>
-              <button className="text-gray-900 bg-white p-1 rounded-lg shadow-md hover:bg-blue-100 flex items-center">
+              <button onClick={() => trierAnnonces('plusRecente')} className="text-gray-900 bg-white p-1 rounded-lg shadow-md hover:bg-blue-100 flex items-center">
                 <BsClock className="mr-2"/> Plus Récente
               </button>
             </div>
@@ -34,17 +71,19 @@ const Home = () => {
             <section className="mb-8">
               <h2 className="text-2xl font-bold mb-4">Nouvelle annonce</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {/* Exemple d'annonce */}
-                <div className="bg-white p-4 rounded-lg shadow-md">
-                  <img src="url_de_votre_image" alt="Description de l'image" className="w-full h-48 object-cover rounded-t-lg" />
-                  <h3 className="text-xl font-semibold mt-4">Titre de l'annonce</h3>
-                  <p className="text-gray-600">Description de l'annonce...</p>
-                  <Link to="/src/components/Detail/detail.jsx">
-                    <button className="text-white bg-blue-500 p-2 rounded-lg shadow-md hover:bg-green-600 flex items-center">
-                      Détails
-                    </button>
-                  </Link>
-                </div>
+                {sortedAnnonces.map((annonce) => (
+                  <div key={annonce.id} className="bg-white p-4 rounded-lg shadow-md">
+                    <img src="url_de_votre_image" alt="Description de l'image" className="w-full h-48 object-cover rounded-t-lg" />
+                    <h3 className="text-xl font-semibold mt-4">{annonce.titre}</h3>
+                    <p className="text-gray-600">{annonce.description}</p>
+                    <p className="text-gray-800 font-bold">Prix: {annonce.prix} €</p>
+                    <Link to="/src/components/Detail/detail.jsx">
+                      <button className="text-white bg-blue-500 p-2 rounded-lg shadow-md hover:bg-green-600 flex items-center">
+                        Détails
+                      </button>
+                    </Link>
+                  </div>
+                ))}
               </div>
             </section>
 
@@ -52,18 +91,19 @@ const Home = () => {
             <section>
               <h2 className="text-2xl font-bold mb-4">Top annonce</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {/* Exemple d'annonce */}
-                <div className="bg-white p-4 rounded-lg shadow-md">
-                  <img src="url_de_votre_image" alt="Description de l'image" className="w-full h-48 object-cover rounded-t-lg" />
-                  <h3 className="text-xl font-semibold mt-4">Titre de l'annonce</h3>
-                  <p className="text-gray-600">Description de l'annonce...</p>
-                  <Link to="/src/components/Detail/detail.jsx">
-                    <button className="text-white bg-blue-500 p-2 rounded-lg shadow-md hover:bg-green-600 flex items-center">
-                      Détails
-                    </button>
-                  </Link>
-                </div>
-                {/* Ajouter d'autres annonces ici */}
+                {sortedAnnonces.map((annonce) => (
+                  <div key={annonce.id} className="bg-white p-4 rounded-lg shadow-md">
+                    <img src="url_de_votre_image" alt="Description de l'image" className="w-full h-48 object-cover rounded-t-lg" />
+                    <h3 className="text-xl font-semibold mt-4">{annonce.titre}</h3>
+                    <p className="text-gray-600">{annonce.description}</p>
+                    <p className="text-gray-800 font-bold">Prix: {annonce.prix} €</p>
+                    <Link to="/src/components/Detail/detail.jsx">
+                      <button className="text-white bg-blue-500 p-2 rounded-lg shadow-md hover:bg-green-600 flex items-center">
+                        Détails
+                      </button>
+                    </Link>
+                  </div>
+                ))}
               </div>
             </section>
           </main>
