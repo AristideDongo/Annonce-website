@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { BsTelephone, BsArrowUp, BsArrowDown, BsStar, BsStarHalf, BsClock } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 
 const Home = () => {
   const [annonces, setAnnonces] = useState([
     // Exemple d'annonces
-    { id: 1, titre: "Annonce 1", description: "Description 1", prix: 100, popularite: 5, date: new Date('2023-01-01') },
-    { id: 2, titre: "Annonce 2", description: "Description 2", prix: 50, popularite: 3, date: new Date('2023-02-01') },
+    { id: 1, titre: "Annonce 1", description: "Description 1", prix: 100, popularite: 5, date: new Date('2023-01-01'), images: ["url_de_votre_image1", "url_de_votre_image2"] },
+    { id: 2, titre: "Annonce 2", description: "Description 2", prix: 50, popularite: 3, date: new Date('2023-02-01'), images: ["url_de_votre_image3", "url_de_votre_image4"] },
     // Ajoutez plus d'annonces ici
   ]);
   const [sortedAnnonces, setSortedAnnonces] = useState([...annonces]);
+  const navigate = useNavigate();
 
   const trierAnnonces = (critere) => {
     let sorted = [...annonces];
@@ -38,6 +40,10 @@ const Home = () => {
   useEffect(() => {
     setSortedAnnonces([...annonces]);
   }, [annonces]);
+
+  const handleDetailClick = (annonce) => {
+    navigate('/src/components/Detail/detail.jsx', { state: annonce });
+  };
 
   return (
     <>
@@ -73,15 +79,13 @@ const Home = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {sortedAnnonces.map((annonce) => (
                   <div key={annonce.id} className="bg-white p-4 rounded-lg shadow-md">
-                    <img src="url_de_votre_image" alt="Description de l'image" className="w-full h-48 object-cover rounded-t-lg" />
+                    <img src={annonce.images[0]} alt="Description de l'image" className="w-full h-48 object-cover rounded-t-lg" />
                     <h3 className="text-xl font-semibold mt-4">{annonce.titre}</h3>
                     <p className="text-gray-600">{annonce.description}</p>
                     <p className="text-gray-800 font-bold">Prix: {annonce.prix} €</p>
-                    <Link to="/src/components/Detail/detail.jsx">
-                      <button className="text-white bg-blue-500 p-2 rounded-lg shadow-md hover:bg-green-600 flex items-center">
-                        Détails
-                      </button>
-                    </Link>
+                    <button onClick={() => handleDetailClick(annonce)} className="text-white bg-blue-500 p-2 rounded-lg shadow-md hover:bg-green-600 flex items-center">
+                      Détails
+                    </button>
                   </div>
                 ))}
               </div>
@@ -93,15 +97,13 @@ const Home = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {sortedAnnonces.map((annonce) => (
                   <div key={annonce.id} className="bg-white p-4 rounded-lg shadow-md">
-                    <img src="url_de_votre_image" alt="Description de l'image" className="w-full h-48 object-cover rounded-t-lg" />
+                    <img src={annonce.images[0]} alt="Description de l'image" className="w-full h-48 object-cover rounded-t-lg" />
                     <h3 className="text-xl font-semibold mt-4">{annonce.titre}</h3>
                     <p className="text-gray-600">{annonce.description}</p>
                     <p className="text-gray-800 font-bold">Prix: {annonce.prix} €</p>
-                    <Link to="/src/components/Detail/detail.jsx">
-                      <button className="text-white bg-blue-500 p-2 rounded-lg shadow-md hover:bg-green-600 flex items-center">
-                        Détails
-                      </button>
-                    </Link>
+                    <button onClick={() => handleDetailClick(annonce)} className="text-white bg-blue-500 p-2 rounded-lg shadow-md hover:bg-green-600 flex items-center">
+                      Détails
+                    </button>
                   </div>
                 ))}
               </div>
@@ -113,4 +115,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Home
