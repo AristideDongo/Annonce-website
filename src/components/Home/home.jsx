@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClock, faSortAmountDown, faSortAmountUp, faDollarSign } from '@fortawesome/free-solid-svg-icons';
 
 const Home = ({ annonces }) => {
   const navigate = useNavigate();
@@ -23,6 +25,8 @@ const Home = ({ annonces }) => {
     .sort((a, b) => {
       if (sortOrder === 'recent') {
         return new Date(b.date) - new Date(a.date); // Tri par date décroissante
+      } else if (sortOrder === 'oldest') {
+        return new Date(a.date) - new Date(b.date); // Tri par date croissante
       } else if (sortOrder === 'priceHigh') {
         return b.price - a.price; // Tri par prix décroissant
       } else if (sortOrder === 'priceLow') {
@@ -39,21 +43,31 @@ const Home = ({ annonces }) => {
         {/* Section de tri */}
         <div className="absolute left-0 top-0 mt-40 ml-4 bg-white p-4 rounded-lg shadow-lg flex flex-col">
           <button 
-            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600"
+            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600 flex items-center justify-center"
             onClick={() => handleSortChange('recent')}
           >
+            <FontAwesomeIcon icon={faClock} className="mr-2" />
             Plus Récente
           </button>
           <button 
-            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600"
+            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600 flex items-center justify-center"
+            onClick={() => handleSortChange('oldest')}
+          >
+            <FontAwesomeIcon icon={faSortAmountUp} className="mr-2" />
+            Plus Ancienne
+          </button>
+          <button 
+            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600 flex items-center justify-center"
             onClick={() => handleSortChange('priceHigh')}
           >
+            <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
             Prix Haut
           </button>
           <button 
-            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600"
+            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600 flex items-center justify-center"
             onClick={() => handleSortChange('priceLow')}
           >
+            <FontAwesomeIcon icon={faSortAmountDown} className="mr-2" />
             Prix Bas
           </button>
           <select 
