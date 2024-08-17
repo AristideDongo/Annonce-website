@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-const Annonce = () => {
+const Annonce = ({ setAnnonces, annonces }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -12,6 +12,7 @@ const Annonce = () => {
 
   const [errors, setErrors] = useState({});
   const [photoPreviews, setPhotoPreviews] = useState(['', '']); // État pour les aperçus des photos
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -103,9 +104,14 @@ const Annonce = () => {
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
     } else {
-      // Custom implementation to handle form submission
-      console.log(formData);
+      const newAnnonce = {
+        ...formData,
+        id: annonces.length + 1,
+        photos: photoPreviews // Utilisez les aperçus des photos comme URLs
+      };
+      setAnnonces([...annonces, newAnnonce]);
       alert('Annonce soumise avec succès');
+      navigate('/');
     }
   };
 
@@ -136,7 +142,7 @@ const Annonce = () => {
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Description de l'annonce"
               />
-              {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
+              {errors.description && <p class="text-red-500 text-sm">{errors.description}</p>}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700">Photos</label>
@@ -206,6 +212,6 @@ const Annonce = () => {
       </div>
     </>
   );
-}
+};
 
 export default Annonce;

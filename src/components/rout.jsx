@@ -19,18 +19,20 @@ import Mfemme from "./Category/mode-femme";
 import Mhomme from "./Category/mode-home";
 import Vehicule from "./Category/vehicule";
 import Detail from "./Detail/detail";
+import { useState } from "react";
 
 const Rout = () => {
+ const [annonces, setAnnonces] = useState([]);
  return(
   <>
   <Routes>
-  <Route path="/" element={<Home />}/> 
+  <Route path="/" element={<Home  annonces={annonces}/>}/> 
   <Route path="/src/components/User/profile.jsx" element={<Profile/>}/>
   <Route path="/src/components/User/setting.jsx" element={<Setting/>}/>
   <Route path="/src/components/User/sing-in.jsx" element={<Singin/>}/>
   <Route path="/src/components/User/sing-up.jsx" element={<Singup/>}/>
   <Route path="/src/components/User/mdpoublie.jsx" element={<Mdpoublie/>}/>
-  <Route path="/src/components/Annonce/annonce.jsx" element={<Annonce/>} />
+  <Route path="/src/components/Annonce/annonce.jsx" element={<Annonce setAnnonces={setAnnonces} annonces={annonces}/>} />
   <Route path="/src/components/Confidentilite/conditions.jsx" element= {<Conditions/>}/>
   <Route path="/src/components/Confidentilite/Politique.jsx" element={ <Politique/>}/>
   <Route path="/src/components/Confidentilite/faq.jsx" element={<Faq/>}/> 
