@@ -1,12 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Home = ({ annonces }) => {
   const navigate = useNavigate();
+  const [sortOrder, setSortOrder] = useState('recent'); // État pour l'ordre de tri
+  const [selectedCategory, setSelectedCategory] = useState(''); // État pour la catégorie sélectionnée
 
   const handleDetailClick = (annonce) => {
     navigate('/src/components/Detail/detail.jsx/', { state: annonce });
   };
+
+  const handleSortChange = (order) => {
+    setSortOrder(order);
+  };
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
+
+  const sortedAnnonces = annonces
+    .filter((annonce) => !selectedCategory || annonce.category === selectedCategory)
+    .sort((a, b) => {
+      if (sortOrder === 'recent') {
+        return new Date(b.date) - new Date(a.date); // Tri par date décroissante
+      } else if (sortOrder === 'priceHigh') {
+        return b.price - a.price; // Tri par prix décroissant
+      } else if (sortOrder === 'priceLow') {
+        return a.price - b.price; // Tri par prix croissant
+      }
+      return 0;
+    });
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 relative">
@@ -14,16 +37,47 @@ const Home = ({ annonces }) => {
         <h1 className="text-3xl font-bold text-center mb-6">Liste des annonces</h1>
         
         {/* Section de tri */}
-        <div className="absolute left-0 top-0 mt-4 ml-4 bg-white p-4 rounded-lg shadow-lg">
-          <button className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600">Trier par Date</button>
-          <button className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600">Trier par Prix</button>
-          <button className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600">Trier par Catégorie</button>
+        <div className="absolute left-0 top-0 mt-40 ml-4 bg-white p-4 rounded-lg shadow-lg flex flex-col">
+          <button 
+            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600"
+            onClick={() => handleSortChange('recent')}
+          >
+            Plus Récente
+          </button>
+          <button 
+            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600"
+            onClick={() => handleSortChange('priceHigh')}
+          >
+            Prix Haut
+          </button>
+          <button 
+            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600"
+            onClick={() => handleSortChange('priceLow')}
+          >
+            Prix Bas
+          </button>
+          <select 
+            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600"
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+          >
+            <option value="">Catégorie</option>
+            <option value="immobilier">Immobilier</option>
+            <option value="vehicule">Vehicule</option>
+            <option value="electromenager">Electromenager</option>
+            <option value="electronique">Electronique</option>
+            <option value="mode-homme">Mode Homme</option>
+            <option value="mode-femme">Mode Femme</option>
+            <option value="mode-enfant">Mode Enfant</option>
+            <option value="autres">Autres</option>
+            {/* Ajoutez d'autres options de catégorie ici */}
+          </select>
         </div>
 
         {/* Liste des annonces */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ml-56">
-          {annonces && annonces.length > 0 ? (
-            annonces.map((annonce) => (
+          {sortedAnnonces && sortedAnnonces.length > 0 ? (
+            sortedAnnonces.map((annonce) => (
               <div key={annonce.id} className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                 {annonce.photos && annonce.photos[0] ? (
                   <img src={annonce.photos[0]} alt="Preview" className="w-full h-48 object-cover rounded-t-lg" />
@@ -46,7 +100,7 @@ const Home = ({ annonces }) => {
               </div>
             ))
           ) : (
-            <p className="text-right text-gray-500 text-2xl">Aucune annonce disponible.</p>
+            <p className="text-right text-gray-500 text-2xl w-full mt-40">Aucune annonce disponible.</p>
           )}
         </div>
       </div>

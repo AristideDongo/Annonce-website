@@ -71,14 +71,14 @@ const Profile = () => {
                 className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
               >
                 <option value="">Sélectionner une option</option>
-                <option value="date">IMMOBILIER</option>
-                <option value="title">VEHICULE</option>
-                <option value="title">ELECTRONIQUE</option>
-                <option value="title">ELECTROMENAGER</option>
-                <option value="title">MODE HOMME</option>
-                <option value="title">MODE FEMME</option>
-                <option value="title">MODE ENFANT</option>
-                <option value="title">AUTRES</option>
+                <option value="immobilier">IMMOBILIER</option>
+                <option value="vehicule">VEHICULE</option>
+                <option value="electronique">ELECTRONIQUE</option>
+                <option value="electromenager">ELECTROMENAGER</option>
+                <option value="mode-homme">MODE HOMME</option>
+                <option value="mode-femme">MODE FEMME</option>
+                <option value="mode-enfant">MODE ENFANT</option>
+                <option value="autres">AUTRES</option>
               </select>
             </div>
             <ul className="mt-4 space-y-4">
@@ -98,4 +98,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Profile

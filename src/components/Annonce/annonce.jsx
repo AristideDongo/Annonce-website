@@ -175,12 +175,12 @@ const Annonce = ({ setAnnonces, annonces }) => {
                 <option value="">Sélectionnez une catégorie</option>
                 <option value="immobilier">Immobilier</option>
                 <option value="vehicules">Véhicules</option>
-                <option value="Electronique">Electronique</option>
-                <option value="Electromenager">Electromenager</option>
-                <option value="Mode Homme">Mode Homme</option>
-                <option value="Mode Femme">Mode Femme</option>
-                <option value="Mode Enfant">Mode Enfant</option>
-                <option value="Autres">Autres</option>
+                <option value="electronique">Electronique</option>
+                <option value="electromenager">Electromenager</option>
+                <option value="mode-homme">Mode Homme</option>
+                <option value="mode-femme">Mode Femme</option>
+                <option value="mode-enfant">Mode Enfant</option>
+                <option value="autres">Autres</option>
               </select>
               {errors.category && <p className="text-red-500 text-sm">{errors.category}</p>}
             </div>
