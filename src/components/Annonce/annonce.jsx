@@ -77,7 +77,7 @@ const Annonce = ({ setAnnonces, annonces }) => {
 
     if (!formData.description) {
       newErrors.description = 'La description est requise';
-    } else if (formData.description.length > 100) {
+    } else if (formData.description.length > 150) {
       newErrors.description = 'La description ne doit pas dépasser 100 caractères';
     }
 
@@ -110,8 +110,33 @@ const Annonce = ({ setAnnonces, annonces }) => {
         photos: photoPreviews // Utilisez les aperçus des photos comme URLs
       };
       setAnnonces([...annonces, newAnnonce]);
-      alert('Annonce soumise avec succès');
-      navigate('/');
+alert('Annonce soumise avec succès');
+if (formData.category === 'electromenager') {
+  navigate('/');
+  return;
+} else if (formData.category === 'immobilier') {
+  navigate('/');
+  return;
+} else if (formData.category === 'electronique') {
+  navigate('/');
+  return;
+} else if (formData.category === 'mode-enfant') {
+  navigate('/');
+  return;
+} else if (formData.category === 'mode-femme') {
+  navigate('/');
+  return;
+} else if (formData.category === 'mode-homme') { // Ajout de la redirection pour la catégorie mode-homme
+  navigate('/');
+  return;
+} else if (formData.category === 'vehicule') {
+  navigate('/');
+  return;
+} else if (formData.category === 'autres') {
+  navigate('/');
+  return;
+}
+navigate('/');
     }
   };
 
@@ -174,7 +199,7 @@ const Annonce = ({ setAnnonces, annonces }) => {
               >
                 <option value="">Sélectionnez une catégorie</option>
                 <option value="immobilier">Immobilier</option>
-                <option value="vehicules">Véhicules</option>
+                <option value="vehicule">Véhicules</option>
                 <option value="electronique">Electronique</option>
                 <option value="electromenager">Electromenager</option>
                 <option value="mode-homme">Mode Homme</option>

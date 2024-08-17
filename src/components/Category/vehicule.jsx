@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const Vehicule = () => {
+const Vehicule = ({annonces}) => {
   const [sortOption, setSortOption] = useState('date');
+  const [filteredAnnonces, setFilteredAnnonces] = useState([]);
+
+  useEffect(() => {
+    // Filtrer les annonces par catégorie "electromenager"
+    const filtered = annonces.filter(annonce => annonce.category === 'vehicule');
+    setFilteredAnnonces(filtered);
+  }, [annonces]);
 
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
@@ -32,23 +39,23 @@ const Vehicule = () => {
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Ici, vous pouvez mapper vos annonces */}
-            <div className="bg-white p-4 rounded-lg shadow-lg">
-              <img src="url_de_votre_image" alt="Photo de l'annonce" className="w-full h-48 object-cover rounded-lg mb-4" />
-              <h2 className="text-xl font-bold mb-2">Titre de l'annonce</h2>
-              <p className="text-gray-700">Description de l'annonce...</p>
-              <p className="text-gray-500 mt-2">Prix: 100€</p>
-              <Link to="/src/components/Detail/detail.jsx">
-              <button className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 mt-2">
-                Détail
-              </button>
-          </Link>
-            </div>
-            {/* Répétez ce bloc pour chaque annonce */}
+            {filteredAnnonces.map((annonce) => (
+              <div key={annonce.id} className="bg-white p-4 rounded-lg shadow-lg">
+                <img src={annonce.photos[0]} alt="Photo de l'annonce" className="w-full h-48 object-cover rounded-lg mb-4" />
+                <h2 className="text-xl font-bold mb-2">{annonce.title}</h2>
+                <p className="text-gray-700">{annonce.description}</p>
+                <p className="text-gray-500 mt-2">Prix: {annonce.price}€</p>
+                <Link to="/src/components/Detail/detail.jsx">
+                  <button className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 mt-2">
+                    Détail
+                  </button>
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-    </>
+      </>
   );
 };
 

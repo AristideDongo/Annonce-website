@@ -37,15 +37,15 @@ const Rout = () => {
   <Route path="/src/components/Confidentilite/Politique.jsx" element={ <Politique/>}/>
   <Route path="/src/components/Confidentilite/faq.jsx" element={<Faq/>}/> 
   <Route path="/src/components/Confidentilite/about.jsx" element={<About/>} />
-  <Route path="/src/components/Category/autres.jsx" element={<Autres/>} />
-  <Route path="/src/components/Category/electromenager.jsx" element={<Electromenager/>} />
-  <Route path="/src/components/Category/electronique.jsx" element={<Electronique/>} />
-  <Route path="/src/components/Category/immobilier.jsx" element={<Immobilier/>} />
-  <Route path="/src/components/Category/mode-enfant.jsx" element={<Menfant/>} />
-  <Route path="/src/components/Category/mode-femme.jsx" element={<Mfemme/>}/>
-  <Route path="/src/components/Category/mode-home.jsx" element={<Mhomme/>} />
-  <Route path="/src/components/Category/vehicule.jsx" element={<Vehicule/>} />
-  <Route path="/src/components/Detail/detail.jsx/" element={<Detail/>}/>
+  <Route path="/src/components/Category/autres.jsx" element={<Autres annonces={annonces}/>} />
+  <Route path="/src/components/Category/electromenager.jsx" element={<Electromenager annonces={annonces}/>} />
+  <Route path="/src/components/Category/electronique.jsx" element={<Electronique annonces={annonces}/>} />
+  <Route path="/src/components/Category/immobilier.jsx" element={<Immobilier annonces={annonces}/>} />
+  <Route path="/src/components/Category/mode-enfant.jsx" element={<Menfant annonces={annonces}/>} />
+  <Route path="/src/components/Category/mode-femme.jsx" element={<Mfemme annonces={annonces}/>}/>
+  <Route path="/src/components/Category/mode-home.jsx" element={<Mhomme annonces={annonces}/>} />
+  <Route path="/src/components/Category/vehicule.jsx" element={<Vehicule annonces={annonces}/>} />
+  <Route path="/src/components/Detail/detail.jsx/" element={<Detail annonces={annonces}/>}/>
   </Routes>
   </>
  )
