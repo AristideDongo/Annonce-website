@@ -126,7 +126,7 @@ if (formData.category === 'electromenager') {
 } else if (formData.category === 'mode-femme') {
   navigate('/');
   return;
-} else if (formData.category === 'mode-homme') { // Ajout de la redirection pour la catégorie mode-homme
+} else if (formData.category === 'mode-homme') { 
   navigate('/');
   return;
 } else if (formData.category === 'vehicule') {
