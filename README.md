@@ -11,7 +11,7 @@ Ce projet est une application web permettant de gérer et de visualiser des anno
 
 1. Clonez le dépôt :
     ```bash
-    git clone https://github.com/votre-utilisateur/votre-projet.git
+    git clone https://github.com/AristideDongo/Annonce-website.git
     cd votre-projet
     ```
 
