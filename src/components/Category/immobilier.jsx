@@ -66,7 +66,7 @@ const Immobilier = ({ annonces }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredAnnonces.map((annonce) => (
               <div key={annonce.id} className="bg-white p-4 rounded-lg shadow-lg">
-                <img src={annonce.photos[0]} alt="Photo de l'annonce" className="w-full h-48 object-cover rounded-lg mb-4" />
+                <img src={annonce.photos[0]} alt="Photo de l'annonce" className="w-full h-48 object-cover rounded-lg mb-4" loading='lazy'/>
                 <h2 className="text-xl font-bold mb-2">{annonce.title}</h2>
                 <p className="text-gray-700">{annonce.description}</p>
                 <p className="text-green-500 font-bold">{annonce.price} FCFA</p>

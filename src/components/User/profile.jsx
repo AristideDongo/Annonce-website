@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-const Profile = ({annonces}) => {
+const Profile = ({ annonces }) => {
   const [sortOption, setSortOption] = useState('');
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [photoURL, setPhotoURL] = useState('https://via.placeholder.com/150');
+  const [sortedAnnonces, setSortedAnnonces] = useState(annonces);
 
   useEffect(() => {
     const savedPhotoURL = localStorage.getItem('photoURL');
@@ -12,9 +13,41 @@ const Profile = ({annonces}) => {
     }
   }, []);
 
+  useEffect(() => {
+    let sorted = [...annonces];
+    switch (sortOption) {
+      case 'immobilier':
+        sorted = sorted.filter(annonce => annonce.category === 'immobilier');
+        break;
+      case 'vehicule':
+        sorted = sorted.filter(annonce => annonce.category === 'vehicule');
+        break;
+      case 'electronique':
+        sorted = sorted.filter(annonce => annonce.category === 'electronique');
+        break;
+      case 'electromenager':
+        sorted = sorted.filter(annonce => annonce.category === 'electromenager');
+        break;
+      case 'mode-homme':
+        sorted = sorted.filter(annonce => annonce.category === 'mode-homme');
+        break;
+      case 'mode-femme':
+        sorted = sorted.filter(annonce => annonce.category === 'mode-femme');
+        break;
+      case 'mode-enfant':
+        sorted = sorted.filter(annonce => annonce.category === 'mode-enfant');
+        break;
+      case 'autres':
+        sorted = sorted.filter(annonce => annonce.category === 'autres');
+        break;
+      default:
+        sorted = annonces;
+    }
+    setSortedAnnonces(sorted);
+  }, [sortOption, annonces]);
+
   const handleSortChange = (event) => {
     setSortOption(event.target.value);
-    // Ajoutez ici la logique de tri en fonction de l'option sélectionnée
   };
 
   const handlePhotoChange = (event) => {
@@ -26,8 +59,7 @@ const Profile = ({annonces}) => {
   };
 
   const handlePhotoUpload = () => {
-    // Ajoutez ici la logique pour télécharger la photo de profil
-    console.log('Photo de profil téléchargée:', profilePhoto);
+    console.log('Profile photo uploaded:', profilePhoto);
   };
 
   return (
@@ -82,14 +114,13 @@ const Profile = ({annonces}) => {
               </select>
             </div>
             <ul className="mt-4 space-y-4">
-              <li className="bg-gray-50 p-4 rounded-lg shadow">
-                <h4 className="text-lg sm:text-xl font-bold">Annonce 1</h4>
-                <p className="text-gray-600">Description de l'annonce 1...</p>
-              </li>
-              <li className="bg-gray-50 p-4 rounded-lg shadow">
-                <h4 className="text-lg sm:text-xl font-bold">Annonce 2</h4>
-                <p className="text-gray-600">Description de l'annonce 2...</p>
-              </li>
+              {sortedAnnonces.map((annonce) => (
+                <li key={annonce.id} className="bg-gray-50 p-4 rounded-lg shadow">
+                  <h4 className="text-lg sm:text-xl font-bold">{annonce.title}</h4>
+                  <p className="text-gray-600">{annonce.description}</p>
+                  <p className="text-green-500 font-bold">{annonce.price} FCFA</p>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -98,4 +129,4 @@ const Profile = ({annonces}) => {
   );
 };
 
-export default Profile
+export default Profile;

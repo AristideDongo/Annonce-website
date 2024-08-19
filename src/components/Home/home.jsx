@@ -92,20 +92,20 @@ const Home = ({ annonces }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ml-56">
           {sortedAnnonces && sortedAnnonces.length > 0 ? (
             sortedAnnonces.map((annonce) => (
-              <div key={annonce.id} className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div key={annonce.id} className="bg-white p-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                 {annonce.photos && annonce.photos[0] ? (
-                  <img src={annonce.photos[0]} alt="Preview" className="w-full h-48 object-cover object-center rounded-t-lg" />
+                  <img src={annonce.photos[0]} alt="Annonce" className="w-full h-32 object-cover object-center rounded-t-lg" loading='lazy'/>
                 ) : (
-                  <div className="w-full h-48 bg-gray-200 rounded-t-lg flex items-center justify-center">
-                    <span className="text-gray-500">Pas d'image</span>
+                  <div className="w-full h-32 bg-gray-200 rounded-t-lg flex items-center justify-center">
+                    <span className="text-red-500">Pas d'image</span>
                   </div>
                 )}
-                <div className="p-4">
-                  <h2 className="text-xl font-bold mb-2">{annonce.title}</h2>
+                <div className="p-2">
+                  <h2 className="text-lg font-bold mb-2">{annonce.title}</h2>
                   <p className="text-gray-700 mb-2">{annonce.description}</p>
                   <p className="text-green-500 font-bold">{annonce.price} FCFA</p>
                   <button 
-                    className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                    className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
                     onClick={() => handleDetailClick(annonce)}
                   >
                     Détails

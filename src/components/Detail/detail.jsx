@@ -23,7 +23,7 @@ const Detail = () => {
           <p className="text-green-500 font-bold text-xl mb-4">{price} FCFA</p>
           {photos && photos.length > 0 && (
             <div className="relative">
-              <img src={photos[currentImageIndex]} alt="Annonce" className="w-full h-96 object-contain rounded-lg mb-4" />
+              <img src={photos[currentImageIndex]} alt="Annonce" className="w-full h-96 object-contain rounded-lg mb-4" loading='lazy'/>
               <button 
                 onClick={handlePrevImage} 
                 className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition duration-300"
