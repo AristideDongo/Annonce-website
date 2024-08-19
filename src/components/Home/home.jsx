@@ -36,42 +36,42 @@ const Home = ({ annonces }) => {
     });
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 relative">
+    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-100 p-6 relative">
       <div className="container mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-6">Liste des annonces</h1>
+        <h1 className="text-4xl font-extrabold text-center mb-8 text-indigo-700">Liste des annonces</h1>
         
         {/* Section de tri */}
-        <div className="absolute left-0 top-0 mt-40 ml-4 bg-white p-4 rounded-lg shadow-lg flex flex-col">
+        <div className="absolute left-0 top-0 mt-40 ml-4 bg-white p-6 rounded-lg shadow-lg flex flex-col space-y-4">
           <button 
-            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600 flex items-center justify-center"
+            className="bg-indigo-500 text-white w-40 px-4 py-2 rounded-lg hover:bg-indigo-600 flex items-center justify-center transition-colors duration-300"
             onClick={() => handleSortChange('recent')}
           >
             <FontAwesomeIcon icon={faClock} className="mr-2" />
             Plus Récente
           </button>
           <button 
-            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600 flex items-center justify-center"
+            className="bg-indigo-500 text-white w-40 px-4 py-2 rounded-lg hover:bg-indigo-600 flex items-center justify-center transition-colors duration-300"
             onClick={() => handleSortChange('oldest')}
           >
             <FontAwesomeIcon icon={faSortAmountUp} className="mr-2" />
             Plus Ancienne
           </button>
           <button 
-            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600 flex items-center justify-center"
+            className="bg-indigo-500 text-white w-40 px-4 py-2 rounded-lg hover:bg-indigo-600 flex items-center justify-center transition-colors duration-300"
             onClick={() => handleSortChange('priceHigh')}
           >
             <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
             Prix Haut
           </button>
           <button 
-            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600 flex items-center justify-center"
+            className="bg-indigo-500 text-white w-40 px-4 py-2 rounded-lg hover:bg-indigo-600 flex items-center justify-center transition-colors duration-300"
             onClick={() => handleSortChange('priceLow')}
           >
             <FontAwesomeIcon icon={faSortAmountDown} className="mr-2" />
             Prix Bas
           </button>
           <select 
-            className="bg-blue-500 text-white w-40 px-4 py-2 rounded-lg mb-2 hover:bg-blue-600"
+            className="bg-indigo-500 text-white w-40 px-4 py-2 rounded-lg hover:bg-indigo-600 transition-colors duration-300"
             value={selectedCategory}
             onChange={handleCategoryChange}
           >
@@ -89,23 +89,23 @@ const Home = ({ annonces }) => {
         </div>
 
         {/* Liste des annonces */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ml-56">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ml-56">
           {sortedAnnonces && sortedAnnonces.length > 0 ? (
             sortedAnnonces.map((annonce) => (
-              <div key={annonce.id} className="bg-white p-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div key={annonce.id} className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                 {annonce.photos && annonce.photos[0] ? (
-                  <img src={annonce.photos[0]} alt="Annonce" className="w-full h-32 object-cover object-center rounded-t-lg" loading='lazy'/>
+                  <img src={annonce.photos[0]} alt="Annonce" className="w-full h-40 object-cover object-center rounded-t-lg" loading='lazy'/>
                 ) : (
-                  <div className="w-full h-32 bg-gray-200 rounded-t-lg flex items-center justify-center">
+                  <div className="w-full h-40 bg-gray-200 rounded-t-lg flex items-center justify-center">
                     <span className="text-red-500">Pas d'image</span>
                   </div>
                 )}
-                <div className="p-2">
-                  <h2 className="text-lg font-bold mb-2">{annonce.title}</h2>
+                <div className="p-4">
+                  <h2 className="text-xl font-bold mb-2 text-indigo-700">{annonce.title}</h2>
                   <p className="text-gray-700 mb-2">{annonce.description}</p>
                   <p className="text-green-500 font-bold">{annonce.price} FCFA</p>
                   <button 
-                    className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                    className="mt-2 bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition-colors duration-300"
                     onClick={() => handleDetailClick(annonce)}
                   >
                     Détails
@@ -114,7 +114,7 @@ const Home = ({ annonces }) => {
               </div>
             ))
           ) : (
-            <p className="text-right text-gray-500 text-2xl w-full mt-40">Aucune annonce disponible.</p>
+            <p className="text-center text-gray-500 text-2xl w-full mt-40">Aucune annonce disponible.</p>
           )}
         </div>
       </div>

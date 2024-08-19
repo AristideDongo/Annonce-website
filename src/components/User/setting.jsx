@@ -1,40 +1,46 @@
 import { useState } from "react";
 
 const Setting = () => {
+  // État pour les informations utilisateur
   const [userInfo, setUserInfo] = useState({
     name: '',
     email: '',
     phone: ''
   });
 
+  // État pour les mots de passe
   const [password, setPassword] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
   });
 
+  // État pour les préférences de notification
   const [notifications, setNotifications] = useState({
     emailNotifications: false,
     smsNotifications: false
   });
 
+  // Gestion du changement des informations utilisateur
   const handleUserInfoChange = (e) => {
     const { name, value } = e.target;
     setUserInfo({ ...userInfo, [name]: value });
   };
 
+  // Gestion du changement des mots de passe
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
     setPassword({ ...password, [name]: value });
   };
 
+  // Gestion du changement des préférences de notification
   const handleNotificationsChange = (e) => {
     const { name, checked } = e.target;
     setNotifications({ ...notifications, [name]: checked });
   };
 
+  // Mise à jour des paramètres utilisateur
   const updateUserSettings = async (userInfo) => {
-    // Custom implementation to update user settings
     try {
       const response = await fetch('/api/updateUserSettings', {
         method: 'POST',
@@ -44,17 +50,19 @@ const Setting = () => {
         body: JSON.stringify(userInfo)
       });
       if (!response.ok) {
-        throw new Error('Failed to update user settings');
+        throw new Error('Échec de la mise à jour des paramètres utilisateur');
       }
-      alert('User settings updated successfully');
+      // Stocker les informations utilisateur dans localStorage
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      alert('Paramètres utilisateur mis à jour avec succès');
     } catch (error) {
       console.error(error);
-      alert('An error occurred while updating user settings');
+      alert('Une erreur est survenue lors de la mise à jour des paramètres utilisateur');
     }
   };
 
+  // Mise à jour du mot de passe
   const updatePassword = async (password) => {
-    // Custom implementation to update password
     try {
       const response = await fetch('/api/updatePassword', {
         method: 'POST',
@@ -64,17 +72,17 @@ const Setting = () => {
         body: JSON.stringify(password)
       });
       if (!response.ok) {
-        throw new Error('Failed to update password');
+        throw new Error('Échec de la mise à jour du mot de passe');
       }
-      alert('Password updated successfully');
+      alert('Mot de passe mis à jour avec succès');
     } catch (error) {
       console.error(error);
-      alert('An error occurred while updating password');
+      alert('Une erreur est survenue lors de la mise à jour du mot de passe');
     }
   };
 
+  // Mise à jour des préférences de notification
   const updateNotificationPreferences = async (notifications) => {
-    // Custom implementation to update notification preferences
     try {
       const response = await fetch('/api/updateNotificationPreferences', {
         method: 'POST',
@@ -84,20 +92,22 @@ const Setting = () => {
         body: JSON.stringify(notifications)
       });
       if (!response.ok) {
-        throw new Error('Failed to update notification preferences');
+        throw new Error('Échec de la mise à jour des préférences de notification');
       }
-      alert('Notification preferences updated successfully');
+      alert('Préférences de notification mises à jour avec succès');
     } catch (error) {
       console.error(error);
-      alert('An error occurred while updating notification preferences');
+      alert('Une erreur est survenue lors de la mise à jour des préférences de notification');
     }
   };
 
+  // Gestion de la soumission du formulaire des informations utilisateur
   const handleSubmitUserInfo = (e) => {
     e.preventDefault();
     updateUserSettings(userInfo);
   };
 
+  // Gestion de la soumission du formulaire des mots de passe
   const handleSubmitPassword = (e) => {
     e.preventDefault();
     if (password.newPassword === password.confirmPassword) {
@@ -107,6 +117,7 @@ const Setting = () => {
     }
   };
 
+  // Gestion de la soumission du formulaire des préférences de notification
   const handleSubmitNotifications = (e) => {
     e.preventDefault();
     updateNotificationPreferences(notifications);

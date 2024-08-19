@@ -8,7 +8,7 @@ const Annonce = ({ setAnnonces, annonces }) => {
     description: '',
     photos: ['', ''],
     category: '',
-    price: '' // Ajout de l'état pour le prix
+    price: ''
   });
 
   // État pour les erreurs de validation

@@ -5,11 +5,22 @@ const Profile = ({ annonces }) => {
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [photoURL, setPhotoURL] = useState('https://via.placeholder.com/150');
   const [sortedAnnonces, setSortedAnnonces] = useState(annonces);
+  const [userInfo, setUserInfo] = useState({
+    name: 'Nom d\'utilisateur',
+    email: 'email@example.com',
+    phone: '0000000000'
+  }); // État pour les informations utilisateur
 
+  
   useEffect(() => {
     const savedPhotoURL = localStorage.getItem('photoURL');
     if (savedPhotoURL) {
       setPhotoURL(savedPhotoURL);
+    }
+
+    const savedUserInfo = localStorage.getItem('userInfo');
+    if (savedUserInfo) {
+      setUserInfo(JSON.parse(savedUserInfo));
     }
   }, []);
 
@@ -73,9 +84,9 @@ const Profile = ({ annonces }) => {
               alt="Profile"
             />
             <div className="text-center sm:text-left">
-              <h2 className="text-2xl sm:text-3xl font-bold">John Doe</h2>
-              <p className="text-gray-600">+225 0102030405</p>
-              <p className="text-gray-600">john.doe@example.com</p>
+              <h2 className="text-2xl sm:text-3xl font-bold">{userInfo.name}</h2>
+              <p className="text-gray-600">{userInfo.phone}</p>
+              <p className="text-gray-600">{userInfo.email}</p>
             </div>
           </div>
           <div className="mt-4">
