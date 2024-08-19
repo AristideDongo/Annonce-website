@@ -69,7 +69,7 @@ const Vehicule = ({ annonces }) => {
                 <img src={annonce.photos[0]} alt="Photo de l'annonce" className="w-full h-48 object-cover rounded-lg mb-4" />
                 <h2 className="text-xl font-bold mb-2">{annonce.title}</h2>
                 <p className="text-gray-700">{annonce.description}</p>
-                <p className="text-gray-500 mt-2">Prix: {annonce.price} FCFA</p>
+                <p className="text-green-500 font-bold">{annonce.price} FCFA</p>
                   <button className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 mt-2" 
                    onClick={() => handleDetailClick(annonce)}>
                     Détail

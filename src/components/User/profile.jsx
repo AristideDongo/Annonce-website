@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Profile = () => {
+const Profile = ({annonces}) => {
   const [sortOption, setSortOption] = useState('');
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [photoURL, setPhotoURL] = useState('https://via.placeholder.com/150');

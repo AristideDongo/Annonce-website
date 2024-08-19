@@ -94,7 +94,7 @@ const Home = ({ annonces }) => {
             sortedAnnonces.map((annonce) => (
               <div key={annonce.id} className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                 {annonce.photos && annonce.photos[0] ? (
-                  <img src={annonce.photos[0]} alt="Preview" className="w-full h-48 object-cover rounded-t-lg" />
+                  <img src={annonce.photos[0]} alt="Preview" className="w-full h-48 object-cover object-center rounded-t-lg" />
                 ) : (
                   <div className="w-full h-48 bg-gray-200 rounded-t-lg flex items-center justify-center">
                     <span className="text-gray-500">Pas d'image</span>

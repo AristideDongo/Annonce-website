@@ -27,7 +27,7 @@ const Rout = () => {
   <>
   <Routes>
   <Route path="/" element={<Home  annonces={annonces}/>}/> 
-  <Route path="/src/components/User/profile.jsx" element={<Profile/>}/>
+  <Route path="/src/components/User/profile.jsx" element={<Profile annonces={annonces}/>}/>
   <Route path="/src/components/User/setting.jsx" element={<Setting/>}/>
   <Route path="/src/components/User/sing-in.jsx" element={<Singin/>}/>
   <Route path="/src/components/User/sing-up.jsx" element={<Singup/>}/>

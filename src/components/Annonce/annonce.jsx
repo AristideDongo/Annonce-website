@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 
 const Annonce = ({ setAnnonces, annonces }) => {
+  // État pour les données du formulaire
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -10,23 +11,27 @@ const Annonce = ({ setAnnonces, annonces }) => {
     price: '' // Ajout de l'état pour le prix
   });
 
+  // État pour les erreurs de validation
   const [errors, setErrors] = useState({});
-  const [photoPreviews, setPhotoPreviews] = useState(['', '']); // État pour les aperçus des photos
+  // État pour les aperçus des photos
+  const [photoPreviews, setPhotoPreviews] = useState(['', '']); 
   const navigate = useNavigate();
 
+  // Gestion du changement des champs de texte
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value
     });
-    // Clear the error for the field being changed
+    // Effacer l'erreur pour le champ modifié
     setErrors({
       ...errors,
       [name]: ''
     });
   };
 
+  // Gestion du changement des photos
   const handlePhotoChange = (index, e) => {
     const file = e.target.files[0];
     const newPhotos = [...formData.photos];
@@ -47,26 +52,28 @@ const Annonce = ({ setAnnonces, annonces }) => {
       reader.readAsDataURL(file);
     }
 
-    // Clear the error for photos if any photo is changed
+    // Effacer l'erreur pour les photos si une photo est modifiée
     setErrors({
       ...errors,
       photos: ''
     });
   };
 
+  // Gestion du changement de la sélection de catégorie
   const handleSelectChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value
     });
-    // Clear the error for the field being changed
+    // Effacer l'erreur pour le champ modifié
     setErrors({
       ...errors,
       [name]: ''
     });
   };
 
+  // Validation du formulaire
   const validateForm = () => {
     const newErrors = {};
     if (!formData.title) {
@@ -98,6 +105,7 @@ const Annonce = ({ setAnnonces, annonces }) => {
     return newErrors;
   };
 
+  // Gestion de la soumission du formulaire
   const handleSubmit = (e) => {
     e.preventDefault();
     const formErrors = validateForm();
@@ -110,33 +118,34 @@ const Annonce = ({ setAnnonces, annonces }) => {
         photos: photoPreviews // Utilisez les aperçus des photos comme URLs
       };
       setAnnonces([...annonces, newAnnonce]);
-alert('Annonce soumise avec succès');
-if (formData.category === 'electromenager') {
-  navigate('/');
-  return;
-} else if (formData.category === 'immobilier') {
-  navigate('/');
-  return;
-} else if (formData.category === 'electronique') {
-  navigate('/');
-  return;
-} else if (formData.category === 'mode-enfant') {
-  navigate('/');
-  return;
-} else if (formData.category === 'mode-femme') {
-  navigate('/');
-  return;
-} else if (formData.category === 'mode-homme') { 
-  navigate('/');
-  return;
-} else if (formData.category === 'vehicule') {
-  navigate('/');
-  return;
-} else if (formData.category === 'autres') {
-  navigate('/');
-  return;
-}
-navigate('/');
+      alert('Annonce soumise avec succès');
+      // Redirection en fonction de la catégorie
+      if (formData.category === 'electromenager') {
+        navigate('/');
+        return;
+      } else if (formData.category === 'immobilier') {
+        navigate('/');
+        return;
+      } else if (formData.category === 'electronique') {
+        navigate('/');
+        return;
+      } else if (formData.category === 'mode-enfant') {
+        navigate('/');
+        return;
+      } else if (formData.category === 'mode-femme') {
+        navigate('/');
+        return;
+      } else if (formData.category === 'mode-homme') { 
+        navigate('/');
+        return;
+      } else if (formData.category === 'vehicule') {
+        navigate('/');
+        return;
+      } else if (formData.category === 'autres') {
+        navigate('/');
+        return;
+      }
+      navigate('/');
     }
   };
 
