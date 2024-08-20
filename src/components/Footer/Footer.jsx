@@ -10,7 +10,7 @@ const Footer = () => {
         {/* Logo */}
         <div className="flex justify-center mb-8">
           {/* <img src="/path/to/logo.png" alt="Logo" className="h-12" /> */}
-          <Link to="/" className="text-white text-4xl font-bold text-center">Annonces<span className="text-orange-600">360</span></Link>
+          <Link to="/" className="text-white text-4xl font-bold text-center">Annonces<span className="text-orange-600">360°</span></Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -71,7 +71,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="text-center mt-8 text-sm text-gray-500">
-          &copy; {new Date().getFullYear()} Annonces360. Tous droits réservés.
+          &copy; {new Date().getFullYear()} Annonces360°. Tous droits réservés.
         </div>
       </div>
     </footer>

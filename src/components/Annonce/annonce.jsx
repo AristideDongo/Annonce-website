@@ -81,14 +81,14 @@ const Annonce = ({ setAnnonces, annonces }) => {
     const newErrors = {};
     if (!formData.title) {
       newErrors.title = 'Le titre est requis';
-    } else if (formData.title.length > 50 ) {
-      newErrors.title = 'Le titre ne doit pas dépasser 50 caractères';
+    } else if (formData.title.length > 10 ) {
+      newErrors.title = 'Le titre ne doit pas dépasser 100 caractères';
     }
 
     if (!formData.description) {
       newErrors.description = 'La description est requise';
-    } else if (formData.description.length > 150) {
-      newErrors.description = 'La description ne doit pas dépasser 100 caractères';
+    } else if (formData.description.length > 450) {
+      newErrors.description = 'La description ne doit pas dépasser 450 caractères';
     }
 
     if (!formData.photos[1]) {

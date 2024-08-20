@@ -54,7 +54,7 @@ const Navbar = ({ setSearchQuery }) => {
     <nav className="bg-gray-900 p-4">
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-white text-lg font-bold tracking-wide">
-          <Link to="/" className="hover:text-neon-green transition-colors duration-300">Annonces<span className="text-orange-600">360</span></Link>
+          <Link to="/" className="hover:text-neon-green transition-colors duration-300">Annonces<span className="text-orange-600">360°</span></Link>
         </div>
         <input
         type="text"
