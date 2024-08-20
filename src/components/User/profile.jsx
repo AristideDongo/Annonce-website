@@ -110,10 +110,15 @@ const Profile = ({ annonces, deleteAnnonce }) => {
   };
 
   const handleConfirmDelete = () => {
-    selectedAnnonces.forEach(id => deleteAnnonce(id));
-    setSelectedAnnonces([]);
+    console.log("Annonces sélectionnées pour suppression:", selectedAnnonces);
+    selectedAnnonces.forEach(id => {
+      console.log("Suppression de l'annonce avec l'id:", id);
+      deleteAnnonce(id);
+    });
+    setSelectedAnnonces([]); // Réinitialiser les annonces sélectionnées après suppression
     setShowDeleteConfirmation(false);
   };
+  
 
   return (
     <div className="min-h-screen bg-indigo-200 flex flex-col items-center p-4 sm:p-6 lg:p-8">

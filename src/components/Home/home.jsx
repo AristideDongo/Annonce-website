@@ -1,14 +1,16 @@
+// Home.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faSortAmountDown, faSortAmountUp, faDollarSign } from '@fortawesome/free-solid-svg-icons';
-import { FadeLoader } from 'react-spinners'; // Importer un loader moderne, par exemple RingLoader de react-spinners
+import { FadeLoader } from 'react-spinners'; // Importer un loader moderne
 
-const Home = ({ annonces }) => {
+const Home = ({ annonces, searchQuery }) => {
   const navigate = useNavigate();
   const [sortOrder, setSortOrder] = useState('recent');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isLoading, setIsLoading] = useState(true); // État pour le chargement des annonces
+  const [query, setQuery] = useState(searchQuery); // État pour le champ de recherche
 
   useEffect(() => {
     // Simule un chargement des annonces
@@ -23,6 +25,10 @@ const Home = ({ annonces }) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    setQuery(searchQuery); // Met à jour le champ de recherche si searchQuery change
+  }, [searchQuery]);
+
   const handleDetailClick = (annonce) => {
     navigate('/src/components/Detail/detail.jsx/', { state: annonce });
   };
@@ -35,7 +41,15 @@ const Home = ({ annonces }) => {
     setSelectedCategory(e.target.value);
   };
 
-  const sortedAnnonces = annonces
+  const handleSearchChange = (e) => {
+    setQuery(e.target.value);
+  };
+
+  const filteredAnnonces = annonces.filter(annonce =>
+    annonce.title.toLowerCase().includes(query.toLowerCase())
+  );
+
+  const sortedAnnonces = filteredAnnonces
     .filter((annonce) => !selectedCategory || annonce.category === selectedCategory)
     .sort((a, b) => {
       if (sortOrder === 'recent') {
@@ -55,8 +69,9 @@ const Home = ({ annonces }) => {
       <div className="container mx-auto">
         <h1 className="text-4xl font-extrabold text-center mb-8 text-indigo-700">Liste des annonces</h1>
 
-        {/* Section de tri */}
+        {/* Section de filtre */}
         <div className="absolute left-0 top-0 mt-40 ml-4 bg-white p-6 rounded-lg shadow-lg flex flex-col space-y-4">
+          {/* Boutons de tri */}
           <button
             className="bg-indigo-500 text-white w-40 px-4 py-2 rounded-lg hover:bg-indigo-600 flex items-center justify-center transition-colors duration-300"
             onClick={() => handleSortChange('recent')}

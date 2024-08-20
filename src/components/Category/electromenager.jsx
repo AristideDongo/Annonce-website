@@ -1,42 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Electromenager = ({ annonces }) => {
+const Electromenager = ({ annonces, searchQuery }) => {
   const navigate = useNavigate();
 
   const [sortOption, setSortOption] = useState('recent');
   const [filteredAnnonces, setFilteredAnnonces] = useState([]);
-  
+
   const handleDetailClick = (annonce) => {
     navigate('/src/components/Detail/detail.jsx/', { state: annonce });
   };
 
-  useEffect(() => {
-    // Filtrer les annonces par catégorie "electromenager"
-    const filtered = annonces.filter(annonce => annonce.category === 'electromenager');
-    setFilteredAnnonces(filtered);
-  }, [annonces]);
+  const sortAnnonces = (annonces, option) => {
+    switch (option) {
+      case 'recent':
+        return annonces.sort((a, b) => new Date(b.date) - new Date(a.date));
+      case 'oldest':
+        return annonces.sort((a, b) => new Date(a.date) - new Date(b.date));
+      case 'price-high':
+        return annonces.sort((a, b) => b.price - a.price);
+      case 'price-low':
+        return annonces.sort((a, b) => a.price - b.price);
+      default:
+        return annonces;
+    }
+  };
 
   useEffect(() => {
-    const sortedAnnonces = [...filteredAnnonces];
-    switch (sortOption) {
-      case 'recent':
-        sortedAnnonces.sort((a, b) => new Date(b.date) - new Date(a.date));
-        break;
-      case 'oldest':
-        sortedAnnonces.sort((a, b) => new Date(a.date) - new Date(b.date));
-        break;
-      case 'price-high':
-        sortedAnnonces.sort((a, b) => b.price - a.price);
-        break;
-      case 'price-low':
-        sortedAnnonces.sort((a, b) => a.price - b.price);
-        break;
-      default:
-        break;
-    }
-    setFilteredAnnonces(sortedAnnonces);
-  }, [sortOption, filteredAnnonces]);
+    // Filtrer les annonces par catégorie "autres" et recherche
+    const filteredByCategory = annonces.filter(annonce => annonce.category === 'autres');
+    const filteredBySearch = filteredByCategory.filter(annonce =>
+      annonce.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    const sorted = sortAnnonces(filteredBySearch, sortOption);
+    setFilteredAnnonces(sorted);
+  }, [annonces, searchQuery, sortOption]);
 
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
@@ -67,19 +65,24 @@ const Electromenager = ({ annonces }) => {
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredAnnonces.map((annonce) => (
-              <div key={annonce.id} className="bg-white p-4 rounded-lg shadow-lg">
-                <img src={annonce.photos[0]} alt="Photo de l'annonce" className="w-full h-48 object-cover rounded-lg mb-4" loading='lazy'/>
-                <h2 className="text-xl font-bold mb-2">{annonce.title}</h2>
-                <p className="text-gray-700">{annonce.description}</p>
-                <p className="text-green-500 font-bold">{annonce.price} FCFA</p>
-                  <button className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 mt-2"
-                   onClick={() => handleDetailClick(annonce)}>
+            {filteredAnnonces.length > 0 ? (
+              filteredAnnonces.map((annonce) => (
+                <div key={annonce.id} className="bg-white p-4 rounded-lg shadow-lg">
+                  <img src={annonce.photos[0]} alt="Photo de l'annonce" className="w-full h-48 object-cover rounded-lg mb-4" loading='lazy'/>
+                  <h2 className="text-xl font-bold mb-2">{annonce.title}</h2>
+                  <p className="text-gray-700">{annonce.description}</p>
+                  <p className="text-green-500 font-bold">{annonce.price} FCFA</p>
+                  <button
+                    className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 mt-2"
+                    onClick={() => handleDetailClick(annonce)}
+                  >
                     Détail
                   </button>
-                
-              </div>
-            ))}
+                </div>
+              ))
+            ) : (
+              <p className="text-center text-gray-500 text-2xl w-full mt-40">Aucune annonce disponible.</p>
+            )}
           </div>
         </div>
       </div>
@@ -87,4 +90,4 @@ const Electromenager = ({ annonces }) => {
   );
 };
 
-export default Electromenager;
+export default  Electromenager
