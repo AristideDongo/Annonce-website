@@ -142,13 +142,14 @@ const Annonce = ({ setAnnonces, annonces }) => {
         } else if (formData.category === 'mode-homme') { 
           navigate('/');
           return;
-        } else if (formData.category === 'vehicule') { navigate('/');
-          return;
-        } else if (formData.category === 'autres') {
-          navigate('/');
-          return;
-        }
-      }, 3000); // Le popup disparaît après 3 secondes
+        } else if (formData.category === 'vehicule') {
+           navigate('/');
+        return;
+      } else if (formData.category === 'autres') {
+        navigate('/');
+        return;
+      }
+      }, 2000); // Le popup disparaît après 2 secondes
     }
   };
 
@@ -235,13 +236,13 @@ const Annonce = ({ setAnnonces, annonces }) => {
             </div>
             <button
               type="submit"
-              className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-200"
+              className="w-full bg-gray-700 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200"
             >
               Soumettre l'annonce
             </button>
           </form>
           <div className="mt-6 text-center">
-            <Link to="/" className="text-indigo-500 hover:underline">
+            <Link to="/" className="text-blue-500 hover:underline">
               Retour à l'accueil
             </Link>
           </div>
