@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Profile = ({ annonces }) => {
+const Profile = ({ annonces, deleteAnnonce }) => {
+  const navigate = useNavigate()
   const [sortOption, setSortOption] = useState('');
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [photoURL, setPhotoURL] = useState('https://via.placeholder.com/150');
@@ -10,8 +12,12 @@ const Profile = ({ annonces }) => {
     email: 'email@example.com',
     phone: '0000000000'
   }); // État pour les informations utilisateur
-
+  const [selectedAnnonces, setSelectedAnnonces] = useState([]);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   
+  const handleDetailClick = (annonce) => {
+    navigate('/src/components/Detail/detail.jsx/', { state: annonce });
+  };
   useEffect(() => {
     const savedPhotoURL = localStorage.getItem('photoURL');
     if (savedPhotoURL) {
@@ -73,6 +79,35 @@ const Profile = ({ annonces }) => {
     console.log('Profile photo uploaded:', profilePhoto);
   };
 
+  const handleSelectAnnonce = (annonceId) => {
+    if (selectedAnnonces.includes(annonceId)) {
+      setSelectedAnnonces(selectedAnnonces.filter(id => id !== annonceId));
+    } else {
+      setSelectedAnnonces([...selectedAnnonces, annonceId]);
+    }
+  };
+
+  const handleDeleteSelectedAnnonces = () => {
+    const updatedAnnonces = sortedAnnonces.filter(annonce => !selectedAnnonces.includes(annonce.id));
+    setSortedAnnonces(updatedAnnonces);
+    setSelectedAnnonces([]);
+  };
+
+  
+  const handleDeleteConfirmation = () => {
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirmation(false);
+  };
+
+  const handleConfirmDelete = () => {
+    selectedAnnonces.forEach(id => deleteAnnonce(id));
+    setSelectedAnnonces([]);
+    setShowDeleteConfirmation(false);
+  };
+
   return (
     <>
       <div className="min-h-screen bg-indigo-100 flex flex-col items-center p-4 sm:p-6 lg:p-8">
@@ -130,9 +165,47 @@ const Profile = ({ annonces }) => {
                   <h4 className="text-lg sm:text-xl font-bold">{annonce.title}</h4>
                   <p className="text-gray-600">{annonce.description}</p>
                   <p className="text-green-500 font-bold">{annonce.price} FCFA</p>
+                  <button className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 mt-2"  
+                  onClick={() => handleDetailClick(annonce)}>
+                    Détail
+                </button>
+                  <input
+                    type="checkbox"
+                    checked={selectedAnnonces.includes(annonce.id)}
+                    onChange={() => handleSelectAnnonce(annonce.id)}
+                    className="ml-96"
+                  />
                 </li>
               ))}
             </ul>
+            <button
+        onClick={handleDeleteConfirmation}
+        className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700"
+      >
+        Supprimer
+      </button>
+      {showDeleteConfirmation && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <h2 className="text-2xl font-semibold mb-2 text-red-600">Confirmation de suppression</h2>
+            <p className="text-gray-700">Êtes-vous sûr de vouloir supprimer les annonces sélectionnées?</p>
+            <div className="mt-4">
+              <button
+                onClick={handleConfirmDelete}
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 mr-2"
+              >
+                Oui
+              </button>
+              <button
+                onClick={handleCancelDelete}
+                className="px-4 py-2 bg-green-500 text-black rounded-md hover:bg-green-600"
+              >
+                Non
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
           </div>
         </div>
       </div>

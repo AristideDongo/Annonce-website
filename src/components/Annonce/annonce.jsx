@@ -124,7 +124,30 @@ const Annonce = ({ setAnnonces, annonces }) => {
       setShowPopup(true); // Afficher le popup
       setTimeout(() => {
         setShowPopup(false);
-        navigate('/');
+        if (formData.category === 'electromenager') {
+          navigate('/');
+          return;
+        } else if (formData.category === 'immobilier') {
+          navigate('/');
+          return;
+        } else if (formData.category === 'electronique') {
+          navigate('/');
+          return;
+        } else if (formData.category === 'mode-enfant') {
+          navigate('/');
+          return;
+        } else if (formData.category === 'mode-femme') {
+          navigate('/');
+          return;
+        } else if (formData.category === 'mode-homme') { 
+          navigate('/');
+          return;
+        } else if (formData.category === 'vehicule') { navigate('/');
+          return;
+        } else if (formData.category === 'autres') {
+          navigate('/');
+          return;
+        }
       }, 3000); // Le popup disparaît après 3 secondes
     }
   };
