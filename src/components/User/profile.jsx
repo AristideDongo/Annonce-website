@@ -75,7 +75,7 @@ const Profile = ({ annonces }) => {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4 sm:p-6 lg:p-8">
+      <div className="min-h-screen bg-indigo-100 flex flex-col items-center p-4 sm:p-6 lg:p-8">
         <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 lg:p-8 mt-10 w-full max-w-2xl">
           <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
             <img

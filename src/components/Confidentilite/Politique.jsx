@@ -2,7 +2,7 @@ import React from 'react';
 
 const Politique = () => {
   return (
-    <div className="container mx-auto p-4">
+    <div className="mx-auto p-4 bg-indigo-100">
       <h1 className="text-3xl font-bold mb-4">Politique de Confidentialité</h1>
       <p className="mb-4">
         Bienvenue sur notre page de politique de confidentialité. Nous nous engageons à protéger votre vie privée et à garantir la sécurité de vos informations personnelles.

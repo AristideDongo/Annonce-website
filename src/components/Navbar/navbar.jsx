@@ -44,51 +44,51 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gray-800 p-4">
+    <nav className="bg-gray-900 p-4">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="text-white text-lg font-bold">
-          <Link to="/">SITE ANNNONCE</Link>
+        <div className="text-white text-lg font-bold tracking-wide">
+          <Link to="/" className="hover:text-neon-green transition-colors duration-300">SITE ANNNONCE</Link>
         </div>
         <div className="hidden md:flex space-x-4">
-          <Link to="/" className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium flex items-center">
-            <FaHome className="mr-2"/> Acceuil
+          <Link to="/" className="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium flex items-center transition duration-300">
+            <FaHome className="mr-2"/> Accueil
           </Link>
           <div className="relative">
             <button 
-              className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium flex items-center"
+              className="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium flex items-center transition duration-300"
               onClick={handleToggleCategories}
             >
               <BiCategory className="mr-2"/> Catégories
             </button>
             {isCategoriesOpen && (
-              <ul className="absolute bg-gray-800 mt-2 rounded-md shadow-lg z-10">
-                <li><Link to="/src/components/Category/immobilier.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><IoIosHome className="mr-2"/> IMMOBILIER</Link></li>
-                <li><Link to="/src/components/Category/vehicule.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><FaCar className="mr-2"/> VEHICULE</Link></li>
-                <li><Link to="/src/components/Category/electromenager.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><TbRazorElectric className="mr-2"/> ELECTROMENAGER</Link></li>
-                <li><Link to="/src/components/Category/electronique.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><MdComputer className="mr-2"/> ELECTRONIQUE</Link></li>
-                <li><Link to="/src/components/Category/mode-home.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><SlUser className="mr-2"/> MODE HOMME</Link></li>
-                <li><Link to="/src/components/Category/mode-femme.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><SlUserFemale className="mr-2"/> MODE FEMME</Link></li>
-                <li><Link to="/src/components/Category/mode-enfant.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><FaBaby className="mr-2"/> MODE ENFANT</Link></li>
-                <li><Link to="/src/components/Category/autres.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><MdOutlineOtherHouses className="mr-2"/> AUTRES</Link></li>
+              <ul className="absolute bg-gray-900 mt-2 rounded-md shadow-lg z-10">
+                <li><Link to="/src/components/Category/immobilier.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><IoIosHome className="mr-2"/> IMMOBILIER</Link></li>
+                <li><Link to="/src/components/Category/vehicule.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><FaCar className="mr-2"/> VEHICULE</Link></li>
+                <li><Link to="/src/components/Category/electromenager.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><TbRazorElectric className="mr-2"/> ELECTROMENAGER</Link></li>
+                <li><Link to="/src/components/Category/electronique.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><MdComputer className="mr-2"/> ELECTRONIQUE</Link></li>
+                <li><Link to="/src/components/Category/mode-home.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><SlUser className="mr-2"/> MODE HOMME</Link></li>
+                <li><Link to="/src/components/Category/mode-femme.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><SlUserFemale className="mr-2"/> MODE FEMME</Link></li>
+                <li><Link to="/src/components/Category/mode-enfant.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><FaBaby className="mr-2"/> MODE ENFANT</Link></li>
+                <li><Link to="/src/components/Category/autres.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><MdOutlineOtherHouses className="mr-2"/> AUTRES</Link></li>
               </ul>
             )}
           </div>
           <div className="relative">
             <button 
-              className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium flex items-center"
+              className="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium flex items-center transition duration-300"
               onClick={handleToggleAccount}
             >
               <FaRegUserCircle className="mr-2"/> Mon Compte
             </button>
             {isAccountMenuOpen && (
-              <ul className="absolute bg-gray-800 mt-2 rounded-md shadow-lg z-10">
-                <li><Link to="/src/components/User/profile.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><FaRegUser className="mr-2"/> Profile</Link></li>
-                <li><Link to="/src/components/User/setting.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><IoSettingsOutline className="mr-2"/> Paramètres</Link></li>
-                <li><Link to="/src/components/User/sing-in.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><IoLogInOutline className="mr-2"/> Connexion</Link></li>
+              <ul className="absolute bg-gray-900 mt-2 rounded-md shadow-lg z-10">
+                <li><Link to="/src/components/User/profile.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><FaRegUser className="mr-2"/> Profil</Link></li>
+                <li><Link to="/src/components/User/setting.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><IoSettingsOutline className="mr-2"/> Paramètres</Link></li>
+                <li><Link to="/src/components/User/sing-in.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><IoLogInOutline className="mr-2"/> Connexion</Link></li>
                 {isUserLoggedIn && (
                   <li>
                     <button 
-                      className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300"
                       onClick={() => setIsLogoutPopupOpen(true)}
                     >
                       <CiLogout className="mr-2"/> Déconnexion
@@ -98,7 +98,7 @@ const Navbar = () => {
               </ul>
             )}
           </div>
-          <Link to="/src/components/Annonce/annonce.jsx" className="bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 flex items-center">
+          <Link to="/src/components/Annonce/annonce.jsx" className="bg-neon-blue text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 flex items-center transition duration-300">
             <IoDuplicateOutline className="mr-2"/> Déposer une annonce
           </Link>
         </div>
@@ -117,31 +117,32 @@ const Navbar = () => {
           </button>
         </div>
       </div>
-      {/* Menu mobile */}
+
       {isCategoriesOpen && (
-        <div className="md:hidden">
-          <ul className="bg-gray-800 mt-2 rounded-md shadow-lg z-10">
-            <li><Link to="/src/components/Category/immobilier.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><IoIosHome className="mr-2"/> IMMOBILIER</Link></li>
-            <li><Link to="/src/components/Category/vehicule.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><FaCar className="mr-2"/> VEHICULE</Link></li>
-            <li><Link to="/src/components/Category/electromenager.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><TbRazorElectric className="mr-2"/> ELECTROMENAGER</Link></li>
-            <li><Link to="/src/components/Category/electronique.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><MdComputer className="mr-2"/> ELECTRONIQUE</Link></li>
-            <li><Link to="/src/components/Category/mode-home.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><SlUser className="mr-2"/> MODE HOMME</Link></li>
-            <li><Link to="/src/components/Category/mode-femme.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><SlUserFemale className="mr-2"/> MODE FEMME</Link></li>
-            <li><Link to="/src/components/Category/mode-enfant.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><FaBaby className="mr-2"/> MODE ENFANT</Link></li>
-            <li><Link to="/src/components/Category/autres.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><MdOutlineOtherHouses className="mr-2"/> AUTRES</Link></li>
+        <div className="md:hidden mt-2">
+          <ul className="bg-gray-900 p-4 rounded-md shadow-lg">
+            <li><Link to="/src/components/Category/immobilier.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><IoIosHome className="mr-2"/> IMMOBILIER</Link></li>
+            <li><Link to="/src/components/Category/vehicule.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><FaCar className="mr-2"/> VEHICULE</Link></li>
+            <li><Link to="/src/components/Category/electromenager.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><TbRazorElectric className="mr-2"/> ELECTROMENAGER</Link></li>
+            <li><Link to="/src/components/Category/electronique.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><MdComputer className="mr-2"/> ELECTRONIQUE</Link></li>
+            <li><Link to="/src/components/Category/mode-home.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><SlUser className="mr-2"/> MODE HOMME</Link></li>
+            <li><Link to="/src/components/Category/mode-femme.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><SlUserFemale className="mr-2"/> MODE FEMME</Link></li>
+            <li><Link to="/src/components/Category/mode-enfant.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><FaBaby className="mr-2"/> MODE ENFANT</Link></li>
+            <li><Link to="/src/components/Category/autres.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><MdOutlineOtherHouses className="mr-2"/> AUTRES</Link></li>
           </ul>
         </div>
       )}
+
       {isAccountMenuOpen && (
-        <div className="md:hidden">
-          <ul className="bg-gray-800 mt-2 rounded-md shadow-lg z-10">
-            <li><Link to="/src/components/User/profile.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><FaRegUser className="mr-2"/> Profile</Link></li>
-            <li><Link to="/src/components/User/setting.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><IoSettingsOutline className="mr-2"/> Paramètres</Link></li>
-            <li><Link to="/src/components/User/sing-in.jsx" className="block px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center" onClick={handleCloseMenus}><IoLogInOutline className="mr-2"/> Connexion</Link></li>
+        <div className="md:hidden mt-2">
+          <ul className="bg-gray-900 p-4 rounded-md shadow-lg">
+            <li><Link to="/src/components/User/profile.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><FaRegUser className="mr-2"/> Profil</Link></li>
+            <li><Link to="/src/components/User/setting.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><IoSettingsOutline className="mr-2"/> Paramètres</Link></li>
+            <li><Link to="/src/components/User/sing-in.jsx" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300" onClick={handleCloseMenus}><IoLogInOutline className="mr-2"/> Connexion</Link></li>
             {isUserLoggedIn && (
               <li>
                 <button 
-                  className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700 flex items-center"
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300"
                   onClick={() => setIsLogoutPopupOpen(true)}
                 >
                   <CiLogout className="mr-2"/> Déconnexion
@@ -151,22 +152,23 @@ const Navbar = () => {
           </ul>
         </div>
       )}
+
       {isLogoutPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
-          <div className="bg-white p-4 rounded-md shadow-lg">
-            <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
-            <div className="mt-4 flex justify-end space-x-2">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-20">
+          <div className="bg-white p-6 rounded-md shadow-lg">
+            <h3 className="text-lg font-bold mb-4">Êtes-vous sûr de vouloir vous déconnecter?</h3>
+            <div className="flex space-x-4">
               <button 
-                className="bg-gray-500 text-white px-4 py-2 rounded-md"
-                onClick={() => setIsLogoutPopupOpen(false)}
-              >
-                Annuler
-              </button>
-              <button 
-                className="bg-red-500 text-white px-4 py-2 rounded-md"
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300"
                 onClick={handleLogout}
               >
-                Déconnexion
+                Oui
+              </button>
+              <button 
+                className="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 transition duration-300"
+                onClick={() => setIsLogoutPopupOpen(false)}
+              >
+                Non
               </button>
             </div>
           </div>

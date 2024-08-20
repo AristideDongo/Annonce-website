@@ -15,6 +15,9 @@ const Annonce = ({ setAnnonces, annonces }) => {
   const [errors, setErrors] = useState({});
   // État pour les aperçus des photos
   const [photoPreviews, setPhotoPreviews] = useState(['', '']); 
+  // État pour gérer la visibilité du popup
+  const [showPopup, setShowPopup] = useState(false);
+
   const navigate = useNavigate();
 
   // Gestion du changement des champs de texte
@@ -118,80 +121,57 @@ const Annonce = ({ setAnnonces, annonces }) => {
         photos: photoPreviews // Utilisez les aperçus des photos comme URLs
       };
       setAnnonces([...annonces, newAnnonce]);
-      alert('Annonce soumise avec succès');
-      // Redirection en fonction de la catégorie
-      if (formData.category === 'electromenager') {
+      setShowPopup(true); // Afficher le popup
+      setTimeout(() => {
+        setShowPopup(false);
         navigate('/');
-        return;
-      } else if (formData.category === 'immobilier') {
-        navigate('/');
-        return;
-      } else if (formData.category === 'electronique') {
-        navigate('/');
-        return;
-      } else if (formData.category === 'mode-enfant') {
-        navigate('/');
-        return;
-      } else if (formData.category === 'mode-femme') {
-        navigate('/');
-        return;
-      } else if (formData.category === 'mode-homme') { 
-        navigate('/');
-        return;
-      } else if (formData.category === 'vehicule') {
-        navigate('/');
-        return;
-      } else if (formData.category === 'autres') {
-        navigate('/');
-        return;
-      }
-      navigate('/');
+      }, 3000); // Le popup disparaît après 3 secondes
     }
   };
 
   return (
     <>  
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-6 text-center">Ajouter une annonce</h2>
+      <div className="min-h-screen flex items-center justify-center bg-indigo-100">
+        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+          <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Ajouter une annonce</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-gray-700">Titre</label>
+              <label className="block text-gray-700 font-medium">Titre</label>
               <input
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-indigo-400"
                 placeholder="Titre de l'annonce"
               />
               {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700">Description</label>
+              <label className="block text-gray-700 font-medium">Description</label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-indigo-400"
                 placeholder="Description de l'annonce"
               />
-              {errors.description && <p class="text-red-500 text-sm">{errors.description}</p>}
+              {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700">Photos</label>
+              <label className="block text-gray-700 font-medium">Photos</label>
               {formData.photos.map((photo, index) => (
                 <div key={index} className="mb-2">
                   <input
                     type="file"
                     onChange={(e) => handlePhotoChange(index, e)}
-                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300 mb-2"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-indigo-400 mb-2"
                   />
                   {photoPreviews[index] && (
                     <img
                       src={photoPreviews[index]}
                       alt={`Preview ${index}`}
-                      className="w-full h-32 object-cover mt-2"
+                      className="w-full h-32 object-cover mt-2 rounded-lg"
                     />
                   )}
                 </div>
@@ -199,18 +179,18 @@ const Annonce = ({ setAnnonces, annonces }) => {
               {errors.photos && <p className="text-red-500 text-sm">{errors.photos}</p>}
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700">Catégorie</label>
+              <label className="block text-gray-700 font-medium">Catégorie</label>
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleSelectChange}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-indigo-400"
               >
                 <option value="">Sélectionnez une catégorie</option>
                 <option value="immobilier">Immobilier</option>
                 <option value="vehicule">Véhicules</option>
                 <option value="electronique">Electronique</option>
-                <option value="electromenager">Electromenager</option>
+                <option value="electromenager">Electroménager</option>
                 <option value="mode-homme">Mode Homme</option>
                 <option value="mode-femme">Mode Femme</option>
                 <option value="mode-enfant">Mode Enfant</option>
@@ -219,31 +199,54 @@ const Annonce = ({ setAnnonces, annonces }) => {
               {errors.category && <p className="text-red-500 text-sm">{errors.category}</p>}
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700">Prix</label>
+              <label className="block text-gray-700 font-medium">Prix</label>
               <input
                 type="text"
                 name="price"
                 value={formData.price}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-indigo-400"
                 placeholder="Prix de l'annonce"
               />
               {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>}
             </div>
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-green-600 transition duration-200"
+              className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-200"
             >
               Soumettre l'annonce
             </button>
           </form>
           <div className="mt-6 text-center">
-            <Link to="/" className="text-blue-500 hover:underline">
+            <Link to="/" className="text-indigo-500 hover:underline">
               Retour à l'accueil
             </Link>
           </div>
         </div>
       </div>
+
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-12 w-12 text-green-500 mx-auto mb-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <h2 className="text-2xl font-semibold mb-2 text-gray-800">Youpi!</h2>
+            <p className="text-gray-700">Votre annonce a été soumise avec succès.</p>
+          </div>
+        </div>
+      )}
     </>
   );
 };

@@ -40,9 +40,9 @@ const Autres = ({annonces}) => {
 
   return (
     <> 
-      <div className="min-h-screen bg-gray-100">
+      <div className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-100 p-6 relative">
         <div className="container mx-auto p-4">
-          <h1 className="text-3xl font-bold mb-6 text-center">Catégorie: AUTRES</h1>
+          <h1 className="text-4xl font-extrabold text-center mb-8 text-indigo-700">Catégorie: AUTRES</h1>
           <div className="flex justify-between items-center mb-4">
             <div>
               <label htmlFor="sort" className="block text-gray-700">Trier par:</label>

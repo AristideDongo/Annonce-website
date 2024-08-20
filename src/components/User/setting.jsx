@@ -124,7 +124,7 @@ const Setting = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="mx-auto p-4 bg-indigo-100">
       <h1 className="text-2xl font-bold mb-4">Paramètres du compte</h1>
       
       <div className="flex flex-wrap -mx-2">
