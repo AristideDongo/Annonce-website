@@ -61,7 +61,7 @@ const Navbar = ({ setSearchQuery }) => {
         placeholder="Rechercher..."
         value={query}
         onChange={handleChange}
-         className="p-2 rounded-lg border border-gray-300 bg-none"
+         className="p-1 rounded-lg border border-gray-300 bg-transparent text-white"
 
       />
         <div className="hidden md:flex space-x-4">
@@ -113,7 +113,7 @@ const Navbar = ({ setSearchQuery }) => {
               </ul>
             )}
           </div>
-          <Link to="/src/components/Annonce/annonce.jsx" className="bg-neon-blue text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 flex items-center transition duration-300">
+          <Link to="/src/components/Annonce/annonce.jsx" className="bg-neon-blue text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-green-700 flex items-center transition duration-300">
             <IoDuplicateOutline className="mr-2"/> Déposer une annonce
           </Link>
         </div>

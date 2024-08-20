@@ -28,7 +28,7 @@ const Electronique = ({ annonces, searchQuery }) => {
 
   useEffect(() => {
     // Filtrer les annonces par catégorie "autres" et recherche
-    const filteredByCategory = annonces.filter(annonce => annonce.category === 'autres');
+    const filteredByCategory = annonces.filter(annonce => annonce.category === 'electronique');
     const filteredBySearch = filteredByCategory.filter(annonce =>
       annonce.title.toLowerCase().includes(searchQuery.toLowerCase())
     );

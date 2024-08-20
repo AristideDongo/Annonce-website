@@ -242,7 +242,7 @@ const Annonce = ({ setAnnonces, annonces }) => {
             </button>
           </form>
           <div className="mt-6 text-center">
-            <Link to="/" className="text-blue-500 hover:underline">
+            <Link to="/" className="text-indigo-500 hover:underline">
               Retour à l'accueil
             </Link>
           </div>

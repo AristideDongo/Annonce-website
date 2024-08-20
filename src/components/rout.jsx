@@ -22,6 +22,7 @@ import Mhomme from "./Category/mode-home";
 import Vehicule from "./Category/vehicule";
 import Detail from "./Detail/detail";
 import Navbar from "./Navbar/navbar";
+import Footer from "./Footer/Footer";
 
 const Rout = () => {
   const [annonces, setAnnonces] = useState([]);
@@ -62,6 +63,7 @@ const Rout = () => {
         <Route path="/src/components/Category/vehicule.jsx" element={<Vehicule annonces={annonces} searchQuery={searchQuery} />} />
         <Route path="/src/components/Detail/detail.jsx" element={<Detail annonces={annonces} />} />
       </Routes>
+      <Footer />
     </>
   );
 };
