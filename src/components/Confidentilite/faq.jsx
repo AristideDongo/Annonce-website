@@ -13,7 +13,7 @@ const Faq = () => {
   ];
 
   return (
-    <div className="mx-auto p-4 bg-indigo-100">
+    <div className="mx-auto p-4 bg-[#F4F6F9]">
       <h1 className="text-3xl font-bold mb-6">FAQ</h1>
       {faqs.map((faq, index) => (
         <div key={index} className="mb-4">

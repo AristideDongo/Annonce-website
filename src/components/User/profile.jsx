@@ -22,6 +22,11 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce }) => {
     description: '',
     price: '',
   });
+  const [errors, setErrors] = useState({
+    title: '',
+    description: '',
+    price: '',
+  });
 
   const handleEditClick = (annonce) => {
     setFormData({
@@ -38,8 +43,35 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce }) => {
     setEditAnnonce(null);
   };
 
+  const validateForm = () => {
+    const newErrors = {
+      title: '',
+      description: '',
+      price: '',
+    };
+    let isValid = true;
+
+    if (!formData.title.trim()) {
+      newErrors.title = 'Le titre est requis.';
+      isValid = false;
+    }
+
+    if (!formData.description.trim()) {
+      newErrors.description = 'La description est requise.';
+      isValid = false;
+    }
+
+    if (!formData.price.trim() || isNaN(formData.price) || Number(formData.price) <= 0) {
+      newErrors.price = 'Le prix doit être un nombre positif.';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const handleConfirmEdit = () => {
-    if (editAnnonce) {
+    if (validateForm() && editAnnonce) {
       const updatedAnnonce = {
         ...editAnnonce,
         ...formData,
@@ -160,7 +192,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce }) => {
   };
 
   return (
-    <div className="min-h-screen bg-indigo-200 flex flex-col items-center p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#F4F6F9] flex flex-col items-center p-4 sm:p-6 lg:p-8">
       <div className="bg-white shadow-lg rounded-lg p-6 sm:p-8 lg:p-10 mt-10 w-full max-w-3xl">
         <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
           <img
@@ -231,17 +263,16 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce }) => {
             {sortedAnnonces.map((annonce) => (
               <li key={annonce.id} className="bg-gray-50 p-5 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <h4 className="text-xl font-bold text-gray-800">{annonce.title}</h4>
-                <p className="text-gray-600">{annonce.description}</p>
-                <p className="text-green-600 font-semibold">{annonce.price} FCFA</p>
+                <p className="text-[#27AE60] font-semibold">Prix {annonce.price} FCFA</p>
                 <button
                   onClick={() => handleDetailClick(annonce)}
-                  className="mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-transform duration-300 transform hover:scale-105"
+                  className="mt-3 px-4 py-2 bg-[#1ABC9C] text-white rounded-lg hover:bg-[#16A085] transition-transform duration-300 transform hover:scale-105"
                 >
                   Détail
                 </button>
                 <button
                   onClick={() => handleEditClick(annonce)}
-                  className="mt-3 px-4 py-2 ml-5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-transform duration-300 transform hover:scale-105"
+                  className="mt-3 ml-5 px-4 py-2 bg-[#3498DB] text-white rounded-lg hover:bg-[#2980B9] transition-transform duration-300 transform hover:scale-105"
                 >
                   Modifier
                 </button>
@@ -256,9 +287,10 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce }) => {
           </ul>
           <button
             onClick={handleDeleteConfirmation}
-            className="mt-6 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-700 transition-transform duration-300 transform hover:scale-105"
+            className={`mt-6 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-700 transition-transform duration-300 transform hover:scale-105 ${selectedAnnonces.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={selectedAnnonces.length === 0}
           >
-            Supprimer
+               Supprimer
           </button>
           {showDeleteConfirmation && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -295,8 +327,9 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce }) => {
                       name="title"
                       value={formData.title}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-indigo-400"
-                      />
+                      className={`w-full px-3 py-2 border ${errors.title ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring focus:border-indigo-400`}
+                    />
+                    {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
                   </div>
                   <div>
                     <label htmlFor="description" className="block text-black">Description:</label>
@@ -305,8 +338,9 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce }) => {
                       name="description"
                       value={formData.description}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-indigo-400"
-                      />
+                      className={`w-full px-3 py-2 border ${errors.description ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring focus:border-indigo-400`}
+                    />
+                    {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
                   </div>
                   <div>
                     <label htmlFor="price" className="block text-black">Prix:</label>
@@ -316,14 +350,15 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce }) => {
                       name="price"
                       value={formData.price}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-indigo-400"
-                      />
+                      className={`w-full px-3 py-2 border ${errors.price ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring focus:border-indigo-400`}
+                    />
+                    {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
                   </div>
                   <div className="flex justify-center space-x-4">
                     <button
                       onClick={handleConfirmEdit}
                       type="button"
-                      className="px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-transform duration-300 transform hover:scale-105"
+                      className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-transform duration-300 transform hover:scale-105"
                     >
                       Sauvegarder
                     </button>

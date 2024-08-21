@@ -87,8 +87,8 @@ const Annonce = ({ setAnnonces, annonces }) => {
 
     if (!formData.description) {
       newErrors.description = 'La description est requise';
-    } else if (formData.description.length > 450) {
-      newErrors.description = 'La description ne doit pas dépasser 450 caractères';
+    } else if (formData.description.length > 2000) {
+      newErrors.description = 'La description ne doit pas dépasser 2000 caractères';
     }
 
     if (!formData.photos[1]) {
@@ -155,7 +155,7 @@ const Annonce = ({ setAnnonces, annonces }) => {
 
   return (
     <>  
-      <div className="min-h-screen flex items-center justify-center bg-indigo-100">
+      <div className="min-h-screen flex items-center justify-center bg-[#F4F6F9]">
         <div className="bg-white mt-5 mb-5 p-8 rounded-lg shadow-md w-full max-w-md">
           <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Ajouter une annonce</h2>
           <form onSubmit={handleSubmit}>
@@ -236,7 +236,7 @@ const Annonce = ({ setAnnonces, annonces }) => {
             </div>
             <button
               type="submit"
-              className="w-full bg-gray-700 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200"
+              className="w-full bg-[#F39C12] text-white py-2 rounded-lg hover:bg-[#E67E22] transition duration-200"
             >
               Soumettre l'annonce
             </button>

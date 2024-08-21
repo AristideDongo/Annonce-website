@@ -1,9 +1,17 @@
-// Home.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faSortAmountDown, faSortAmountUp, faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import { FadeLoader } from 'react-spinners';
+
+
+// Fonction utilitaire pour tronquer les titres
+const truncateTitle = (title, maxLength) => {
+  if (title.length > maxLength) {
+    return title.slice(0, maxLength) + '...';
+  }
+  return title;
+};
 
 const Home = ({ annonces, searchQuery }) => {
   const navigate = useNavigate();
@@ -63,41 +71,41 @@ const Home = ({ annonces, searchQuery }) => {
     });
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-100 p-6 relative">
+    <div className="min-h-screen bg-[#F4F6F9] p-6 relative">
       <div className="container mx-auto">
-        <h1 className="text-4xl font-extrabold text-center mb-8 text-orange-600">Liste des annonces</h1>
+        <h1 className="text-4xl font-extrabold text-center mb-8 text-[#333333]">Nouvelle Annonce</h1>
 
-        <div className="absolute left-0 top-0 mt-40 ml-4 bg-white p-6 rounded-lg shadow-lg flex flex-col space-y-4">
+        <div className="absolute left-0 top-0 mt-40 ml-4 bg-gray-200 p-6 rounded-lg shadow-lg flex flex-col space-y-4">
           <button
-            className="bg-orange-500 text-white w-40 px-4 py-2 rounded-lg hover:bg-orange-600 flex items-center justify-center transition-colors duration-300"
+            className="bg-[#FF6F61] text-white w-40 px-4 py-2 rounded-lg hover:bg-[#e63e2f] flex items-center justify-center transition-colors duration-300"
             onClick={() => handleSortChange('recent')}
           >
             <FontAwesomeIcon icon={faClock} className="mr-2" />
             Plus Récente
           </button>
           <button
-            className="bg-orange-500 text-white w-40 px-4 py-2 rounded-lg hover:bg-orange-600 flex items-center justify-center transition-colors duration-300"
+            className="bg-[#FF6F61] text-white w-40 px-4 py-2 rounded-lg hover:bg-[#e63e2f] flex items-center justify-center transition-colors duration-300"
             onClick={() => handleSortChange('oldest')}
           >
             <FontAwesomeIcon icon={faSortAmountUp} className="mr-2" />
             Plus Ancienne
           </button>
           <button
-            className="bg-orange-500 text-white w-40 px-4 py-2 rounded-lg hover:bg-orange-600 flex items-center justify-center transition-colors duration-300"
+            className="bg-[#FF6F61] text-white w-40 px-4 py-2 rounded-lg hover:bg-[#e63e2f] flex items-center justify-center transition-colors duration-300"
             onClick={() => handleSortChange('priceHigh')}
           >
             <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
             Prix Haut
           </button>
           <button
-            className="bg-orange-500 text-white w-40 px-4 py-2 rounded-lg hover:bg-orange-600 flex items-center justify-center transition-colors duration-300"
+            className="bg-[#FF6F61] text-white w-40 px-4 py-2 rounded-lg hover:bg-[#e63e2f] flex items-center justify-center transition-colors duration-300"
             onClick={() => handleSortChange('priceLow')}
           >
             <FontAwesomeIcon icon={faSortAmountDown} className="mr-2" />
             Prix Bas
           </button>
           <select
-            className="bg-orange-500 text-white w-40 px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-300"
+            className="bg-[#FF6F61] text-white w-40 px-4 py-2 rounded-lg hover:bg-[#e63e2f] transition-colors duration-300"
             value={selectedCategory}
             onChange={handleCategoryChange}
           >
@@ -115,7 +123,7 @@ const Home = ({ annonces, searchQuery }) => {
 
         {isLoading ? (
           <div className="flex justify-center items-center min-h-screen">
-            <FadeLoader color="#2E7D32" size={100} />
+            <FadeLoader color="#F4511E" size={100} />
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 ml-56">
@@ -130,10 +138,12 @@ const Home = ({ annonces, searchQuery }) => {
                     </div>
                   )}
                   <div className="p-4">
-                    <h2 className="text-xl font-bold mb-2 text-black">{annonce.title}</h2>
-                    <p className="text-green-500 font-bold">{annonce.price} FCFA</p>
+                    <h2 className="text-xl font-bold mb-2 text-black">
+                      {truncateTitle(annonce.title, 50)} {/* Limiter le titre à 50 caractères */}
+                    </h2>
+                    <p className="text-[#27AE60] font-bold">{annonce.price} FCFA</p>
                     <button
-                      className="mt-1 w-full bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors duration-300"
+                      className="mt-1 w-full bg-[#1ABC9C] text-white px-4 py-2 rounded-lg hover:bg-[#16A085] transition-colors duration-300"
                       onClick={() => handleDetailClick(annonce)}
                     >
                       Détails
