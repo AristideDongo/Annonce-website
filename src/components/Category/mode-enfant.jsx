@@ -44,7 +44,7 @@ const Menfant = ({ annonces, searchQuery }) => {
     <> 
       <div className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-100 p-6 relative">
         <div className="container mx-auto p-4">
-          <h1 className="text-4xl font-extrabold text-center mb-8 text-indigo-700">MODE ENFANT</h1>
+          <h1 className="text-4xl font-extrabold text-center mb-8 text-orange-600">MODE ENFANT</h1>
           <div className="flex justify-between items-center mb-4">
             <div>
               <label htmlFor="sort" className="block text-gray-700">Trier par:</label>
@@ -67,10 +67,9 @@ const Menfant = ({ annonces, searchQuery }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredAnnonces.length > 0 ? (
               filteredAnnonces.map((annonce) => (
-                <div key={annonce.id} className="bg-white p-4 rounded-lg shadow-lg">
+                <div key={annonce.id} className="bg-white p-2 rounded-lg shadow-lg">
                   <img src={annonce.photos[0]} alt="Photo de l'annonce" className="w-full h-48 object-cover rounded-lg mb-4" loading='lazy'/>
                   <h2 className="text-xl font-bold mb-2">{annonce.title}</h2>
-                  <p className="text-gray-700">{annonce.description}</p>
                   <p className="text-green-500 font-bold">{annonce.price} FCFA</p>
                   <button
                     className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 mt-2"

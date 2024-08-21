@@ -1,4 +1,21 @@
-import { useState } from "react";
+import React, { useState } from 'react';
+
+const Modal = ({ isOpen, onClose, message }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+      <div className="bg-white p-4 rounded-lg max-w-sm mx-auto text-center">
+        <p className="mb-4 text-lg">{message}</p>
+        <button 
+          onClick={onClose} 
+          className="bg-red-500 text-white px-4 py-2 rounded">
+          Fermer
+        </button>
+      </div>
+    </div>
+  );
+};
 
 const Setting = () => {
   // État pour les informations utilisateur
@@ -20,6 +37,17 @@ const Setting = () => {
     emailNotifications: false,
     smsNotifications: false
   });
+
+  // État pour la gestion des erreurs
+  const [error, setError] = useState({ isOpen: false, message: '' });
+
+  const handleError = (message) => {
+    setError({ isOpen: true, message });
+  };
+
+  const closeErrorModal = () => {
+    setError({ isOpen: false, message: '' });
+  };
 
   // Gestion du changement des informations utilisateur
   const handleUserInfoChange = (e) => {
@@ -52,12 +80,11 @@ const Setting = () => {
       if (!response.ok) {
         throw new Error('Échec de la mise à jour des paramètres utilisateur');
       }
-      // Stocker les informations utilisateur dans localStorage
       localStorage.setItem('userInfo', JSON.stringify(userInfo));
       alert('Paramètres utilisateur mis à jour avec succès');
     } catch (error) {
       console.error(error);
-      alert('Une erreur est survenue lors de la mise à jour des paramètres utilisateur');
+      handleError('Une erreur est survenue lors de la mise à jour des paramètres utilisateur');
     }
   };
 
@@ -77,7 +104,7 @@ const Setting = () => {
       alert('Mot de passe mis à jour avec succès');
     } catch (error) {
       console.error(error);
-      alert('Une erreur est survenue lors de la mise à jour du mot de passe');
+      handleError('Une erreur est survenue lors de la mise à jour du mot de passe');
     }
   };
 
@@ -97,7 +124,7 @@ const Setting = () => {
       alert('Préférences de notification mises à jour avec succès');
     } catch (error) {
       console.error(error);
-      alert('Une erreur est survenue lors de la mise à jour des préférences de notification');
+      handleError('Une erreur est survenue lors de la mise à jour des préférences de notification');
     }
   };
 
@@ -113,7 +140,7 @@ const Setting = () => {
     if (password.newPassword === password.confirmPassword) {
       updatePassword(password);
     } else {
-      alert('Les mots de passe ne correspondent pas');
+      handleError('Les mots de passe ne correspondent pas');
     }
   };
 
@@ -227,6 +254,8 @@ const Setting = () => {
           </form>
         </div>
       </div>
+
+      <Modal isOpen={error.isOpen} onClose={closeErrorModal} message={error.message} />
     </div>
   );
 };

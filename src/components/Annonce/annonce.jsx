@@ -81,7 +81,7 @@ const Annonce = ({ setAnnonces, annonces }) => {
     const newErrors = {};
     if (!formData.title) {
       newErrors.title = 'Le titre est requis';
-    } else if (formData.title.length > 10 ) {
+    } else if (formData.title.length > 100 ) {
       newErrors.title = 'Le titre ne doit pas dépasser 100 caractères';
     }
 
@@ -156,7 +156,7 @@ const Annonce = ({ setAnnonces, annonces }) => {
   return (
     <>  
       <div className="min-h-screen flex items-center justify-center bg-indigo-100">
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <div className="bg-white mt-5 mb-5 p-8 rounded-lg shadow-md w-full max-w-md">
           <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Ajouter une annonce</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">

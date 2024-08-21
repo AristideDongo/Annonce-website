@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Profile = ({ annonces, deleteAnnonce }) => {
+const Profile = ({ annonces, deleteAnnonce, updateAnnonce }) => {
   const navigate = useNavigate();
   const [sortOption, setSortOption] = useState('');
   const [profilePhoto, setProfilePhoto] = useState(null);
@@ -15,8 +15,41 @@ const Profile = ({ annonces, deleteAnnonce }) => {
   const [selectedAnnonces, setSelectedAnnonces] = useState([]);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showPhotoPopup, setShowPhotoPopup] = useState(false);
+  const [editAnnonce, setEditAnnonce] = useState(null);
+  const [showEditPopup, setShowEditPopup] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    price: '',
+  });
 
-  
+  const handleEditClick = (annonce) => {
+    setFormData({
+      title: annonce.title,
+      description: annonce.description,
+      price: annonce.price,
+    });
+    setEditAnnonce(annonce);
+    setShowEditPopup(true);
+  };
+
+  const handleCloseEditPopup = () => {
+    setShowEditPopup(false);
+    setEditAnnonce(null);
+  };
+
+  const handleConfirmEdit = () => {
+    if (editAnnonce) {
+      const updatedAnnonce = {
+        ...editAnnonce,
+        ...formData,
+      };
+      updateAnnonce(updatedAnnonce);
+      console.log("Modification de l'annonce:", updatedAnnonce);
+      handleCloseEditPopup();
+    }
+  };
+
   const handleDetailClick = (annonce) => {
     navigate('/src/components/Detail/detail.jsx/', { state: annonce });
   };
@@ -26,12 +59,11 @@ const Profile = ({ annonces, deleteAnnonce }) => {
       setShowPhotoPopup(true);
     }
   };
-  
+
   const handleClosePopup = () => {
     setShowPhotoPopup(false);
   };
-  
-  
+
   useEffect(() => {
     const savedPhotoURL = localStorage.getItem('photoURL');
     if (savedPhotoURL) {
@@ -118,7 +150,14 @@ const Profile = ({ annonces, deleteAnnonce }) => {
     setSelectedAnnonces([]); // Réinitialiser les annonces sélectionnées après suppression
     setShowDeleteConfirmation(false);
   };
-  
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-indigo-200 flex flex-col items-center p-4 sm:p-6 lg:p-8">
@@ -137,22 +176,22 @@ const Profile = ({ annonces, deleteAnnonce }) => {
           </div>
         </div>
         {showPhotoPopup && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div className="bg-white p-4 rounded-lg shadow-lg text-center max-w-[90%] max-h-[90%] overflow-auto">
-      <img
-        src={photoURL}
-        alt="Profile Large"
-        className="max-w-full max-h-96 rounded-lg"
-      />
-      <button
-        onClick={handleClosePopup}
-        className="mt-4 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-600 transition-transform duration-300 transform hover:scale-105"
-      >
-        Fermer
-      </button>
-    </div>
-  </div>
-)}
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white p-4 rounded-lg shadow-lg text-center max-w-[90%] max-h-[90%] overflow-auto">
+              <img
+                src={photoURL}
+                alt="Profile Large"
+                className="max-w-full max-h-96 rounded-lg"
+              />
+              <button
+                onClick={handleClosePopup}
+                className="mt-4 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-600 transition-transform duration-300 transform hover:scale-105"
+              >
+                Fermer
+              </button>
+            </div>
+          </div>
+        )}
         <div className="mt-6">
           <input
             type="file"
@@ -200,6 +239,12 @@ const Profile = ({ annonces, deleteAnnonce }) => {
                 >
                   Détail
                 </button>
+                <button
+                  onClick={() => handleEditClick(annonce)}
+                  className="mt-3 px-4 py-2 ml-5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-transform duration-300 transform hover:scale-105"
+                >
+                  Modifier
+                </button>
                 <input
                   type="checkbox"
                   checked={selectedAnnonces.includes(annonce.id)}
@@ -234,6 +279,63 @@ const Profile = ({ annonces, deleteAnnonce }) => {
                     Non
                   </button>
                 </div>
+              </div>
+            </div>
+          )}
+          {showEditPopup && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+                <h2 className="text-2xl font-semibold mb-4 text-yellow-600">Modifier l'annonce</h2>
+                <form className="space-y-4">
+                  <div>
+                    <label htmlFor="title" className="block text-black">Titre:</label>
+                    <input
+                      type="text"
+                      id="title"
+                      name="title"
+                      value={formData.title}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-indigo-400"
+                      />
+                  </div>
+                  <div>
+                    <label htmlFor="description" className="block text-black">Description:</label>
+                    <textarea
+                      id="description"
+                      name="description"
+                      value={formData.description}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-indigo-400"
+                      />
+                  </div>
+                  <div>
+                    <label htmlFor="price" className="block text-black">Prix:</label>
+                    <input
+                      type="text"
+                      id="price"
+                      name="price"
+                      value={formData.price}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-indigo-400"
+                      />
+                  </div>
+                  <div className="flex justify-center space-x-4">
+                    <button
+                      onClick={handleConfirmEdit}
+                      type="button"
+                      className="px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-transform duration-300 transform hover:scale-105"
+                    >
+                      Sauvegarder
+                    </button>
+                    <button
+                      onClick={handleCloseEditPopup}
+                      type="button"
+                      className="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-transform duration-300 transform hover:scale-105"
+                    >
+                      Annuler
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           )}

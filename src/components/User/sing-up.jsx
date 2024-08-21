@@ -125,7 +125,7 @@ const Singup = () => {
   return (
     <>
       <div className="min-h-screen flex items-center justify-center bg-indigo-100">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <div className="bg-white mt-5 mb-5 p-8 rounded-lg shadow-lg w-full max-w-md">
           <h2 className="text-2xl font-bold mb-6 text-center">INSCRIPTION</h2>
           <form onSubmit={validateForm}>
             <div className="mb-4">
@@ -215,10 +215,10 @@ const Singup = () => {
             </button>
           </form>
           <div className="mt-6 flex justify-center items-center space-x-4">
-            <button className="bg-gray-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition duration-200">
+            <button className="bg-black text-white p-4 rounded-full shadow-lg hover:bg-blue-400 hover:text-blue-700 transition duration-200">
               <ImFacebook2 size={24} />
             </button>
-            <button className="bg-gray-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition duration-200">
+            <button className="bg-black text-white p-4 rounded-full shadow-lg hover:bg-green-400 transition duration-200">
               <FcGoogle size={24} />
             </button>
           </div>

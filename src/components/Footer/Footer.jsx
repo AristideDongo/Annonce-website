@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaWhatsapp } from 'react-icons/fa';
-import { FaXTwitter } from 'react-icons/fa6';
+import { FaFacebook, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import { FaLocationDot, FaXTwitter } from 'react-icons/fa6';
+import { IoIosCall } from 'react-icons/io';
+import { MdEmail } from 'react-icons/md';
 
 const Footer = () => {
   return (
@@ -26,9 +28,9 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4 text-white">Contact</h3>
             <ul className="text-sm leading-relaxed">
-              <li>Email: <a href="mailto:contact@siteannonce.com" className="hover:underline">contact@siteannonce.com</a></li>
-              <li>Téléphone: <a href="tel:+33123456789" className="hover:underline">+33 1 23 45 67 89</a></li>
-              <li>Adresse: 123 Rue de l'Annonce, Paris, France</li>
+              <li><MdEmail/><a href="mailto:contact@siteannonce.com" className="hover:underline">contact@siteannonce360.com</a></li>
+              <li className='pt-2'><IoIosCall/><a href="tel:+33123456789" className="hover:underline">+225 01 01 01 01 01</a></li>
+              <li className='pt-2'><FaLocationDot/>Face au camp militaire, bondoukou, Ci</li>
             </ul>
           </div>
 

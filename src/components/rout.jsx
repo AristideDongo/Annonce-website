@@ -28,6 +28,14 @@ const Rout = () => {
   const [annonces, setAnnonces] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const updateAnnonce = (updatedAnnonce) => {
+    setAnnonces(prevAnnonces => 
+      prevAnnonces.map(annonce =>
+        annonce.id === updatedAnnonce.id ? updatedAnnonce : annonce
+      )
+    );
+  };
+
   const deleteAnnonce = (id) => {
     console.log("Suppression d'annonce ID:", id);
     setAnnonces(prevAnnonces => {
@@ -43,7 +51,7 @@ const Rout = () => {
       <Navbar setSearchQuery={setSearchQuery} />
       <Routes>
         <Route path="/" element={<Home annonces={annonces} searchQuery={searchQuery} />} />
-        <Route path="/src/components/User/profile.jsx" element={<Profile annonces={annonces}deleteAnnonce={deleteAnnonce}/>} />
+        <Route path="/src/components/User/profile.jsx" element={<Profile annonces={annonces} deleteAnnonce={deleteAnnonce} updateAnnonce={updateAnnonce}/>} />
         <Route path="/src/components/User/setting.jsx" element={<Setting />} />
         <Route path="/src/components/User/sing-in.jsx" element={<Singin />} />
         <Route path="/src/components/User/sing-up.jsx" element={<Singup />} />

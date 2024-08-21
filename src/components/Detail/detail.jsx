@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 const Detail = () => {
   const location = useLocation();
@@ -19,7 +21,8 @@ const Detail = () => {
       <div className="container mx-auto">
         <div className="bg-white p-8 rounded-lg shadow-lg">
           <h1 className="text-3xl font-bold mb-4">{title}</h1>
-          <p className="text-gray-700 mb-4">{description}</p>
+          <p className="text-2xl text-gray-400 font-semibold underline" >Description de l'annonce: </p><br />
+          <p className="text-black mb-4">{description}</p>
           <p className="text-green-500 font-bold text-xl mb-4">{price} FCFA</p>
           {photos && photos.length > 0 && (
             <div className="relative">
@@ -28,13 +31,13 @@ const Detail = () => {
                 onClick={handlePrevImage} 
                 className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition duration-300"
               >
-                &lt;
+                <FontAwesomeIcon icon={faChevronLeft} />
               </button>
               <button 
                 onClick={handleNextImage} 
                 className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition duration-300"
               >
-                &gt;
+                <FontAwesomeIcon icon={faChevronRight} />
               </button>
             </div>
           )}
