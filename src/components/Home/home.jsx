@@ -138,9 +138,13 @@ const Home = ({ annonces, searchQuery }) => {
                     </div>
                   )}
                   <div className="p-4">
-                    <h2 className="text-xl font-bold mb-2 text-black">
-                      {truncateTitle(annonce.title, 50)} {/* Limiter le titre à 50 caractères */}
-                    </h2>
+                  <h2 
+                        className="text-xl font-bold mb-2 text-black overflow-hidden whitespace-nowrap text-overflow-ellipsis" 
+                        style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                  >
+                       {truncateTitle(annonce.title, 50)}
+                  </h2>
+
                     <p className="text-[#27AE60] font-bold">{annonce.price} FCFA</p>
                     <button
                       className="mt-1 w-full bg-[#1ABC9C] text-white px-4 py-2 rounded-lg hover:bg-[#16A085] transition-colors duration-300"

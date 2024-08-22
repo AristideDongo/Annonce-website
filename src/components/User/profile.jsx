@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 
-const Profile = ({ annonces, deleteAnnonce, updateAnnonce }) => {
+const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfile }) => {
   const navigate = useNavigate();
   const [sortOption, setSortOption] = useState('');
   const [profilePhoto, setProfilePhoto] = useState(null);
-  const [photoURL, setPhotoURL] = useState('https://via.placeholder.com/150');
   const [sortedAnnonces, setSortedAnnonces] = useState(annonces);
+  const [photoURL, setPhotoURL] = useState(profile.photoURL);
   const [userInfo, setUserInfo] = useState({
-    name: 'Nom d\'utilisateur',
+    name: profile.name,
     email: 'email@example.com',
-    phone: '0000000000'
+    phone: profile.phone
   });
   const [selectedAnnonces, setSelectedAnnonces] = useState([]);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -27,6 +27,14 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce }) => {
     description: '',
     price: '',
   });
+
+  useEffect(() => {
+    setPhotoURL(profile.photoURL);
+    setUserInfo(prevUserInfo => ({
+      ...prevUserInfo,
+      name: profile.name
+    }));
+  }, [profile]);
 
   const handleEditClick = (annonce) => {
     setFormData({
@@ -150,7 +158,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce }) => {
     setProfilePhoto(file);
     const newPhotoURL = URL.createObjectURL(file);
     setPhotoURL(newPhotoURL);
-    localStorage.setItem('photoURL', newPhotoURL);
+    updateProfile({ photoURL: newPhotoURL });
   };
 
   const handlePhotoUpload = () => {

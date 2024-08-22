@@ -45,18 +45,26 @@ const Rout = () => {
     });
   };
   
+  const [profile, setProfile] = useState({
+    photoURL: 'https://via.placeholder.com/150',
+    name: 'Nom d\'utilisateur',
+    phone: '0000000000',
+  });
 
+  const updateProfile = (newProfile) => {
+    setProfile(prevProfile => ({ ...prevProfile, ...newProfile }));
+  };
   return (
     <>
       <Navbar setSearchQuery={setSearchQuery} />
       <Routes>
         <Route path="/" element={<Home annonces={annonces} searchQuery={searchQuery} />} />
-        <Route path="/src/components/User/profile.jsx" element={<Profile annonces={annonces} deleteAnnonce={deleteAnnonce} updateAnnonce={updateAnnonce}/>} />
+        <Route path="/src/components/User/profile.jsx" element={<Profile annonces={annonces} deleteAnnonce={deleteAnnonce} updateAnnonce={updateAnnonce} profile={profile} updateProfile={updateProfile}/>} />
         <Route path="/src/components/User/setting.jsx" element={<Setting />} />
         <Route path="/src/components/User/sing-in.jsx" element={<Singin />} />
         <Route path="/src/components/User/sing-up.jsx" element={<Singup />} />
         <Route path="/src/components/User/mdpoublie.jsx" element={<Mdpoublie />} />
-        <Route path="/src/components/Annonce/annonce.jsx" element={<Annonce setAnnonces={setAnnonces} annonces={annonces} />} />
+        <Route path="/src/components/Annonce/annonce.jsx" element={<Annonce setAnnonces={setAnnonces} annonces={annonces} profile={profile} />} />
         <Route path="/src/components/Confidentilite/conditions.jsx" element={<Conditions />} />
         <Route path="/src/components/Confidentilite/Politique.jsx" element={<Politique />} />
         <Route path="/src/components/Confidentilite/faq.jsx" element={<Faq />} />
@@ -69,7 +77,7 @@ const Rout = () => {
         <Route path="/src/components/Category/mode-femme.jsx" element={<Mfemme annonces={annonces} searchQuery={searchQuery} />} />
         <Route path="/src/components/Category/mode-home.jsx" element={<Mhomme annonces={annonces} searchQuery={searchQuery} />} />
         <Route path="/src/components/Category/vehicule.jsx" element={<Vehicule annonces={annonces} searchQuery={searchQuery} />} />
-        <Route path="/src/components/Detail/detail.jsx" element={<Detail annonces={annonces} />} />
+        <Route path="/src/components/Detail/detail.jsx" element={<Detail annonces={annonces} profile={profile}/>} />
       </Routes>
       <Footer />
     </>
