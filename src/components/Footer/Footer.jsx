@@ -7,7 +7,7 @@ import { MdEmail } from 'react-icons/md';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#2C3E50] text-gray-300 py-10">
+    <footer className="bg-black text-gray-300 py-10 font-custom ">
       <div className="container mx-auto px-4 md:px-8">
         {/* Logo */}
         <div className="flex justify-center mb-8">
@@ -56,7 +56,7 @@ const Footer = () => {
               </li>
               <li>
                 <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="transition-transform duration-200 hover:scale-110">
-                  <FaXTwitter className="inline-block text-xl text-white hover:text-black" />
+                  <FaXTwitter className="inline-block text-xl text-white hover:text-gray-800" />
                 </a>
               </li>
               <li>

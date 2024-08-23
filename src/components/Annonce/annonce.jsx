@@ -1,6 +1,45 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
+import Select from 'react-select';
 
+const locationOptions = [
+  { value: 'ci-abidjan,abobo', label: 'CI,Abidjan, Abobo' },
+  { value: 'ci-abidjan,abobo-baoule', label: 'CI,Abidjan, Abobo-Baoulé' },
+  { value: 'ci-abidjan,adjame', label: 'CI,Abidjan, Adjamé' },
+  { value: 'ci-abidjan,attecoube', label: 'CI,Abidjan, Attecoubé' },
+  { value: 'ci-abidjan,cocody', label: 'CI,Abidjan, Cocody' },
+  { value: 'ci-abidjan,cocody-2-plateaux', label: 'CI,Abidjan, Cocody - 2 Plateaux' },
+  { value: 'ci-abidjan,cocody-angre', label: 'CI,Abidjan, Cocody - Angré' },
+  { value: 'ci-abidjan,koumassi', label: 'CI,Abidjan, Koumassi' },
+  { value: 'ci-abidjan,koumassi-riviera', label: 'CI,Abidjan, Koumassi - Riviera' },
+  { value: 'ci-abidjan,marcory', label: 'CI,Abidjan, Marcory' },
+  { value: 'ci-abidjan,marcory-zone-4', label: 'CI,Abidjan, Marcory - Zone 4' },
+  { value: 'ci-abidjan,plateau', label: 'CI,Abidjan, Plateau' },
+  { value: 'ci-abidjan,plateau-biafra', label: 'CI,Abidjan, Plateau - Biafra' },
+  { value: 'ci-abidjan,port-bouet', label: 'CI,Abidjan, Port-Bouët' },
+  { value: 'ci-abidjan,port-bouet-gonzagueville', label: 'CI,Abidjan, Port-Bouët - Gonzagueville' },
+  { value: 'ci-abidjan,treichville', label: 'CI,Abidjan, Treichville' },
+  { value: 'ci-abidjan,yopougon', label: 'CI,Abidjan, Yopougon' },
+  { value: 'ci-abidjan,yopougon-sicogi', label: 'CI,Abidjan, Yopougon - Sicogi' },
+  { value: 'ci-abidjan,yopougon-andokoi', label: 'CI,Abidjan, Yopougon - Andokoi' },
+  { value: 'ci-abidjan,songon', label: 'CI,Abidjan, Songon' },
+  { value: 'ci-abidjan,bingerville', label: 'CI,Abidjan, Bingerville' },
+  { value: 'ci-yamoussoukro', label: 'CI,Yamoussoukro' },
+  { value: 'ci-bouake', label: 'CI,Bouaké' },
+  { value: 'ci-daloa', label: 'CI,Daloa' },
+  { value: 'ci-san-pedro', label: 'CI,San-Pédro' },
+  { value: 'ci-korhogo', label: 'CI,Korhogo' },
+  { value: 'ci-man', label: 'CI,Man' },
+  { value: 'ci-gagnoa', label: 'CI,Gagnoa' },
+  { value: 'ci-abengourou', label: 'CI,Abengourou' },
+  { value: 'ci-bondoukou,quartier-zanzan', label: 'CI,Bondoukou, Quartier Zanzan' },
+  { value: 'ci-segela', label: 'CI,Séguéla' },
+  { value: 'ci-odienne', label: 'CI,Odienné' },
+  { value: 'ci-ferkessedougou', label: 'CI,Ferkessédougou' },
+  { value: 'ci-issia', label: 'CI,Issia' },
+  { value: 'ci-dabou', label: 'CI,Dabou' },
+  // Ajoutez d'autres options selon vos besoins
+]
 const Annonce = ({ setAnnonces, annonces, profile }) => {
   const [formData, setFormData] = useState({
     title: '',
@@ -8,11 +47,12 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
     photos: ['', '', '', '', '', ''],
     category: '',
     price: '',
-    phone: ''
+    phone: '',
+    location: null
   });
 
   const [errors, setErrors] = useState({});
-  const [photoPreviews, setPhotoPreviews] = useState(['', '', '', '', '']);  // Correspondre au nombre de photos
+  const [photoPreviews, setPhotoPreviews] = useState(['', '', '', '', '']);
   const [showPopup, setShowPopup] = useState(false);
 
   const navigate = useNavigate();
@@ -66,6 +106,17 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
     });
   };
 
+  const handleLocationChange = (selectedOption) => {
+    setFormData({
+      ...formData,
+      location: selectedOption
+    });
+    setErrors({
+      ...errors,
+      location: ''
+    });
+  };
+
   const validateForm = () => {
     const newErrors = {};
     if (!formData.title) {
@@ -77,11 +128,11 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
     if (!formData.description) {
       newErrors.description = 'La description est requise';
     } else if (formData.description.length > 700) {
-      newErrors.description = 'La description ne doit pas dépasser 2000 caractères';
+      newErrors.description = 'La description ne doit pas dépasser 700 caractères';
     }
 
     const filledPhotos = formData.photos.filter(photo => photo !== '');
-    if (filledPhotos.length < 3) {  // Assurez-vous que 3 photos sont requises
+    if (filledPhotos.length < 3) {
       newErrors.photos = 'Trois photos sont requises';
     }
 
@@ -101,6 +152,10 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
       newErrors.phone = 'Le numéro de téléphone doit comporter 10 chiffres';
     }
 
+    if (!formData.location) {
+      newErrors.location = 'La localisation est requise';
+    }
+
     return newErrors;
   };
 
@@ -113,7 +168,8 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
       const newAnnonce = {
         ...formData,
         id: annonces.length + 1,
-        photos: photoPreviews
+        photos: photoPreviews,
+        location: formData.location,  // Ajout de la localisation ici
       };
       setAnnonces([...annonces, newAnnonce]);
       setShowPopup(true);
@@ -123,12 +179,13 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
       }, 2000);
     }
   };
+  
 
   return (
     <>  
-      <div className="min-h-screen flex items-center justify-center bg-[#F4F6F9]">
+      <div className="min-h-screen font-custom flex items-center justify-center bg-[#F4F6F9]">
         <div className="bg-white mt-5 mb-5 p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Ajouter une annonce</h2>
+          <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Redigez votre annonce</h2>
           <div className="flex items-center p-4 bg-white shadow-md rounded-lg max-w-sm mx-auto mt-8">
             <img
               src={profile.photoURL}
@@ -142,10 +199,9 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
             </div>
           </div>
 
-          {/* Champs du formulaire détachés et espacés */}
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium">Titre</label>
+              <label className="block mt-5 text-gray-700 font-medium">Titre</label>
               <input
                 type="text"
                 name="title"
@@ -153,7 +209,9 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-indigo-400"
                 placeholder="Titre de l'annonce"
+                maxLength="100"
               />
+              <p className="text-gray-500 text-sm">{formData.title.length}/100</p>
               {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
             </div>
             <div className="mb-4">
@@ -164,49 +222,51 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-indigo-400"
                 placeholder="Description de l'annonce"
+                maxLength="700"
               />
+              <p className="text-gray-500 text-sm">{formData.description.length}/700</p>
               {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
             </div>
             {/* Bloc de Photos sous forme de grille */}
-          <div className="mb-8">
-            <label className="block text-gray-700 font-medium">Photos</label>
-            <div className="grid grid-cols-3 gap-4 mb-4">
-              {formData.photos.map((photo, index) => (
-                <div key={index} className="relative">
-                  <label className="flex items-center justify-center w-full h-32 border border-gray-300 rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200">
-                    {photoPreviews[index] ? (
-                      <img
-                        src={photoPreviews[index]}
-                        alt={`Preview ${index}`}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-12 w-12 text-gray-600"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M12 4v16m8-8H4"
+            <div className="mb-8">
+              <label className="block text-gray-700 font-medium">Photos</label>
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                {formData.photos.map((photo, index) => (
+                  <div key={index} className="relative">
+                    <label className="flex items-center justify-center w-full h-32 border border-gray-300 rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200">
+                      {photoPreviews[index] ? (
+                        <img
+                          src={photoPreviews[index]}
+                          alt={`Preview ${index}`}
+                          className="w-full h-full object-cover rounded-lg"
                         />
-                      </svg>
-                    )}
-                    <input
-                      type="file"
-                      onChange={(e) => handlePhotoChange(index, e)}
-                      className="absolute inset-0 opacity-0 cursor-pointer"
-                    />
-                  </label>
-                </div>
-              ))}
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-12 w-12 text-gray-600"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M12 4v16m8-8H4"
+                          />
+                        </svg>
+                      )}
+                      <input
+                        type="file"
+                        onChange={(e) => handlePhotoChange(index, e)}
+                        className="absolute inset-0 opacity-0 cursor-pointer"
+                      />
+                    </label>
+                  </div>
+                ))}
+              </div>
+              {errors.photos && <p className="text-red-500 text-sm">{errors.photos}</p>}
             </div>
-            {errors.photos && <p className="text-red-500 text-sm">{errors.photos}</p>}
-          </div>
             <div className="mb-4">
               <label className="block text-gray-700 font-medium">Catégorie</label>
               <select
@@ -251,9 +311,22 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
               />
               {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
             </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 font-medium">Localisation</label>
+              <Select
+                name="location"
+                value={formData.location}
+                onChange={handleLocationChange}
+                options={locationOptions}
+                placeholder="Sélectionnez une localisation"
+                className="basic-single"
+                classNamePrefix="select"
+              />
+              {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
+            </div>
             <button
               type="submit"
-              className="w-full bg-[#F39C12] text-white py-2 rounded-lg hover:bg-[#E67E22] transition duration-200"
+              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200"
             >
               Soumettre l'annonce
             </button>

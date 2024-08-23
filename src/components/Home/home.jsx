@@ -4,15 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faSortAmountDown, faSortAmountUp, faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import { FadeLoader } from 'react-spinners';
 
-
-// Fonction utilitaire pour tronquer les titres
-const truncateTitle = (title, maxLength) => {
-  if (title.length > maxLength) {
-    return title.slice(0, maxLength) + '...';
-  }
-  return title;
-};
-
 const Home = ({ annonces, searchQuery }) => {
   const navigate = useNavigate();
   const [sortOrder, setSortOrder] = useState('recent');
@@ -51,7 +42,7 @@ const Home = ({ annonces, searchQuery }) => {
     setQuery(e.target.value);
   };
 
-  const filteredAnnonces = annonces.filter(annonce =>
+  const filteredAnnonces = annonces.filter((annonce) =>
     annonce.title.toLowerCase().includes(query.toLowerCase())
   );
 
@@ -70,42 +61,50 @@ const Home = ({ annonces, searchQuery }) => {
       return 0;
     });
 
+    const truncateText = (text, maxLength) => {
+      if (text.length > maxLength) {
+        return text.slice(0, maxLength) + '...';
+      }
+      return text;
+    };
+    
+
   return (
-    <div className="min-h-screen bg-[#F4F6F9] p-6 relative">
+    <div className="min-h-screen bg-[#F4F6F9] p-6 relative font-custom">
       <div className="container mx-auto">
         <h1 className="text-4xl font-extrabold text-center mb-8 text-[#333333]">Nouvelle Annonce</h1>
 
-        <div className="absolute left-0 top-0 mt-40 ml-4 bg-gray-200 p-6 rounded-lg shadow-lg flex flex-col space-y-4">
+        <div className="absolute left-0 top-0 mt-40 ml-4 bg-gray-300 p-6 rounded-lg shadow-lg flex flex-col space-y-4">
           <button
-            className="bg-[#FF6F61] text-white w-40 px-4 py-2 rounded-lg hover:bg-[#e63e2f] flex items-center justify-center transition-colors duration-300"
+            className="bg-white text-blue-500 w-40 px-4 py-2 rounded-lg hover:bg-gray-300 flex items-center justify-center transition-colors duration-300"
             onClick={() => handleSortChange('recent')}
           >
             <FontAwesomeIcon icon={faClock} className="mr-2" />
             Plus Récente
           </button>
           <button
-            className="bg-[#FF6F61] text-white w-40 px-4 py-2 rounded-lg hover:bg-[#e63e2f] flex items-center justify-center transition-colors duration-300"
+            className="bg-white text-blue-500 w-40 px-4 py-2 rounded-lg hover:bg-gray-300 flex items-center justify-center transition-colors duration-300"
             onClick={() => handleSortChange('oldest')}
           >
             <FontAwesomeIcon icon={faSortAmountUp} className="mr-2" />
             Plus Ancienne
           </button>
           <button
-            className="bg-[#FF6F61] text-white w-40 px-4 py-2 rounded-lg hover:bg-[#e63e2f] flex items-center justify-center transition-colors duration-300"
+            className="bg-white text-blue-500 w-40 px-4 py-2 rounded-lg hover:bg-gray-300 flex items-center justify-center transition-colors duration-300"
             onClick={() => handleSortChange('priceHigh')}
           >
             <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
             Prix Haut
           </button>
           <button
-            className="bg-[#FF6F61] text-white w-40 px-4 py-2 rounded-lg hover:bg-[#e63e2f] flex items-center justify-center transition-colors duration-300"
+            className="bg-white text-blue-500 w-40 px-4 py-2 rounded-lg hover:bg-gray-300 flex items-center justify-center transition-colors duration-300"
             onClick={() => handleSortChange('priceLow')}
           >
             <FontAwesomeIcon icon={faSortAmountDown} className="mr-2" />
             Prix Bas
           </button>
           <select
-            className="bg-[#FF6F61] text-white w-40 px-4 py-2 rounded-lg hover:bg-[#e63e2f] transition-colors duration-300"
+            className="bg-white text-blue-500 w-40 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300"
             value={selectedCategory}
             onChange={handleCategoryChange}
           >
@@ -129,29 +128,33 @@ const Home = ({ annonces, searchQuery }) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 ml-56">
             {sortedAnnonces && sortedAnnonces.length > 0 ? (
               sortedAnnonces.map((annonce) => (
-                <div key={annonce.id} className="bg-white p-1 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div
+                  key={annonce.id}
+                  className="bg-white p-1 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                >
                   {annonce.photos && annonce.photos[0] ? (
-                    <img src={annonce.photos[0]} alt="Annonce" className="w-full h-48 object-cover object-center rounded-t-lg" loading="lazy" />
+                    <img
+                      src={annonce.photos[0]}
+                      alt="Annonce"
+                      onClick={() => handleDetailClick(annonce)}
+                      className="cursor-pointer w-full h-48 object-cover object-center rounded-t-lg"
+                      loading="lazy"
+                    />
                   ) : (
                     <div className="w-full h-40 bg-gray-200 rounded-t-lg flex items-center justify-center">
                       <span className="text-red-500">Pas d'image</span>
                     </div>
                   )}
                   <div className="p-4">
-                  <h2 
-                        className="text-xl font-bold mb-2 text-black overflow-hidden whitespace-nowrap text-overflow-ellipsis" 
-                        style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
-                  >
-                       {truncateTitle(annonce.title, 50)}
-                  </h2>
-
-                    <p className="text-[#27AE60] font-bold">{annonce.price} FCFA</p>
-                    <button
-                      className="mt-1 w-full bg-[#1ABC9C] text-white px-4 py-2 rounded-lg hover:bg-[#16A085] transition-colors duration-300"
+                  <h2
                       onClick={() => handleDetailClick(annonce)}
+                      className="text-lg font-bold mb-2 text-blue-600 hover:text-orange-500 break-words cursor-pointer"
+                      style={{ maxHeight: '3em' }} // Ajuster la hauteur maximale ici pour permettre jusqu'à deux lignes
                     >
-                      Détails
-                    </button>
+                      {truncateText(annonce.title, 50)}
+                    </h2>
+
+                    <p className="text-black mt-14 blue-500 text-xl font-semibold">{annonce.price} FCFA</p>
                   </div>
                 </div>
               ))

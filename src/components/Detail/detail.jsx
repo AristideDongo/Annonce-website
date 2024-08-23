@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight, faPhone } from '@fortawesome/free-solid-svg-icons';
-
+import { faChevronLeft, faChevronRight, faPhone, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 
 const Detail = ({ profile }) => {
   const location = useLocation();
-  const { title, description, price, photos, phone } = location.state;
+  const { title, description, price, photos, phone, location: annonceLocation } = location.state;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [buttonText, setButtonText] = useState('Voir le numero');
-
+  const [buttonText, setButtonText] = useState('Voir le numéro');
+  const [showPhotoPopup, setShowPhotoPopup] = useState(false);
 
   const handleNextImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % photos.length);
@@ -24,18 +23,29 @@ const Detail = ({ profile }) => {
   };
 
   const handleButtonClick = () => {
-    if (buttonText === 'Voir le numero') {
+    if (buttonText === 'Voir le numéro') {
       setButtonText(phone);
       const popupShown = localStorage.getItem('securityPopupShown');
       if (!popupShown) {
+        // Logic to show popup if needed
       }
     } else {
-      setButtonText('Voir le numero');
+      setButtonText('Voir le numéro');
     }
   };
 
+  const handlePhotoClick = () => {
+    if (profile.photoURL) {
+      setShowPhotoPopup(true);
+    }
+  };
+
+  const handleClosePopup = () => {
+    setShowPhotoPopup(false);
+  };
+
   return (
-    <div className="min-h-screen bg-[#F4F6F9] p-4">
+    <div className="min-h-screen bg-[#F4F6F9] p-4 font-custom ">
       <div className="container mx-auto flex">
         {/* Images et boutons de navigation à gauche (50%) */}
         <div className="w-1/2 relative">
@@ -47,26 +57,30 @@ const Detail = ({ profile }) => {
                 className="w-full h-96 object-contain rounded-lg mb-4" 
                 loading='lazy'
               />
-              <button 
-                onClick={handlePrevImage} 
-                disabled={handlePrevImage.length === 0}
-                className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition duration-300"
-              >
-                <FontAwesomeIcon icon={faChevronLeft} />
-              </button>
-              <button 
-                onClick={handleNextImage} 
-                disabled={handleNextImage.length === 5}
-                className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition duration-300"
-              >
-                <FontAwesomeIcon icon={faChevronRight} />
-              </button>
+              {/* Conteneur pour les boutons de navigation */}
+              <div className="absolute mt-4 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex space-x-4">
+                  <button 
+                       onClick={handlePrevImage}
+                       disabled={currentImageIndex === 0}
+                       className="bg-gray-800 text-white w-10 h-10 rounded-full hover:bg-gray-700 transition duration-300 flex items-center justify-center"
+                  >
+                     <FontAwesomeIcon icon={faChevronLeft} />
+                  </button>
+                  <button 
+                       onClick={handleNextImage}
+                       disabled={currentImageIndex === photos.length - 1}
+                       className="bg-gray-800 text-white w-10 h-10 rounded-full hover:bg-gray-700 transition duration-300 flex items-center justify-center"
+                   >
+                     <FontAwesomeIcon icon={faChevronRight} />
+                  </button>
+              </div>
+
             </>
           )}
 
-          {/* Aperçus des images en bas, limitées à 3 */}
-          <div className="flex overflow-x-auto mt-2 space-x-2">
-            {photos && photos.slice(0,6).map((photo, index) => (
+          {/* Miniatures des photos */}
+          <div className="flex overflow-x-auto mt-16 space-x-2">
+            {photos.map((photo, index) => (
               <img 
                 key={index} 
                 src={photo} 
@@ -86,20 +100,49 @@ const Detail = ({ profile }) => {
             <img 
               src={profile.photoURL} 
               alt="Profile utilisateur" 
+              onClick={handlePhotoClick}
               className="w-32 h-32 rounded-full border-2 border-gray-300 shadow-md object-cover hover:scale-105"
               loading='lazy'
             />
-            {/* Nom de l'utilisateur */}
-            <h2 className=" ml-5 text-xl font-bold text-gray-700">{profile.name}</h2>
+            {/* Nom de l'utilisateur et localisation */}
+            <div className="ml-5">
+              <h2 className="text-xl font-bold text-gray-700">{profile.name}</h2>
+              {annonceLocation && (
+                <div className="flex items-center text-gray-500">
+                  <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
+                  <span className='text-xl'>{annonceLocation.label}</span>
+                </div>
+              )}
+            </div>
           </div>
-          <h1 className="text-3xl font-bold mb-4">{title}</h1>
+
+          {/* Popup pour afficher la photo de profil en grand */}
+          {showPhotoPopup && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white p-4 rounded-lg shadow-lg text-center max-w-[90%] max-h-[90%] overflow-auto">
+                <img
+                  src={profile.photoURL}
+                  alt="Profile Large"
+                  className="max-w-full max-h-96 rounded-lg"
+                />
+                <button
+                  onClick={handleClosePopup}
+                  className="mt-4 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-600 transition-transform duration-300 transform hover:scale-105"
+                >
+                  Fermer
+                </button>
+              </div>
+            </div>
+          )}
+
+          <h1 className="text-3xl font-bold mb-4 break-words">{title}</h1>
           <p className="text-2xl text-gray-400 font-semibold underline">Description de l'annonce: </p><br />
-          <p className="text-[#7F8C8D] mb-4">{description}</p>
+          <p className="text-[#7F8C8D] mb-4 break-words text-lg ">{description}</p>
           <p className="text-[#27AE60] font-bold text-xl mb-4">Prix: {price} FCFA</p>
           {/* Nouveau bouton avec icône de téléphone et texte dynamique */}
           <button 
             onClick={handleButtonClick} 
-            className="bg-purple-500 text-white p-2 rounded-full hover:bg-purple-600 transition duration-300 mt-4 flex items-center"
+            className="bg-green-500 text-white p-2 rounded-full hover:bg-green-600 hover:scale-105 transition duration-300 mt-4 flex items-center"
           >
             <FontAwesomeIcon icon={faPhone} className="mr-2" />
             {buttonText}

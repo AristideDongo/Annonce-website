@@ -71,16 +71,10 @@ const Autres = ({ annonces, searchQuery }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredAnnonces.length > 0 ? (
               filteredAnnonces.map((annonce) => (
-                <div key={annonce.id} className="bg-white p-2 rounded-lg shadow-lg">
-                  <img src={annonce.photos[0]} alt="Photo de l'annonce" className="w-full h-48 object-cover rounded-lg mb-4" loading='lazy'/>
-                  <h2 className="text-xl font-bold mb-2">{truncateTitle(annonce.title, 50)}</h2>
+                <div key={annonce.id} className="bg-white cursor-pointer p-2 rounded-lg shadow-lg">
+                  <img src={annonce.photos[0]} onClick={() => handleDetailClick(annonce)} alt="Photo de l'annonce" className="w-full h-48 object-cover rounded-lg mb-4" loading='lazy'/>
+                  <h2 onClick={() => handleDetailClick(annonce)} className="text-xl text-blue-600 hover:text-orange-400 cursor-pointer font-bold mb-2">{truncateTitle(annonce.title, 50)}</h2>
                   <p className="text-[#27AE60] font-bold">{annonce.price} FCFA</p>
-                  <button
-                    className="bg-[#1ABC9C] text-white py-2 px-4 rounded-lg hover:bg-[#16A085] transition duration-200 mt-2"
-                    onClick={() => handleDetailClick(annonce)}
-                  >
-                    Détail
-                  </button>
                 </div>
               ))
             ) : (
