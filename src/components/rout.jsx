@@ -69,7 +69,7 @@ const Rout = () => {
         <Route path="User/sing-in" element={<Singin />} />
         <Route path="User/sing-up" element={<Singup />} />
         <Route path="User/mdpoublie" element={<Mdpoublie />} />
-        <Route path="Annonce/annonce" element={isUserLoggedIn ? <Annonce setAnnonces={setAnnonces} annonces={annonces} profile={profile} /> : <Navigate to="./User/sing-in" />} />
+        <Route path="Annonce/annonce" element={ <Annonce setAnnonces={setAnnonces} annonces={annonces} profile={profile} />} />
         <Route path="Confidentilite/conditions" element={<Conditions />} />
         <Route path="Confidentilite/Politique" element={<Politique />} />
         <Route path="Confidentilite/faq" element={<Faq />} />

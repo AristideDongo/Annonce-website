@@ -60,7 +60,7 @@ const Navbar = ({ setSearchQuery }) => {
 
   const handlePostAd = () => {
     if (isUserLoggedIn) {
-      navigate("Annonce/annonce");
+      navigate("/Annonce/annonce");
     } else {
       setIsInfoPopupOpen(true);
     }
@@ -72,7 +72,7 @@ const Navbar = ({ setSearchQuery }) => {
 
   const handleLoginRedirect = () => {
     handleCloseInfoPopup();
-    navigate("User/sing-in");
+    navigate("/User/sing-in");
   };
 
   // Fonction pour ouvrir et fermer le sidebar
@@ -141,7 +141,7 @@ const Navbar = ({ setSearchQuery }) => {
                   {isUserLoggedIn && (
                     <li>
                       <button 
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700 flex items-center transition duration-300"
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:text-white hover:bg-red-700 flex items-center transition duration-300"
                         onClick={() => setIsLogoutPopupOpen(true)}
                       >
                         <CiLogout className="mr-2" /> Déconnexion
@@ -170,42 +170,42 @@ const Navbar = ({ setSearchQuery }) => {
       {/* Sidebar pour mobile */}
       <div className={`fixed inset-0 z-40 transition-transform transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="bg-gray-800 bg-opacity-75 w-full h-full" onClick={handleToggleSidebar}></div>
-        <div className="absolute left-0 top-0 h-full w-64 bg-gray-100 shadow-lg p-4">
+        <div className="absolute left-0 top-0 h-full w-64 bg-gray-200 shadow-lg p-4">
           <button onClick={handleToggleSidebar} className="text-black">
             <AiOutlineDown className="text-2xl" />
           </button>
           <div className="mt-4">
             {/* Éléments du menu dans le sidebar */}
             <ul>
-              <li><Link to="/" className="block text-black hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300" onClick={handleToggleSidebar}><FaHome className="mr-2"/> Accueil</Link></li>
+              <li><Link to="/" className="block text-blue-600 hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300" onClick={handleToggleSidebar}><FaHome className="mr-2"/> Accueil</Link></li>
               {/* Catégories pour le sidebar mobile */}
               <li>
                 <button 
-                  className="block w-full text-left text-black hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300"
+                  className="block w-full text-left text-blue-600 hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300"
                   onClick={handleToggleMobileCategories}
                 >
                   <BiCategory className="mr-2" /> Catégories <AiOutlineDown className={`ml-1 transform ${isMobileCategoriesOpen ? 'rotate-180' : ''}`} />
                 </button>
                 {isMobileCategoriesOpen && (
                   <ul className="ml-4 mt-2">
-                    <li><Link to="Category/immobilier" className="block text-black hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><IoIosHome className="mr-2" /> IMMOBILIER</Link></li>
-                    <li><Link to="Category/vehicule" className="block text-black hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><FaCar className="mr-2" /> VEHICULE</Link></li>
-                    <li><Link to="Category/electromenager" className="block text-black hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><TbRazorElectric className="mr-2" /> ELECTROMENAGER</Link></li>
-                    <li><Link to="Category/electronique" className="block text-black hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><MdComputer className="mr-2" /> ELECTRONIQUE</Link></li>
-                    <li><Link to="Category/mode-home" className="block text-black hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><SlUser className="mr-2" /> MODE HOMME</Link></li>
-                    <li><Link to="Category/mode-femme" className="block text-black hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><SlUserFemale className="mr-2" /> MODE FEMME</Link></li>
-                    <li><Link to="Category/mode-enfant" className="block text-black hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><FaBaby className="mr-2" /> MODE ENFANT</Link></li>
-                    <li><Link to="Category/autres" className="block text-black hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><MdOutlineOtherHouses className="mr-2" /> AUTRES</Link></li>
+                    <li><Link to="Category/immobilier" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><IoIosHome className="mr-2" /> IMMOBILIER</Link></li>
+                    <li><Link to="Category/vehicule" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><FaCar className="mr-2" /> VEHICULE</Link></li>
+                    <li><Link to="Category/electromenager" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><TbRazorElectric className="mr-2" /> ELECTROMENAGER</Link></li>
+                    <li><Link to="Category/electronique" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><MdComputer className="mr-2" /> ELECTRONIQUE</Link></li>
+                    <li><Link to="Category/mode-home" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><SlUser className="mr-2" /> MODE HOMME</Link></li>
+                    <li><Link to="Category/mode-femme" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><SlUserFemale className="mr-2" /> MODE FEMME</Link></li>
+                    <li><Link to="Category/mode-enfant" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><FaBaby className="mr-2" /> MODE ENFANT</Link></li>
+                    <li><Link to="Category/autres" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><MdOutlineOtherHouses className="mr-2" /> AUTRES</Link></li>
                   </ul>
                 )}
               </li>
-              <li><Link to="User/profile" className="block text-black hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300" onClick={handleToggleSidebar}><FaRegUser className="mr-2"/> Profile</Link></li>
-              <li><Link to="User/setting" className="block text-black hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300" onClick={handleToggleSidebar}><IoSettingsOutline className="mr-2"/> Paramètres</Link></li>
-              <li><Link to="User/sing-in" className="block text-black hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300" onClick={handleToggleSidebar}><IoLogInOutline className="mr-2"/> Connexion</Link></li>
+              <li><Link to="User/profile" className="block text-blue-600 hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300" onClick={handleToggleSidebar}><FaRegUser className="mr-2"/> Profile</Link></li>
+              <li><Link to="User/setting" className="block text-blue-600 hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300" onClick={handleToggleSidebar}><IoSettingsOutline className="mr-2"/> Paramètres</Link></li>
+              <li><Link to="User/sing-in" className="block text-blue-600 hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300" onClick={handleToggleSidebar}><IoLogInOutline className="mr-2"/> Connexion</Link></li>
               {isUserLoggedIn && (
                 <li>
                   <button 
-                    className="block w-full text-left text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-200 flex items-center transition duration-300"
+                    className="block w-full text-left text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700 hover:text-white flex items-center transition duration-300"
                     onClick={() => {
                       handleLogout();
                       handleToggleSidebar();
@@ -231,12 +231,12 @@ const Navbar = ({ setSearchQuery }) => {
 
       {/* Popup de déconnexion */}
       {isLogoutPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-opacity-75 bg-gray-700 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-md shadow-md">
             <h2 className="text-xl font-bold mb-4">Êtes-vous sûr de vouloir vous déconnecter ?</h2>
             <div className="flex justify-end">
               <button
-                className="bg-red-500 text-white px-4 py-2 rounded-md mr-2"
+                className="bg-red-500 text-white px-4 py-2 rounded-md mr-96"
                 onClick={handleLogout}
               >
                 Oui

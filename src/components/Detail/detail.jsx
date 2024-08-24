@@ -68,7 +68,7 @@ const Detail = ({ profile }) => {
   };
 
   return (
-    <div className="min-h-screen font-custom bg-[#F4F6F9] p-4">
+    <div className="min-h-screen mt-16 font-custom bg-[#F4F6F9] p-4">
       <div className="container mx-auto flex">
         {/* Images et boutons de navigation à gauche (50%) */}
         <div className="w-1/2 relative">
@@ -80,7 +80,7 @@ const Detail = ({ profile }) => {
                 className="w-full h-96 object-contain rounded-lg mb-4" 
                 loading='lazy'
               />
-              <div className="absolute mt-8 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex space-x-4">
+              <div className="absolute mt-6 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex space-x-4">
                 <button 
                   onClick={handlePrevImage}
                   disabled={currentImageIndex === 0}

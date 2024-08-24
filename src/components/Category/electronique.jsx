@@ -11,7 +11,7 @@ const Electronique = ({ annonces, searchQuery }) => {
   const [loading, setLoading] = useState(true);  // État pour gérer le chargement
 
   const handleDetailClick = (annonce) => {
-    navigate('Detail/detail/', { state: annonce });
+    navigate('/Detail/detail', { state: annonce });
   };
 
   const sortAnnonces = (annonces, option) => {

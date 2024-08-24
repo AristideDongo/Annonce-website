@@ -18,7 +18,7 @@ const Mdpoublie = () => {
             <div className="text-center">
               <h2 className="text-2xl font-bold mb-6">Email envoyé</h2>
               <p className="mb-4">Un lien de réinitialisation du mot de passe a été envoyé à votre adresse email.</p>
-              <Link to="User/sing-in" className="text-blue-500 hover:underline">
+              <Link to="/User/sing-in" className="text-blue-500 hover:underline">
                 Retour à la connexion
               </Link>
             </div>
@@ -42,7 +42,7 @@ const Mdpoublie = () => {
                 </button>
               </form>
               <div className="mt-6 text-center">
-                <Link to="User/sing-in" className="text-blue-500 hover:underline">
+                <Link to="/User/sing-in" className="text-blue-500 hover:underline">
                   Retour à la connexion
                 </Link>
               </div>

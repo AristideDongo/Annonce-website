@@ -124,7 +124,7 @@ const Singup = () => {
 
   return (
     <>
-      <div className="min-h-screen font-custom flex items-center justify-center bg-[#F4F6F9]">
+      <div className="min-h-screen pt-16 font-custom flex items-center justify-center bg-[#F4F6F9]">
         <div className="bg-white mt-5 mb-5 p-8 rounded-lg shadow-lg w-full max-w-md">
           <h2 className="text-2xl font-bold mb-6 text-center">INSCRIPTION</h2>
           <form onSubmit={validateForm}>
@@ -223,12 +223,12 @@ const Singup = () => {
             </button>
           </div>
           <div className="mt-6 text-center">
-            <Link to="User/mdpoublie" className="text-blue-500 hover:underline">
+            <Link to="/User/mdpoublie" className="text-blue-500 hover:underline">
               Mot de passe oublié ?
             </Link>
           </div>
           <div className="mt-2 text-center">
-            <Link to="User/sing-in" className="text-blue-500 hover:underline">
+            <Link to="/User/sing-in" className="text-blue-500 hover:underline">
               Connexion
             </Link>
           </div>

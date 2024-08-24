@@ -81,12 +81,12 @@ const Singin = () => {
             </button>
           </div>
           <div className="mt-6 text-center">
-            <Link to="/src/components/User/mdpoublie.jsx" className="text-blue-500 hover:underline">
+            <Link to="/User/mdpoublie" className="text-blue-500 hover:underline">
               Mot de passe oublié ?
             </Link>
           </div>
           <div className="mt-2 text-center">
-            <Link to="/src/components/User/sing-up.jsx" className="text-blue-500 hover:underline">
+            <Link to="/User/sing-up" className="text-blue-500 hover:underline">
               Inscription
             </Link>
           </div>
