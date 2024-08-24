@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { BiCategory } from 'react-icons/bi';
 import { FaBaby, FaCar, FaHome, FaRegUser, FaRegUserCircle } from 'react-icons/fa';
-import { IoIosHome } from 'react-icons/io';
+import { IoIosHome, IoMdAlert } from 'react-icons/io';
 import { IoDuplicateOutline, IoLogInOutline, IoSettingsOutline } from 'react-icons/io5';
 import { MdComputer, MdOutlineOtherHouses } from 'react-icons/md';
 import { TbRazorElectric } from "react-icons/tb";
@@ -15,7 +15,9 @@ const Navbar = ({ setSearchQuery }) => {
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setQuery(e.target.value);
@@ -41,6 +43,23 @@ const Navbar = ({ setSearchQuery }) => {
     console.log("Déconnecté");
     setIsUserLoggedIn(false);
     setIsLogoutPopupOpen(false);
+  };
+
+  const handlePostAd = () => {
+    if (isUserLoggedIn) {
+      navigate("/src/components/Annonce/annonce.jsx");
+    } else {
+      setIsInfoPopupOpen(true);
+    }
+  };
+
+  const handleCloseInfoPopup = () => {
+    setIsInfoPopupOpen(false);
+  };
+
+  const handleLoginRedirect = () => {
+    handleCloseInfoPopup();
+    navigate("/src/components/User/sing-in.jsx");
   };
 
   return (
@@ -92,9 +111,9 @@ const Navbar = ({ setSearchQuery }) => {
             </button>
             {isAccountMenuOpen && (
               <ul className="absolute bg-white mt-2 rounded-md shadow-lg z-10">
-                <li><Link to="/src/components/User/profile.jsx" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500  flex items-center transition duration-300" onClick={handleCloseMenus}><FaRegUser className="mr-2"/> Profile</Link></li>
-                <li><Link to="/src/components/User/setting.jsx" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500  flex items-center transition duration-300" onClick={handleCloseMenus}><IoSettingsOutline className="mr-2"/> Paramètres</Link></li>
-                <li><Link to="/src/components/User/sing-in.jsx" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500  flex items-center transition duration-300" onClick={handleCloseMenus}><IoLogInOutline className="mr-2"/> Connexion</Link></li>
+                <li><Link to="/src/components/User/profile.jsx" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><FaRegUser className="mr-2"/> Profile</Link></li>
+                <li><Link to="/src/components/User/setting.jsx" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><IoSettingsOutline className="mr-2"/> Paramètres</Link></li>
+                <li><Link to="/src/components/User/sing-in.jsx" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><IoLogInOutline className="mr-2"/> Connexion</Link></li>
                 {isUserLoggedIn && (
                   <li>
                     <button 
@@ -108,21 +127,18 @@ const Navbar = ({ setSearchQuery }) => {
               </ul>
             )}
           </div>
-          <Link to="/src/components/Annonce/annonce.jsx" className="bg-neon-blue text-white px-3 py-2 rounded-md bg-blue-500 text-sm font-medium hover:bg-blue-600 flex items-center transition duration-300">
+          <button 
+            className="bg-neon-blue text-white px-3 py-2 rounded-md bg-blue-600 text-sm font-medium hover:bg-blue-700 flex items-center transition duration-300"
+            onClick={handlePostAd}
+          >
             <IoDuplicateOutline className="mr-2"/> Déposer une annonce
-          </Link>
+          </button>
         </div>
         <div className="md:hidden flex items-center">
-          <button className="text-white" onClick={() => {
-            setIsCategoriesOpen(!isCategoriesOpen);
-            setIsAccountMenuOpen(false);
-          }}>
+          <button className="text-white" onClick={handleToggleCategories}>
             <BiCategory className="text-2xl"/>
           </button>
-          <button className="text-white ml-4" onClick={() => {
-            setIsAccountMenuOpen(!isAccountMenuOpen);
-            setIsCategoriesOpen(false);
-          }}>
+          <button className="text-white ml-4" onClick={handleToggleAccount}>
             <FaRegUserCircle className="text-2xl"/>
           </button>
         </div>
@@ -179,6 +195,31 @@ const Navbar = ({ setSearchQuery }) => {
                 onClick={() => setIsLogoutPopupOpen(false)}
               >
                 Non
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isInfoPopupOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full text-center">
+            <div className="flex justify-center mb-4">
+              <IoMdAlert className="text-red-500 text-4xl" />
+            </div>
+            <h3 className="text-lg font-semibold mb-4">Vous devez vous connecter pour déposer une annonce.</h3>
+            <div className="flex flex-col space-y-4">
+              <button 
+                className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
+                onClick={handleLoginRedirect}
+              >
+                Se connecter
+              </button>
+              <button 
+                className="px-6 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 transition duration-300"
+                onClick={handleCloseInfoPopup}
+              >
+                Annuler
               </button>
             </div>
           </div>
