@@ -151,7 +151,7 @@ const Setting = () => {
   };
 
   return (
-    <div className="mx-auto p-4 bg-[#F4F6F9]">
+    <div className="mx-auto font-custom p-4 bg-[#F4F6F9]">
       <h1 className="text-2xl font-bold mb-4">Paramètres du compte</h1>
       
       <div className="flex flex-wrap -mx-2">

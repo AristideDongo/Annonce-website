@@ -4,21 +4,17 @@ import { BiCategory } from 'react-icons/bi';
 import { FaBaby, FaCar, FaHome, FaRegUser, FaRegUserCircle } from 'react-icons/fa';
 import { IoIosHome } from 'react-icons/io';
 import { IoDuplicateOutline, IoLogInOutline, IoSettingsOutline } from 'react-icons/io5';
-import { MdComputer } from 'react-icons/md';
+import { MdComputer, MdOutlineOtherHouses } from 'react-icons/md';
 import { TbRazorElectric } from "react-icons/tb";
 import { SlUser, SlUserFemale } from "react-icons/sl";
-import { MdOutlineOtherHouses } from "react-icons/md";
 import { CiLogout } from 'react-icons/ci';
 import { AiOutlineDown, AiOutlineSearch } from 'react-icons/ai';
 
-
 const Navbar = ({ setSearchQuery }) => {
-  // États pour gérer l'ouverture des menus et popup
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false);
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // État pour suivre si l'utilisateur est connecté
-
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [query, setQuery] = useState("");
 
   const handleChange = (e) => {
@@ -26,34 +22,29 @@ const Navbar = ({ setSearchQuery }) => {
     setSearchQuery(e.target.value);
   };
 
-  // Fonction pour basculer l'affichage des catégories
   const handleToggleCategories = () => {
     setIsCategoriesOpen(!isCategoriesOpen);
     setIsAccountMenuOpen(false);
   };
 
-  // Fonction pour basculer l'affichage du menu compte
   const handleToggleAccount = () => {
     setIsAccountMenuOpen(!isAccountMenuOpen);
     setIsCategoriesOpen(false);
   };
 
-  // Fonction pour fermer tous les menus
   const handleCloseMenus = () => {
     setIsCategoriesOpen(false);
     setIsAccountMenuOpen(false);
   };
 
-  // Fonction pour gérer la déconnexion
   const handleLogout = () => {
-    // Logique de déconnexion ici
     console.log("Déconnecté");
-    setIsUserLoggedIn(false); // Mettre à jour l'état de connexion de l'utilisateur
+    setIsUserLoggedIn(false);
     setIsLogoutPopupOpen(false);
   };
 
   return (
-    <nav className="bg-black p-4 font-custom">
+    <nav className="fixed top-0 left-0 w-full bg-black p-4 font-custom z-30">
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-white text-lg font-bold tracking-wide">
           <Link to="/" className="hover:text-neon-green transition-colors duration-300">Annonces<span className="text-orange-600">360°</span></Link>

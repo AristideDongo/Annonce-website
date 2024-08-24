@@ -199,8 +199,15 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
     });
   };
 
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    }
+    return text;
+  };
+
   return (
-    <div className="min-h-screen bg-[#F4F6F9] flex flex-col items-center p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen font-custom bg-[#F4F6F9] flex flex-col items-center p-4 sm:p-6 lg:p-8">
       <div className="bg-white shadow-lg rounded-lg p-6 sm:p-8 lg:p-10 mt-10 w-full max-w-3xl">
         <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
           <img
@@ -270,7 +277,13 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
           <ul className="mt-6 space-y-4">
             {sortedAnnonces.map((annonce) => (
               <li key={annonce.id} className="bg-gray-50 p-5 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <h4 className="text-xl font-bold text-gray-800">{annonce.title}</h4>
+                      <h2
+                      onClick={() => handleDetailClick(annonce)}
+                      className="text-lg font-bold mb-2 text-black"
+                      style={{ maxHeight: '3em' }} // Ajuster la hauteur maximale ici pour permettre jusqu'à deux lignes
+                    >
+                      {truncateText(annonce.title, 50)}
+                    </h2>
                 <p className="text-[#27AE60] font-semibold">Prix {annonce.price} FCFA</p>
                 <button
                   onClick={() => handleDetailClick(annonce)}
@@ -335,7 +348,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
                       name="title"
                       value={formData.title}
                       onChange={handleInputChange}
-                      className={`w-full px-3 py-2 border ${errors.title ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring focus:border-indigo-400`}
+                      className={`w-full px-3 py-3 border ${errors.title ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring focus:border-indigo-400`}
                     />
                     {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
                   </div>
@@ -346,7 +359,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
                       name="description"
                       value={formData.description}
                       onChange={handleInputChange}
-                      className={`w-full px-3 py-2 border ${errors.description ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring focus:border-indigo-400`}
+                      className={`w-full px-3 py-6 border ${errors.description ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring focus:border-indigo-400`}
                     />
                     {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
                   </div>
@@ -362,6 +375,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
                     />
                     {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
                   </div>
+                  
                   <div className="flex justify-center space-x-4">
                     <button
                       onClick={handleConfirmEdit}

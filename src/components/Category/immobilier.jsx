@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-const truncateTitle = (title, maxLength) => {
-  if (title.length > maxLength) {
-    return title.slice(0, maxLength) + '...';
-  }
-  return title;
-};
+import { FadeLoader } from 'react-spinners';
 
 const Immobilier = ({ annonces, searchQuery }) => {
   const navigate = useNavigate();
 
   const [sortOption, setSortOption] = useState('recent');
   const [filteredAnnonces, setFilteredAnnonces] = useState([]);
+  const [loading, setLoading] = useState(true);  // État pour gérer le chargement
 
   const handleDetailClick = (annonce) => {
     navigate('/src/components/Detail/detail.jsx/', { state: annonce });
@@ -34,24 +29,36 @@ const Immobilier = ({ annonces, searchQuery }) => {
   };
 
   useEffect(() => {
+    setLoading(true);  // Commencez le chargement
+
     // Filtrer les annonces par catégorie "autres" et recherche
     const filteredByCategory = annonces.filter(annonce => annonce.category === 'immobilier');
     const filteredBySearch = filteredByCategory.filter(annonce =>
       annonce.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
     const sorted = sortAnnonces(filteredBySearch, sortOption);
+
     setFilteredAnnonces(sorted);
+    setLoading(false);  // Arrêtez le chargement après la mise à jour des annonces
   }, [annonces, searchQuery, sortOption]);
 
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
   };
 
+  // Fonction pour tronquer le texte
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    }
+    return text;
+  };
+
   return (
     <> 
-      <div className="min-h-screen bg-[#F4F6F9] p-6 relative">
+      <div className="min-h-screen font-custom bg-[#F4F6F9] p-6 relative">
         <div className="container mx-auto p-4">
-          <h1 className="text-4xl font-extrabold text-center mb-8 text-[#333333]">IMMOBILIER</h1>
+          <h1 className="text-4xl font-extrabold text-center mb-8 mt-16 text-[#333333]">IMMOBILIER</h1>
           <div className="flex justify-between items-center mb-4">
             <div>
               <label htmlFor="sort" className="block text-gray-700">Trier par:</label>
@@ -68,19 +75,33 @@ const Immobilier = ({ annonces, searchQuery }) => {
               </select>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredAnnonces.length > 0 ? (
-              filteredAnnonces.map((annonce) => (
-                <div key={annonce.id} className="bg-white cursor-pointer p-2 rounded-lg shadow-lg">
-                  <img src={annonce.photos[0]} onClick={() => handleDetailClick(annonce)} alt="Photo de l'annonce" className="w-full h-48 object-cover rounded-lg mb-4" loading='lazy'/>
-                  <h2 onClick={() => handleDetailClick(annonce)} className="text-xl text-blue-600 hover:text-orange-400 cursor-pointer font-bold mb-2">{truncateTitle(annonce.title, 50)}</h2>
-                  <p className="text-[#27AE60] font-bold">{annonce.price} FCFA</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-center text-gray-500 text-2xl w-full mt-40">Aucune annonce disponible.</p>
-            )}
-          </div>
+          
+          {/* Affichez le loader si l'état de chargement est true */}
+          {loading ? (
+            <div className="flex justify-center items-center h-96">
+              <FadeLoader color="#F4511E" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredAnnonces.length > 0 ? (
+                filteredAnnonces.map((annonce) => (
+                  <div key={annonce.id} className="bg-white cursor-pointer p-2 rounded-lg shadow-lg">
+                    <img src={annonce.photos[0]} onClick={() => handleDetailClick(annonce)} alt="Photo de l'annonce" className="w-full h-48 object-cover rounded-lg mb-4" loading='lazy'/>
+                    <h2
+                      onClick={() => handleDetailClick(annonce)}
+                      className="text-lg font-bold mb-2 text-blue-600 hover:text-orange-500 break-words cursor-pointer"
+                      style={{ maxHeight: '3em' }}
+                    >
+                      {truncateText(annonce.title, 50)}
+                    </h2>
+                    <p className="text-[#27AE60] font-bold">{annonce.price} FCFA</p>
+                  </div>
+                ))
+              ) : (
+                <p className="text-center text-gray-500 text-2xl w-full mt-40">Aucune annonce disponible.</p>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </>

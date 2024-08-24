@@ -12,7 +12,7 @@ const Mdpoublie = () => {
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-[#F4F6F9]">
+      <div className="min-h-screen font-custom flex items-center justify-center bg-[#F4F6F9]">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
           {isSubmitted ? (
             <div className="text-center">

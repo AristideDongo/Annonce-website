@@ -124,7 +124,7 @@ const Singup = () => {
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-[#F4F6F9]">
+      <div className="min-h-screen font-custom flex items-center justify-center bg-[#F4F6F9]">
         <div className="bg-white mt-5 mb-5 p-8 rounded-lg shadow-lg w-full max-w-md">
           <h2 className="text-2xl font-bold mb-6 text-center">INSCRIPTION</h2>
           <form onSubmit={validateForm}>
