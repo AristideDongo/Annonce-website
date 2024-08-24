@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faSortAmountDown, faSortAmountUp, faDollarSign } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faSortAmountDown, faSortAmountUp, faDollarSign, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FadeLoader } from 'react-spinners';
+import {useOutsideClick} from '../Navbar/navbarhookperso'
 
 const Home = ({ annonces, searchQuery }) => {
   const navigate = useNavigate();
@@ -10,10 +11,11 @@ const Home = ({ annonces, searchQuery }) => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [query, setQuery] = useState(searchQuery);
+  const [isFilterVisible, setIsFilterVisible] = useState(false); // Nouvel état pour contrôler la visibilité
 
-  // Gestion combinée de l'état de chargement et de la requête de recherche
+  const categoriesRef = useOutsideClick(() => setIsFilterVisible(false));
+
   useEffect(() => {
-    // Arrête le chargement dès que les annonces sont disponibles ou s'il n'y a pas d'annonces
     if (annonces) {
       setIsLoading(false);
     }
@@ -21,7 +23,7 @@ const Home = ({ annonces, searchQuery }) => {
   }, [annonces, searchQuery]);
 
   const handleDetailClick = (annonce) => {
-    navigate('/src/components/Detail/detail.jsx/', { state: annonce });
+    navigate('Detail/detail', { state: annonce });
   };
 
   const handleSortChange = (order) => {
@@ -36,12 +38,19 @@ const Home = ({ annonces, searchQuery }) => {
     setQuery(e.target.value);
   };
 
-  // Filtrage des annonces
+  // Fonction pour tronquer le texte
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    }
+    return text;
+  };
+
+  // Filtrage et tri des annonces
   const filteredAnnonces = annonces.filter((annonce) =>
     annonce.title.toLowerCase().includes(query.toLowerCase())
   );
 
-  // Tri des annonces
   const sortedAnnonces = filteredAnnonces
     .filter((annonce) => !selectedCategory || annonce.category === selectedCategory)
     .sort((a, b) => {
@@ -57,21 +66,23 @@ const Home = ({ annonces, searchQuery }) => {
       return 0;
     });
 
-  // Fonction pour tronquer le texte
-  const truncateText = (text, maxLength) => {
-    if (text.length > maxLength) {
-      return text.slice(0, maxLength) + '...';
-    }
-    return text;
-  };
-
   return (
     <div className="min-h-screen bg-[#F4F6F9] p-6 relative font-custom">
       <div className="container mx-auto">
         <h1 className="text-4xl font-extrabold text-center mt-16 mb-8 text-[#333333]">Nouvelle Annonce</h1>
 
+        {/* Bouton pour afficher/masquer la section de tri */}
+        <button
+          ref={categoriesRef}
+          className="absolute top-16 left-0 ml-4 bg-gray-300 p-3 rounded-r-lg shadow-lg flex items-center"
+          onClick={() => setIsFilterVisible(!isFilterVisible)}
+        >
+          <FontAwesomeIcon icon={faFilter} className="mr-2" />
+          Filtrer
+        </button>
+
         {/* Section de filtrage et tri */}
-        <div className="absolute left-0 top-0 mt-40 ml-4 bg-gray-300 p-6 rounded-lg shadow-lg flex flex-col space-y-4">
+        <div  className={`absolute mt-28 top-16 left-0 bg-gray-300 p-6 rounded-lg shadow-lg flex flex-col space-y-4 transition-transform duration-300 ${isFilterVisible ? 'translate-x-0' : '-translate-x-80'}`}>
           <button
             className="bg-white text-blue-500 w-40 px-4 py-2 rounded-lg hover:bg-gray-300 flex items-center justify-center transition-colors duration-300"
             onClick={() => handleSortChange('recent')}

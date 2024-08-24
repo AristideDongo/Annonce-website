@@ -91,7 +91,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
   };
 
   const handleDetailClick = (annonce) => {
-    navigate('/src/components/Detail/detail.jsx/', { state: annonce });
+    navigate('Detail/detail', { state: annonce });
   };
 
   const handlePhotoClick = () => {

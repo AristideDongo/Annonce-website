@@ -10,7 +10,7 @@ const Menfant = ({ annonces, searchQuery }) => {
   const [loading, setLoading] = useState(true);  // État pour gérer le chargement
 
   const handleDetailClick = (annonce) => {
-    navigate('/src/components/Detail/detail.jsx/', { state: annonce });
+    navigate('Detail/detail/', { state: annonce });
   };
 
   const sortAnnonces = (annonces, option) => {

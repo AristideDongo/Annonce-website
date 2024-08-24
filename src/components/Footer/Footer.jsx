@@ -38,10 +38,10 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4 text-white">Liens utiles</h3>
             <ul className="text-sm leading-relaxed space-y-2">
-              <li><Link to="/src/components/Confidentilite/about.jsx" className="hover:text-white">À propos de nous</Link></li>
-              <li><Link to="/src/components/Confidentilite/conditions.jsx" className="hover:text-white">Conditions d'utilisation</Link></li>
-              <li><Link to="/src/components/Confidentilite/Politique.jsx" className="hover:text-white">Politique de confidentialité</Link></li>
-              <li><Link to="/src/components/Confidentilite/faq.jsx" className="hover:text-white">FAQ</Link></li>
+              <li><Link to="Confidentilite/about" className="hover:text-white">À propos de nous</Link></li>
+              <li><Link to="Confidentilite/conditions" className="hover:text-white">Conditions d'utilisation</Link></li>
+              <li><Link to="Confidentilite/Politique" className="hover:text-white">Politique de confidentialité</Link></li>
+              <li><Link to="Confidentilite/faq" className="hover:text-white">FAQ</Link></li>
             </ul>
           </div>
 

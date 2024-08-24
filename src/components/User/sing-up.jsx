@@ -223,12 +223,12 @@ const Singup = () => {
             </button>
           </div>
           <div className="mt-6 text-center">
-            <Link to="/src/components/User/mdpoublie.jsx" className="text-blue-500 hover:underline">
+            <Link to="User/mdpoublie" className="text-blue-500 hover:underline">
               Mot de passe oublié ?
             </Link>
           </div>
           <div className="mt-2 text-center">
-            <Link to="/src/components/User/sing-in.jsx" className="text-blue-500 hover:underline">
+            <Link to="User/sing-in" className="text-blue-500 hover:underline">
               Connexion
             </Link>
           </div>
