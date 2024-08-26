@@ -4,7 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom"; 
 import { useState } from "react"; 
 
-const Singin = () => {
+const Singin = ({ updateProfile }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [popupVisible, setPopupVisible] = useState(false);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
@@ -40,7 +40,14 @@ const Singin = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('token', data.token); // Stocker le token dans le localStorage
+        // Stocker le token et autres informations de l'utilisateur dans le localStorage
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user)); // Supposons que l'API renvoie un objet utilisateur
+
+        // Mise à jour du profil utilisateur
+        updateProfile(data.user);
+
+        // Afficher le popup de succès et rediriger
         setPopupVisible(true); 
         setTimeout(() => {
           setPopupVisible(false); 

@@ -256,29 +256,29 @@ const Navbar = ({ setSearchQuery }) => {
       {/* Popup d'information */}
       {isInfoPopupOpen && (
   <div className="fixed bg-gray-800 bg-opacity-75 inset-0 flex items-center justify-center z-50">
-  <div className="bg-white p-6 rounded-md shadow-md text-center">
-    <div className="mb-4 flex justify-center">
-      <FaSadTear className="text-red-500 text-6xl" />
+      <div className="bg-white p-6 rounded-md shadow-md text-center">
+        <div className="mb-4 flex justify-center">
+          <FaSadTear className="text-red-500 text-6xl" />
+        </div>
+        <h2 className="text-xl font-bold mb-4">
+          Vous devez être connecté pour déposer une annonce.
+        </h2>
+        <div className="flex justify-center space-x-4">
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
+            onClick={handleLoginRedirect}
+          >
+            Se connecter
+          </button>
+          <button
+            className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400 transition duration-300"
+            onClick={handleCloseInfoPopup}
+          >
+            Fermer
+          </button>
+        </div>
+      </div>
     </div>
-    <h2 className="text-xl font-bold mb-4">
-      Vous devez être connecté pour déposer une annonce.
-    </h2>
-    <div className="flex justify-center space-x-4">
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
-        onClick={handleLoginRedirect}
-      >
-        Se connecter
-      </button>
-      <button
-        className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400 transition duration-300"
-        onClick={handleCloseInfoPopup}
-      >
-        Fermer
-      </button>
-    </div>
-  </div>
-</div>
 )}
 
     </>

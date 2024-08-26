@@ -9,7 +9,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
   const [photoURL, setPhotoURL] = useState(profile.photoURL);
   const [userInfo, setUserInfo] = useState({
     name: profile.name,
-    email: 'email@example.com',
+    email: profile.email,
     phone: profile.phone
   });
   const [selectedAnnonces, setSelectedAnnonces] = useState([]);
@@ -217,7 +217,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
             onClick={handlePhotoClick}
           />
           <div className="text-center sm:text-left">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800">{userInfo.name}</h2>
+            <h2 className="text-xl sm:text-4xl font-bold text-gray-800">{userInfo.name}</h2>
             <p className="text-lg text-gray-600">{userInfo.phone}</p>
             <p className="text-lg text-gray-600">{userInfo.email}</p>
           </div>

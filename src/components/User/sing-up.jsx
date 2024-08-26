@@ -167,7 +167,7 @@ const Singup = ({ profile, updateProfile }) => {
                 type="text"
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Votre nom"
-                defaultValue={profile.name || ""}
+                defaultValue={""}
                 required
               />
             </div>
@@ -177,7 +177,7 @@ const Singup = ({ profile, updateProfile }) => {
                 type="email"
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Votre email"
-                value={email}
+                 defaultValue={""}
                 onChange={handleEmailChange}
                 required
               />
@@ -205,7 +205,7 @@ const Singup = ({ profile, updateProfile }) => {
                   type="text"
                   className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                   placeholder="Votre numéro"
-                  value={phoneNumber}
+                  defaultValue={""}
                   onChange={handlePhoneNumberChange}
                   pattern="\d*"
                   title="Le numéro doit contenir uniquement des chiffres."
@@ -270,7 +270,7 @@ const Singup = ({ profile, updateProfile }) => {
           </div>
           <div className="mt-6 text-center">
             <p className="text-gray-600">
-              Vous avez déjà un compte ? <Link to="/login" className="text-blue-500 hover:underline">Connectez-vous</Link>
+              Vous avez déjà un compte ? <Link to="/User/sing-in" className="text-blue-500 hover:underline">Connectez-vous</Link>
             </p>
           </div>
         </div>

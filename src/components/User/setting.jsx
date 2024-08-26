@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
+// Composant Modal pour afficher les erreurs
 const Modal = ({ isOpen, onClose, message }) => {
   if (!isOpen) return null;
 
@@ -17,12 +18,12 @@ const Modal = ({ isOpen, onClose, message }) => {
   );
 };
 
-const Setting = () => {
+const Setting = ({ profile={}, updateProfile }) => {
   // État pour les informations utilisateur
   const [userInfo, setUserInfo] = useState({
-    name: '',
-    email: '',
-    phone: ''
+    name: profile.name || '',
+    email: profile.email || '',
+    phone: profile.phone || ''
   });
 
   // État pour les mots de passe
@@ -34,8 +35,8 @@ const Setting = () => {
 
   // État pour les préférences de notification
   const [notifications, setNotifications] = useState({
-    emailNotifications: false,
-    smsNotifications: false
+    emailNotifications: profile.emailNotifications || false,
+    smsNotifications: profile.smsNotifications || false
   });
 
   // État pour la gestion des erreurs
@@ -68,7 +69,7 @@ const Setting = () => {
   };
 
   // Mise à jour des paramètres utilisateur
-  const updateUserSettings = async (userInfo) => {
+  const updateUserSettings = async () => {
     try {
       const response = await fetch('/api/updateUserSettings', {
         method: 'POST',
@@ -80,7 +81,8 @@ const Setting = () => {
       if (!response.ok) {
         throw new Error('Échec de la mise à jour des paramètres utilisateur');
       }
-      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      // Appeler updateProfile pour refléter les changements dans le profil
+      updateProfile(userInfo);
       alert('Paramètres utilisateur mis à jour avec succès');
     } catch (error) {
       console.error(error);
@@ -89,7 +91,7 @@ const Setting = () => {
   };
 
   // Mise à jour du mot de passe
-  const updatePassword = async (password) => {
+  const updatePassword = async () => {
     try {
       const response = await fetch('/api/updatePassword', {
         method: 'POST',
@@ -109,7 +111,7 @@ const Setting = () => {
   };
 
   // Mise à jour des préférences de notification
-  const updateNotificationPreferences = async (notifications) => {
+  const updateNotificationPreferences = async () => {
     try {
       const response = await fetch('/api/updateNotificationPreferences', {
         method: 'POST',
@@ -131,14 +133,14 @@ const Setting = () => {
   // Gestion de la soumission du formulaire des informations utilisateur
   const handleSubmitUserInfo = (e) => {
     e.preventDefault();
-    updateUserSettings(userInfo);
+    updateUserSettings();
   };
 
   // Gestion de la soumission du formulaire des mots de passe
   const handleSubmitPassword = (e) => {
     e.preventDefault();
     if (password.newPassword === password.confirmPassword) {
-      updatePassword(password);
+      updatePassword();
     } else {
       handleError('Les mots de passe ne correspondent pas');
     }
@@ -147,7 +149,7 @@ const Setting = () => {
   // Gestion de la soumission du formulaire des préférences de notification
   const handleSubmitNotifications = (e) => {
     e.preventDefault();
-    updateNotificationPreferences(notifications);
+    updateNotificationPreferences();
   };
 
   return (
