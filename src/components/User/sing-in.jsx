@@ -6,31 +6,55 @@ import { useState } from "react";
 
 const Singin = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [popupVisible, setPopupVisible] = useState(false); // État pour gérer la visibilité du popup de succès
-  const [errorPopupVisible, setErrorPopupVisible] = useState(false); // État pour gérer la visibilité du popup d'erreur
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [errorPopupVisible, setErrorPopupVisible] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate(); 
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault(); 
 
-    // Logique de validation du formulaire ici...
-    const isSuccess = Math.random() > 0.5; // Simuler un succès ou un échec (remplacez ceci par votre logique réelle)
+    // Validation simple
+    if (!email || !password) {
+      setErrorMessage("Veuillez remplir tous les champs.");
+      setErrorPopupVisible(true);
+      setTimeout(() => setErrorPopupVisible(false), 2000);
+      return;
+    }
 
-    if (isSuccess) {
-      setPopupVisible(true); 
-      setTimeout(() => {
-        setPopupVisible(false); 
-        navigate("/"); 
-      }, 2000); 
-    } else {
-      setErrorPopupVisible(true); 
-      setTimeout(() => {
-        setErrorPopupVisible(false); 
-      }, 2000); 
+    try {
+      const response = await fetch('/api/login', { // Remplacez '/api/login' par votre URL d'API
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.token); // Stocker le token dans le localStorage
+        setPopupVisible(true); 
+        setTimeout(() => {
+          setPopupVisible(false); 
+          navigate("/"); 
+        }, 2000); 
+      } else {
+        setErrorMessage(data.message || "Connexion échouée.");
+        setErrorPopupVisible(true);
+        setTimeout(() => setErrorPopupVisible(false), 2000);
+      }
+    } catch (error) {
+      setErrorMessage("Une erreur est survenue. Veuillez réessayer.");
+      setErrorPopupVisible(true);
+      setTimeout(() => setErrorPopupVisible(false), 2000);
     }
   };
 
@@ -44,6 +68,8 @@ const Singin = () => {
               <label className="block text-gray-700">Email</label>
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Votre email"
                 required
@@ -53,6 +79,8 @@ const Singin = () => {
               <label className="block text-gray-700">Mot de passe</label>
               <input
                 type={passwordVisible ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Votre mot de passe"
                 required
@@ -72,14 +100,24 @@ const Singin = () => {
               CONNEXION
             </button>
           </form>
-          <div className="mt-6 flex justify-center space-x-4">
-            <button className="bg-black text-white p-4 rounded-full shadow-lg hover:bg-blue-400 hover:text-blue-700 transition duration-200">
-              <ImFacebook2 size={24} />
-            </button>
-            <button className="bg-black text-white p-4 rounded-full shadow-lg hover:bg-green-400 transition duration-200">
-              <FcGoogle size={24} />
-            </button>
-          </div>
+          <div className="mt-4 text-center">
+              <p className="text-gray-600">Ou connectez vous avec</p>
+              <div className="flex justify-center mt-2">
+                <button
+                  type="button"
+                  className="flex items-center px-4 py-2 bg-white border rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring"
+                >
+                  <FcGoogle className="mr-2" size={20} />
+                  Google
+                </button>
+                <button
+                  type="button"
+                  className="flex items-center px-4 py-2 bg-white border rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring ml-2"
+                >
+                  <ImFacebook2 className="mr-2" size={20} />
+                  Facebook
+                </button>
+              </div>
           <div className="mt-6 text-center">
             <Link to="/User/mdpoublie" className="text-blue-500 hover:underline">
               Mot de passe oublié ?
@@ -89,7 +127,8 @@ const Singin = () => {
             <Link to="/User/sing-up" className="text-blue-500 hover:underline">
               Inscription
             </Link>
-          </div>
+          </div>              
+            </div>
         </div>
 
         {/* Popup de succès */}
@@ -105,8 +144,8 @@ const Singin = () => {
         {errorPopupVisible && (
           <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-lg font-bold text-center text-red-500">Connexion échouée!</h3>
-              <p className="text-lg font-bold text-center text-red-500">Verifiez votre email ou votre mot de passe puis ressayer</p>
+              <h3 className="text-lg font-bold text-center text-red-500">Erreur!</h3>
+              <p className="text-lg font-bold text-center text-red-500">{errorMessage}</p>
             </div>
           </div>
         )}

@@ -131,7 +131,8 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
         ...formData,
         id: annonces.length + 1,
         photos: photoPreviews,
-        location: formData.location,  // Ajout de la localisation ici
+        location: formData.location,
+        timestamp: Math.floor(Date.now() / 1000) // Ajout du timestamp en secondes
       };
       setAnnonces([...annonces, newAnnonce]);
       setShowPopup(true);
@@ -141,6 +142,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
       }, 2000);
     }
   };
+  
   
 
   return (
@@ -163,7 +165,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block mt-5 text-gray-700 font-medium">Titre</label>
+              <label className="block mt-5 text-gray-700 text-lg font-medium">Titre</label>
               <input
                 type="text"
                 name="title"
@@ -177,7 +179,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
               {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium">Description</label>
+              <label className="block text-gray-700 text-lg font-medium">Description</label>
               <textarea
                 name="description"
                 value={formData.description}
@@ -191,7 +193,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
             </div>
             {/* Bloc de Photos sous forme de grille */}
             <div className="mb-8">
-              <label className="block text-gray-700 font-medium">Photos</label>
+              <label className="block text-gray-700 text-lg font-custom">Photos<span className='text-base' >(minimum trois (3) photos)</span> </label>
               <div className="grid grid-cols-3 gap-4 mb-4">
                 {formData.photos.map((photo, index) => (
                   <div key={index} className="relative">
@@ -230,7 +232,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
               {errors.photos && <p className="text-red-500 text-sm">{errors.photos}</p>}
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium">Catégorie</label>
+              <label className="block text-gray-700 text-lg font-medium">Catégorie</label>
               <select
                 name="category"
                 value={formData.category}
@@ -250,7 +252,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
               {errors.category && <p className="text-red-500 text-sm">{errors.category}</p>}
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium">Prix</label>
+              <label className="block text-gray-700 text-lg font-medium">Prix</label>
               <input
                 type="text"
                 name="price"
@@ -262,7 +264,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
               {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>}
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium">Numéro de téléphone</label>
+              <label className="block text-gray-700 text-lg font-medium">Numéro de téléphone</label>
               <input
                 type="text"
                 name="phone"
@@ -274,7 +276,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
               {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium">Localisation</label>
+              <label className="block text-gray-700 text-lg font-medium">Localisation</label>
               <Select
                 name="location"
                 value={formData.location}

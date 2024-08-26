@@ -67,38 +67,43 @@ const Detail = ({ profile }) => {
     setShowReportSuccess(false);
   };
 
+  const handleCloseReportForm = () => {
+    setShowReportForm(false);
+  };
+
   return (
     <div className="min-h-screen mt-16 font-custom bg-[#F4F6F9] p-4">
-      <div className="container mx-auto flex">
+      <div className="container mx-auto flex flex-col md:flex-row">
         {/* Images et boutons de navigation à gauche (50%) */}
-        <div className="w-1/2 relative">
+        <div className="w-full md:w-1/2 relative mb-6 md:mb-0">
           {photos && photos.length > 0 && (
-            <>
+            <div className="relative">
               <img 
                 src={photos[currentImageIndex]} 
                 alt="Annonce" 
-                className="w-full h-96 object-contain rounded-lg mb-4" 
+                className="w-full h-64 md:h-80 lg:h-96 object-contain rounded-lg mb-4" 
                 loading='lazy'
               />
-              <div className="absolute mt-6 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex space-x-4">
+              {/* Boutons de navigation centrés en dessous de l'image principale */}
+              <div className="flex justify-center mt-4">
                 <button 
                   onClick={handlePrevImage}
                   disabled={currentImageIndex === 0}
-                  className="bg-gray-800 text-white w-10 h-10 rounded-full hover:bg-gray-700 transition duration-300 flex items-center justify-center"
+                  className="bg-gray-800 text-white w-10 h-10 rounded-full hover:bg-gray-700 transition duration-300 flex items-center justify-center mx-2"
                 >
                   <FontAwesomeIcon icon={faChevronLeft} />
                 </button>
                 <button 
                   onClick={handleNextImage}
                   disabled={currentImageIndex === photos.length - 1}
-                  className="bg-gray-800 text-white w-10 h-10 rounded-full hover:bg-gray-700 transition duration-300 flex items-center justify-center"
+                  className="bg-gray-800 text-white w-10 h-10 rounded-full hover:bg-gray-700 transition duration-300 flex items-center justify-center mx-2"
                 >
                   <FontAwesomeIcon icon={faChevronRight} />
                 </button>
               </div>
-            </>
+            </div>
           )}
-          <div className="flex overflow-x-auto mt-16 space-x-2">
+          <div className="flex overflow-x-auto mt-4 space-x-2">
             {photos.map((photo, index) => (
               <img 
                 key={index} 
@@ -113,19 +118,19 @@ const Detail = ({ profile }) => {
         </div>
 
         {/* Contenu principal à droite (50%) */}
-        <div className="w-1/2 bg-white h-auto p-8 rounded-lg shadow-lg">
-          <div className="flex items-center mb-4">
+        <div className="w-full md:w-1/2 bg-white h-auto p-4 md:p-8 rounded-lg shadow-lg">
+          <div className="flex flex-col md:flex-row items-center mb-4">
             <img 
               src={profile.photoURL} 
               alt="Profile utilisateur" 
               onClick={handlePhotoClick}
-              className="w-32 h-32 rounded-full border-2 border-gray-300 shadow-md object-cover hover:scale-105"
+              className="w-24 h-24 md:w-32 md:h-32 rounded-full border-2 border-gray-300 shadow-md object-cover hover:scale-105 transition-transform duration-300"
               loading='lazy'
             />
-            <div className="ml-5">
+            <div className="mt-4 md:mt-0 md:ml-5 text-center md:text-left">
               <h2 className="text-xl font-bold text-gray-700">{profile.name}</h2>
               {annonceLocation && (
-                <div className="flex items-center text-gray-500">
+                <div className="flex items-center justify-center md:justify-start text-gray-500 mt-2">
                   <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
                   <span className='text-xl'>{annonceLocation.label}</span>
                 </div>
@@ -133,6 +138,7 @@ const Detail = ({ profile }) => {
             </div>
           </div>
 
+          {/* Popup de photo de profil */}
           {showPhotoPopup && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="bg-white p-4 rounded-lg shadow-lg text-center max-w-[90%] max-h-[90%] overflow-auto">
@@ -151,6 +157,7 @@ const Detail = ({ profile }) => {
             </div>
           )}
 
+          {/* Confirmation de signalement */}
           {showReportConfirm && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="bg-white p-4 rounded-lg shadow-lg text-center max-w-md">
@@ -174,57 +181,71 @@ const Detail = ({ profile }) => {
             </div>
           )}
 
+          {/* Formulaire de signalement */}
           {showReportForm && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white p-4 rounded-lg shadow-lg text-center max-w-md">
-                <h3 className="text-xl font-bold mb-4">Formulaire de signalement</h3>
-                <textarea 
+              <div className="bg-white p-10 rounded-lg shadow-lg text-center max-w-md">
+                <h3 className="text-xl font-bold mb-4">Signaler l'annonceur</h3>
+                <textarea
+                  className="w-full p-5 border border-gray-300 rounded-md mb-4"
+                  placeholder="Raison du signalement"
                   value={reportReason}
                   onChange={(e) => setReportReason(e.target.value)}
-                  placeholder="Décrivez la raison du signalement"
-                  rows="4"
-                  className="w-full p-2 border border-gray-300 rounded-lg mb-4"
                 />
-                <button
-                  onClick={handleReportSubmit}
-                  className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-transform duration-300 transform hover:scale-105"
-                >
-                  Envoyer
-                </button>
+                <div className="flex justify-center space-x-4">
+                  <button 
+                    onClick={handleReportSubmit}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-transform duration-300 transform hover:scale-105"
+                  >
+                    Envoyer
+                  </button>
+                  <button 
+                    onClick={handleCloseReportForm}
+                    className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-transform duration-300 transform hover:scale-105"
+                  >
+                    Annuler
+                  </button>
+                </div>
               </div>
             </div>
           )}
 
+          {/* Confirmation de succès de signalement */}
           {showReportSuccess && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="bg-white p-4 rounded-lg shadow-lg text-center max-w-md">
-                <h3 className="text-xl font-bold mb-4">Signalement reçu</h3>
-                <p>Votre message de signalement a bien été envoyé. Merci de nous avoir alertés.</p>
-                <button
+                <h3 className="text-xl font-bold mb-4">Signalement envoyé</h3>
+                <p>Votre signalement a été envoyé avec succès.</p>
+                <button 
                   onClick={handleCloseSuccessPopup}
                   className="mt-4 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-600 transition-transform duration-300 transform hover:scale-105"
                 >
-                  Fermer
+                  OK
                 </button>
               </div>
             </div>
           )}
 
-          <h1 className="text-3xl font-bold mb-4 break-words">{title}</h1>
-          <p className="text-2xl text-gray-400 font-semibold underline">Description de l'annonce:</p>
-          <p className="text-[#7F8C8D] mb-4 break-words text-lg">{description}</p>
-          <p className="text-[#27AE60] font-bold text-xl mb-4">Prix: {price} FCFA</p>
-          <div className="flex space-x-80 mt-4">
+          <div className="mb-4">
+            <h3 className="text-4xl font-bold text-black break-words ">{title}</h3>
+            <h4 className="text-2xl font-semibold text-gray-500 underline mt-5 mb-5" >DESCRIPTION DE L'ANNONCE:</h4>
+            <p className="text-gray-500 text-xl mt-2 break-words mb-5 ">{description}</p>
+            <span className="text-xl font-bold text-green-600">{price} FCFA</span>
+          </div>
+
+          <div className="flex items-center justify-center md:justify-start mt-4">
             <button 
               onClick={handlePhoneButtonClick} 
-              className="bg-green-500 text-white p-2 rounded-full hover:bg-green-600 hover:scale-105 transition duration-300 flex items-center"
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-transform duration-300 transform hover:scale-105 flex items-center"
             >
               <FontAwesomeIcon icon={faPhone} className="mr-2" />
               {buttonText}
             </button>
+          </div>
+          <div className="flex items-center justify-center md:justify-start mt-16">
             <button 
-              onClick={handleReportClick}
-              className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 hover:scale-105 transition duration-300 flex items-center"
+              onClick={handleReportClick} 
+              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-transform duration-300 transform hover:scale-105 flex items-center"
             >
               <FontAwesomeIcon icon={faThumbsDown} className="mr-2" />
               Signaler

@@ -57,8 +57,6 @@ const Rout = () => {
     setProfile(prevProfile => ({ ...prevProfile, ...newProfile }));
   };
 
-  const isUserLoggedIn = localStorage.getItem('isUserLoggedIn') === 'true';
-
   return (
     <>
       <Navbar setSearchQuery={setSearchQuery} />
@@ -67,7 +65,7 @@ const Rout = () => {
         <Route path="User/profile" element={<Profile annonces={annonces} deleteAnnonce={deleteAnnonce} updateAnnonce={updateAnnonce} profile={profile} updateProfile={updateProfile}/>} />
         <Route path="User/setting" element={<Setting />} />
         <Route path="User/sing-in" element={<Singin />} />
-        <Route path="User/sing-up" element={<Singup />} />
+        <Route path="User/sing-up" element={<Singup profile={profile} updateProfile={updateProfile} />} />
         <Route path="User/mdpoublie" element={<Mdpoublie />} />
         <Route path="Annonce/annonce" element={ <Annonce setAnnonces={setAnnonces} annonces={annonces} profile={profile} />} />
         <Route path="Confidentilite/conditions" element={<Conditions />} />

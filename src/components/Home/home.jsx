@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faSortAmountDown, faSortAmountUp, faDollarSign, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FadeLoader } from 'react-spinners';
-import {useOutsideClick} from '../Navbar/navbarhookperso'
+import { useOutsideClick } from '../Navbar/navbarhookperso';
 
 const Home = ({ annonces, searchQuery }) => {
   const navigate = useNavigate();
@@ -11,7 +11,9 @@ const Home = ({ annonces, searchQuery }) => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [query, setQuery] = useState(searchQuery);
-  const [isFilterVisible, setIsFilterVisible] = useState(false); // Nouvel état pour contrôler la visibilité
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(88);
 
   const categoriesRef = useOutsideClick(() => setIsFilterVisible(false));
 
@@ -38,7 +40,6 @@ const Home = ({ annonces, searchQuery }) => {
     setQuery(e.target.value);
   };
 
-  // Fonction pour tronquer le texte
   const truncateText = (text, maxLength) => {
     if (text.length > maxLength) {
       return text.slice(0, maxLength) + '...';
@@ -46,7 +47,19 @@ const Home = ({ annonces, searchQuery }) => {
     return text;
   };
 
-  // Filtrage et tri des annonces
+  const getElapsedMinutes = (timestamp) => {
+    const annonceTime = new Date(timestamp * 1000);
+    const now = new Date();
+
+    if (isNaN(annonceTime.getTime())) {
+      console.error('Invalid timestamp:', timestamp);
+      return 'Invalid date';
+    }
+
+    const elapsedTime = Math.floor((now - annonceTime) / 60000);
+    return elapsedTime;
+  };
+
   const filteredAnnonces = annonces.filter((annonce) =>
     annonce.title.toLowerCase().includes(query.toLowerCase())
   );
@@ -55,9 +68,9 @@ const Home = ({ annonces, searchQuery }) => {
     .filter((annonce) => !selectedCategory || annonce.category === selectedCategory)
     .sort((a, b) => {
       if (sortOrder === 'recent') {
-        return new Date(b.date) - new Date(a.date);
+        return b.timestamp - a.timestamp;
       } else if (sortOrder === 'oldest') {
-        return new Date(a.date) - new Date(b.date);
+        return a.timestamp - b.timestamp;
       } else if (sortOrder === 'priceHigh') {
         return b.price - a.price;
       } else if (sortOrder === 'priceLow') {
@@ -66,12 +79,18 @@ const Home = ({ annonces, searchQuery }) => {
       return 0;
     });
 
+  const totalPages = Math.ceil(sortedAnnonces.length / itemsPerPage);
+  const currentItems = sortedAnnonces.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div className="min-h-screen bg-[#F4F6F9] p-6 relative font-custom">
       <div className="container mx-auto">
         <h1 className="text-4xl font-extrabold text-center mt-16 mb-8 text-[#333333]">Nouvelle Annonce</h1>
 
-        {/* Bouton pour afficher/masquer la section de tri */}
         <button
           ref={categoriesRef}
           className="absolute top-16 left-0 ml-4 bg-gray-300 p-3 rounded-r-lg shadow-lg flex items-center"
@@ -81,8 +100,13 @@ const Home = ({ annonces, searchQuery }) => {
           Filtrer
         </button>
 
-        {/* Section de filtrage et tri */}
-        <div  className={`absolute mt-28 top-16 left-0 bg-gray-300 p-6 rounded-lg shadow-lg flex flex-col space-y-4 transition-transform duration-300 ${isFilterVisible ? 'translate-x-0' : '-translate-x-80'}`}>
+        <div
+          ref={categoriesRef}
+          className={`absolute z-40 mt-32 top-16 left-0 bg-gray-300 p-6 rounded-lg shadow-lg flex flex-col space-y-4 transition-transform duration-300 ${
+            isFilterVisible ? 'translate-x-0' : '-translate-x-full'
+          }`}
+          style={{ transform: isFilterVisible ? 'translateX(0)' : 'translateX(-100%)' }}
+        >
           <button
             className="bg-white text-blue-500 w-40 px-4 py-2 rounded-lg hover:bg-gray-300 flex items-center justify-center transition-colors duration-300"
             onClick={() => handleSortChange('recent')}
@@ -128,48 +152,72 @@ const Home = ({ annonces, searchQuery }) => {
           </select>
         </div>
 
-        {/* Affichage du loader ou des annonces */}
         {isLoading ? (
           <div className="flex justify-center items-center min-h-screen">
             <FadeLoader color="#F4511E" size={100} />
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 ml-56">
-            {sortedAnnonces && sortedAnnonces.length > 0 ? (
-              sortedAnnonces.map((annonce) => (
-                <div
-                  key={annonce.id}
-                  className="bg-white p-1 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-                >
-                  {annonce.photos && annonce.photos[0] ? (
-                    <img
-                      src={annonce.photos[0]}
-                      alt="Annonce"
-                      onClick={() => handleDetailClick(annonce)}
-                      className="cursor-pointer w-full h-48 object-cover object-center rounded-t-lg"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-full h-40 bg-gray-200 rounded-t-lg flex items-center justify-center">
-                      <span className="text-red-500">Pas d'image</span>
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+              {currentItems.length > 0 ? (
+                currentItems.map((annonce) => (
+                  <div
+                    key={annonce.id}
+                    className="bg-white p-1 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                  >
+                    {annonce.photos && annonce.photos[0] ? (
+                      <div className="relative">
+                        <img
+                          src={annonce.photos[0]}
+                          alt="Annonce"
+                          onClick={() => handleDetailClick(annonce)}
+                          className="cursor-pointer w-full h-48 object-cover object-center rounded-t-lg"
+                          loading="lazy"
+                        />
+                        <div className="absolute bottom-2 left-2 bg-black bg-opacity-75 rounded-full p-1">
+                          <FontAwesomeIcon icon={faClock} className="text-gray-500" />
+                          <span className="text-white ml-1 text-xs">{getElapsedMinutes(annonce.timestamp)} minutes</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="w-full h-40 bg-gray-200 rounded-t-lg flex items-center justify-center">
+                        <span className="text-red-500">Pas d'image</span>
+                      </div>
+                    )}
+                    <div className="p-4">
+                      <h2
+                        onClick={() => handleDetailClick(annonce)}
+                        className="text-lg font-bold mb-2 text-blue-600 hover:text-orange-500 break-words cursor-pointer"
+                        style={{ maxHeight: '3em' }}
+                      >
+                        {truncateText(annonce.title, 50)}
+                      </h2>
+                      <p className="text-black mt-auto blue-500 text-xl font-semibold">{annonce.price} FCFA</p>
                     </div>
-                  )}
-                  <div className="p-4">
-                    <h2
-                      onClick={() => handleDetailClick(annonce)}
-                      className="text-lg font-bold mb-2 text-blue-600 hover:text-orange-500 break-words cursor-pointer"
-                      style={{ maxHeight: '3em' }}
-                    >
-                      {truncateText(annonce.title, 50)}
-                    </h2>
-                    <p className="text-black mt-14 blue-500 text-xl font-semibold">{annonce.price} FCFA</p>
                   </div>
+                ))
+              ) : (
+                <p className="text-center text-gray-500 text-2xl w-full mt-40">Aucune annonce disponible.</p>
+              )}
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex justify-center mt-8">
+                <div className="flex space-x-2">
+                  {[...Array(totalPages).keys()].map((page) => (
+                    <button
+                      key={page}
+                      className={`px-4 py-2 rounded-lg border ${currentPage === page + 1 ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'} transition-colors duration-300`}
+                      onClick={() => handlePageChange(page + 1)}
+                    >
+                      {page + 1}
+                    </button>
+                  ))}
                 </div>
-              ))
-            ) : (
-              <p className="text-center text-gray-500 text-2xl w-full mt-40">Aucune annonce disponible.</p>
+              </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

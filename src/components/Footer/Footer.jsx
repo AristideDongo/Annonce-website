@@ -1,17 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaFacebook, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaWhatsapp, FaArrowUp } from 'react-icons/fa';
 import { FaLocationDot, FaXTwitter } from 'react-icons/fa6';
 import { IoIosCall } from 'react-icons/io';
 import { MdEmail } from 'react-icons/md';
 
 const Footer = () => {
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <footer className="bg-black text-gray-300 py-10 font-custom ">
+    <footer className="bg-black text-gray-300 py-10 font-custom relative">
       <div className="container mx-auto px-4 md:px-8">
         {/* Logo */}
         <div className="flex justify-center mb-8">
-          {/* <img src="/path/to/logo.png" alt="Logo" className="h-12" /> */}
           <Link to="/" className="text-white text-4xl font-bold text-center">Annonces<span className="text-orange-600">360°</span></Link>
         </div>
 
@@ -76,6 +97,15 @@ const Footer = () => {
           &copy; {new Date().getFullYear()} Annonces360°. Tous droits réservés.
         </div>
       </div>
+      {/* Scroll to top button */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-4 right-4 bg-orange-600 text-white p-3 rounded-full shadow-lg border-2 transition-all duration-300 ease-in-out transform hover:scale-110 hover:bg-orange-700"
+        >
+          <FaArrowUp className="text-xl" />
+        </button>
+      )}
     </footer>
   );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 
 const Conditions = () => {
   return (
-    <div className="mx-auto p-4 font-custom bg-[#F4F6F9]">
+    <div className="mx-auto p-4 mt-16 font-custom bg-[#F4F6F9]">
       <h1 className="text-3xl font-bold mb-4">Conditions d'utilisation</h1>
       <section className="mb-6">
         <h2 className="text-2xl font-semibold mb-2">1. Introduction</h2>
