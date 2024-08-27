@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BiCategory } from 'react-icons/bi';
-import { FaBaby, FaCar, FaHome, FaRegUser, FaRegUserCircle } from 'react-icons/fa';
+import { FaBaby, FaCar, FaHome, FaRegUser, FaRegUserCircle, FaRegHeart } from 'react-icons/fa';
 import { IoIosHome } from 'react-icons/io';
 import { IoDuplicateOutline, IoLogInOutline, IoSettingsOutline } from 'react-icons/io5';
 import { MdComputer, MdOutlineOtherHouses } from 'react-icons/md';
@@ -30,7 +30,7 @@ const Navbar = ({ setSearchQuery }) => {
    useEffect(() => {
     // Vérifiez l'état de connexion lors du chargement du composant
     const token = localStorage.getItem('authToken');
-    setIsUserLoggedIn(!!token);
+    setIsUserLoggedIn(true);
   }, []);
 
   const handleChange = (e) => {
@@ -116,14 +116,14 @@ const Navbar = ({ setSearchQuery }) => {
               </button>
               {isCategoriesOpen && (
                 <ul className="absolute bg-white mt-2 rounded-md shadow-lg z-10">
-                  <li><Link to="Category/immobilier" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><IoIosHome className="mr-2" /> IMMOBILIER</Link></li>
-                  <li><Link to="Category/vehicule" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><FaCar className="mr-2" /> VEHICULE</Link></li>
-                  <li><Link to="Category/electromenager" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><TbRazorElectric className="mr-2" /> ELECTROMENAGER</Link></li>
-                  <li><Link to="Category/electronique" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><MdComputer className="mr-2" /> ELECTRONIQUE</Link></li>
-                  <li><Link to="Category/mode-home" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><SlUser className="mr-2" /> MODE HOMME</Link></li>
-                  <li><Link to="Category/mode-femme" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><SlUserFemale className="mr-2" /> MODE FEMME</Link></li>
-                  <li><Link to="Category/mode-enfant" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><FaBaby className="mr-2" /> MODE ENFANT</Link></li>
-                  <li><Link to="Category/autres" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><MdOutlineOtherHouses className="mr-2" /> AUTRES</Link></li>
+                  <li><Link to="/Category/immobilier" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><IoIosHome className="mr-2" /> IMMOBILIER</Link></li>
+                  <li><Link to="/Category/vehicule" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><FaCar className="mr-2" /> VEHICULE</Link></li>
+                  <li><Link to="/Category/electromenager" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><TbRazorElectric className="mr-2" /> ELECTROMENAGER</Link></li>
+                  <li><Link to="/Category/electronique" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><MdComputer className="mr-2" /> ELECTRONIQUE</Link></li>
+                  <li><Link to="/Category/mode-home" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><SlUser className="mr-2" /> MODE HOMME</Link></li>
+                  <li><Link to="/Category/mode-femme" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><SlUserFemale className="mr-2" /> MODE FEMME</Link></li>
+                  <li><Link to="/Category/mode-enfant" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><FaBaby className="mr-2" /> MODE ENFANT</Link></li>
+                  <li><Link to="/Category/autres" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><MdOutlineOtherHouses className="mr-2" /> AUTRES</Link></li>
                 </ul>
               )}
             </div>
@@ -136,9 +136,10 @@ const Navbar = ({ setSearchQuery }) => {
               </button>
               {isAccountMenuOpen && (
                 <ul className="absolute bg-white mt-2 rounded-md shadow-lg z-10">
-                  <li><Link to="User/profile" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><FaRegUser className="mr-2" /> Profile</Link></li>
-                  <li><Link to="User/setting" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><IoSettingsOutline className="mr-2" /> Paramètres</Link></li>
-                  <li><Link to="User/sing-in" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><IoLogInOutline className="mr-2" /> Connexion</Link></li>
+                  <li><Link to="/User/profile" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><FaRegUser className="mr-2" /> Profile</Link></li>
+                  <li><Link to="/User/favoris" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><FaRegHeart className="mr-2" /> Favoris</Link></li>          
+                  <li><Link to="/User/setting" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><IoSettingsOutline className="mr-2" /> Paramètres</Link></li>
+                  <li><Link to="/User/sing-in" className="block px-4 py-2 text-sm text-blue-500 hover:text-orange-500 flex items-center transition duration-300" onClick={handleCloseMenus}><IoLogInOutline className="mr-2" /> Connexion</Link></li>
                   {isUserLoggedIn && (
                     <li>
                       <button 
@@ -189,20 +190,21 @@ const Navbar = ({ setSearchQuery }) => {
                 </button>
                 {isMobileCategoriesOpen && (
                   <ul className="ml-4 mt-2">
-                    <li><Link to="Category/immobilier" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><IoIosHome className="mr-2" /> IMMOBILIER</Link></li>
-                    <li><Link to="Category/vehicule" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><FaCar className="mr-2" /> VEHICULE</Link></li>
-                    <li><Link to="Category/electromenager" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><TbRazorElectric className="mr-2" /> ELECTROMENAGER</Link></li>
-                    <li><Link to="Category/electronique" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><MdComputer className="mr-2" /> ELECTRONIQUE</Link></li>
-                    <li><Link to="Category/mode-home" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><SlUser className="mr-2" /> MODE HOMME</Link></li>
-                    <li><Link to="Category/mode-femme" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><SlUserFemale className="mr-2" /> MODE FEMME</Link></li>
-                    <li><Link to="Category/mode-enfant" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><FaBaby className="mr-2" /> MODE ENFANT</Link></li>
-                    <li><Link to="Category/autres" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><MdOutlineOtherHouses className="mr-2" /> AUTRES</Link></li>
+                    <li><Link to="/Category/immobilier" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><IoIosHome className="mr-2" /> IMMOBILIER</Link></li>
+                    <li><Link to="/Category/vehicule" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><FaCar className="mr-2" /> VEHICULE</Link></li>
+                    <li><Link to="/Category/electromenager" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><TbRazorElectric className="mr-2" /> ELECTROMENAGER</Link></li>
+                    <li><Link to="/Category/electronique" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><MdComputer className="mr-2" /> ELECTRONIQUE</Link></li>
+                    <li><Link to="/Category/mode-home" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><SlUser className="mr-2" /> MODE HOMME</Link></li>
+                    <li><Link to="/Category/mode-femme" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><SlUserFemale className="mr-2" /> MODE FEMME</Link></li>
+                    <li><Link to="/Category/mode-enfant" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><FaBaby className="mr-2" /> MODE ENFANT</Link></li>
+                    <li><Link to="/Category/autres" className="block text-blue-600 hover:text-orange-500 px-4 py-2 text-sm flex items-center transition duration-300" onClick={handleToggleSidebar}><MdOutlineOtherHouses className="mr-2" /> AUTRES</Link></li>
                   </ul>
                 )}
               </li>
-              <li><Link to="User/profile" className="block text-blue-600 hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300" onClick={handleToggleSidebar}><FaRegUser className="mr-2"/> Profile</Link></li>
-              <li><Link to="User/setting" className="block text-blue-600 hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300" onClick={handleToggleSidebar}><IoSettingsOutline className="mr-2"/> Paramètres</Link></li>
-              <li><Link to="User/sing-in" className="block text-blue-600 hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300" onClick={handleToggleSidebar}><IoLogInOutline className="mr-2"/> Connexion</Link></li>
+              <li><Link to="/User/profile" className="block text-blue-600 hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300" onClick={handleToggleSidebar}><FaRegUser className="mr-2"/> Profile</Link></li>
+              <li><Link to="/User/favoris" className="block text-blue-600 hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300" onClick={handleToggleSidebar}><FaRegHeart className="mr-2"/> Favoris</Link></li>
+              <li><Link to="/User/setting" className="block text-blue-600 hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300" onClick={handleToggleSidebar}><IoSettingsOutline className="mr-2"/> Paramètres</Link></li>
+              <li><Link to="/User/sing-in" className="block text-blue-600 hover:text-orange-500 px-4 py-2 rounded-md text-sm font-medium flex items-center transition duration-300" onClick={handleToggleSidebar}><IoLogInOutline className="mr-2"/> Connexion</Link></li>
               {isUserLoggedIn && (
                 <li>
                   <button 

@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faSortAmountDown, faSortAmountUp, faDollarSign, faFilter } from '@fortawesome/free-solid-svg-icons';
+import {
+  faClock,
+  faSortAmountDown,
+  faSortAmountUp,
+  faDollarSign,
+  faFilter,
+  faHeart,
+} from '@fortawesome/free-solid-svg-icons';
 import { FadeLoader } from 'react-spinners';
 import { useOutsideClick } from '../Navbar/navbarhookperso';
 
@@ -14,6 +21,7 @@ const Home = ({ annonces, searchQuery }) => {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(88);
+  const [favorites, setFavorites] = useState([]);
 
   const categoriesRef = useOutsideClick(() => setIsFilterVisible(false));
 
@@ -22,6 +30,10 @@ const Home = ({ annonces, searchQuery }) => {
       setIsLoading(false);
     }
     setQuery(searchQuery);
+
+    // Charger les favoris depuis localStorage
+    const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    setFavorites(savedFavorites);
   }, [annonces, searchQuery]);
 
   const handleDetailClick = (annonce) => {
@@ -60,6 +72,16 @@ const Home = ({ annonces, searchQuery }) => {
     return elapsedTime;
   };
 
+  const handleFavoriteClick = (annonce) => {
+    const isFavorite = favorites.some(fav => fav.id === annonce.id);
+    const updatedFavorites = isFavorite
+      ? favorites.filter(fav => fav.id !== annonce.id)
+      : [...favorites, annonce];
+
+    setFavorites(updatedFavorites);
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+  };
+
   const filteredAnnonces = annonces.filter((annonce) =>
     annonce.title.toLowerCase().includes(query.toLowerCase())
   );
@@ -89,8 +111,7 @@ const Home = ({ annonces, searchQuery }) => {
   return (
     <div className="min-h-screen bg-[#F4F6F9] p-6 relative font-custom">
       <div className="container mx-auto">
-        <h1 className="text-4xl font-extrabold text-center mt-16 mb-8 text-[#333333]">Nouvelle Annonce</h1>
-
+        <h1 className="text-4xl font-extrabold text-center mt-16 mb-8 capitalize text-[#333333]">Annonce Récente</h1>
         <button
           ref={categoriesRef}
           className="absolute top-16 left-0 ml-4 bg-gray-300 p-3 rounded-r-lg shadow-lg flex items-center"
@@ -140,7 +161,7 @@ const Home = ({ annonces, searchQuery }) => {
             value={selectedCategory}
             onChange={handleCategoryChange}
           >
-            <option value="">Catégorie</option>
+            <option value="">Tous</option>
             <option value="immobilier">Immobilier</option>
             <option value="vehicule">Véhicule</option>
             <option value="electromenager">Électroménager</option>
@@ -163,7 +184,7 @@ const Home = ({ annonces, searchQuery }) => {
                 currentItems.map((annonce) => (
                   <div
                     key={annonce.id}
-                    className="bg-white p-1 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                    className="bg-white p-1 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 relative"
                   >
                     {annonce.photos && annonce.photos[0] ? (
                       <div className="relative">
@@ -185,14 +206,17 @@ const Home = ({ annonces, searchQuery }) => {
                       </div>
                     )}
                     <div className="p-4">
-                      <h2
-                        onClick={() => handleDetailClick(annonce)}
-                        className="text-lg font-bold mb-2 text-blue-600 hover:text-orange-500 break-words cursor-pointer"
-                        style={{ maxHeight: '3em' }}
-                      >
-                        {truncateText(annonce.title, 50)}
-                      </h2>
+                    <h3 className="text-lg break-words font-semibold text-blue-600 mb-2 hover:text-orange-600" 
+                    onClick={() => handleDetailClick(annonce)}>{truncateText(annonce.title, 50)}</h3>
                       <p className="text-black mt-auto blue-500 text-xl font-semibold">{annonce.price} FCFA</p>
+                    </div>
+                    <div
+                      className={`absolute top-2 right-2 p-2 rounded-full bg-white bg-opacity-75 cursor-pointer transition-transform duration-300 ${
+                        favorites.some(fav => fav.id === annonce.id) ? 'text-red-500' : 'text-gray-500'
+                      }`}
+                      onClick={() => handleFavoriteClick(annonce)}
+                    >
+                      <FontAwesomeIcon icon={faHeart} />
                     </div>
                   </div>
                 ))
@@ -201,7 +225,6 @@ const Home = ({ annonces, searchQuery }) => {
               )}
             </div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center mt-8">
                 <div className="flex space-x-2">

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Select from 'react-select';
 import { locationOptions } from '../locations/locations'
+import { countries } from '../countries/countries';
+
 const Annonce = ({ setAnnonces, annonces, profile }) => {
   const [formData, setFormData] = useState({
     title: '',
@@ -10,8 +12,11 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
     category: '',
     price: '',
     phone: '',
+    whatsapp: '',
     location: null
   });
+
+  const countryCode = countries.find(country => country.name === "Côte d'Ivoire").code;
 
   const [errors, setErrors] = useState({});
   const [photoPreviews, setPhotoPreviews] = useState(['', '', '', '', '']);
@@ -30,6 +35,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
       [name]: ''
     });
   };
+  
 
   const handlePhotoChange = (index, e) => {
     const file = e.target.files[0];
@@ -274,6 +280,20 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
                 placeholder="Numéro de téléphone"
               />
               {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-lg font-medium">Numéro de WhatsApp (optionnel)</label>
+                <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                  <span className="bg-gray-200 px-3 py-2 text-gray-700">{countryCode}</span> {/* Affichage de l'indicatif du pays */}
+                  <input
+                    type="text"
+                    name="whatsapp"
+                    value={formData.whatsapp}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border-0 focus:outline-none focus:ring-0"
+                    placeholder="Numéro de WhatsApp"
+                  />
+                </div>
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 text-lg font-medium">Localisation</label>

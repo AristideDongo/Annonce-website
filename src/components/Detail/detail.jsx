@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faPhone, faMapMarkerAlt, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+import { countries } from '../countries/countries';
+import { FaWhatsapp, FaHeart } from 'react-icons/fa';
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+
 
 const Detail = ({ profile }) => {
+  const navigate = useNavigate()
   const location = useLocation();
-  const { title, description, price, photos, phone, location: annonceLocation } = location.state;
+  const { id ,title, description, price, photos, phone, whatsapp, location: annonceLocation } = location.state;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [buttonText, setButtonText] = useState('Voir le numéro');
   const [showPhotoPopup, setShowPhotoPopup] = useState(false);
@@ -13,7 +18,9 @@ const Detail = ({ profile }) => {
   const [showReportForm, setShowReportForm] = useState(false);
   const [showReportSuccess, setShowReportSuccess] = useState(false);
   const [reportReason, setReportReason] = useState('');
-
+ // État des favoris
+ const [favorites, setFavorites] = useState([]);
+ const [isFavorite, setIsFavorite] = useState(false);
   const handleNextImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % photos.length);
   };
@@ -39,6 +46,10 @@ const Detail = ({ profile }) => {
       setShowPhotoPopup(true);
     }
   };
+
+  const handleNameClick = () =>{
+    navigate('/User/profile')
+  }
 
   const handleClosePopup = () => {
     setShowPhotoPopup(false);
@@ -70,7 +81,27 @@ const Detail = ({ profile }) => {
   const handleCloseReportForm = () => {
     setShowReportForm(false);
   };
+  
 
+  // Trouver le code du pays pour la Côte d'Ivoire
+const countryCode = countries.find(country => country.name === "Côte d'Ivoire")?.code || '';
+
+// Format du numéro de téléphone pour WhatsApp
+const formattedPhoneNumber = `${countryCode}${whatsapp.replace(/\D/g, '')}`;
+
+ // Fonction pour gérer les favoris
+ const handleFavoriteToggle = () => {
+  const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  
+  const isCurrentlyFavorite = storedFavorites.some(fav => fav.id === id);
+  const updatedFavorites = isCurrentlyFavorite
+    ? storedFavorites.filter(fav => fav.id !== id)
+    : [...storedFavorites, { id, title, description, price, photos, phone, whatsapp, location: annonceLocation }];
+
+  localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+  setIsFavorite(!isCurrentlyFavorite);
+};
+  
   return (
     <div className="min-h-screen mt-16 font-custom bg-[#F4F6F9] p-4">
       <div className="container mx-auto flex flex-col md:flex-row">
@@ -84,6 +115,13 @@ const Detail = ({ profile }) => {
                 className="w-full h-64 md:h-80 lg:h-96 object-contain rounded-lg mb-4" 
                 loading='lazy'
               />
+              {/* Icône de favoris */}
+              <button
+      onClick={handleFavoriteToggle}
+      className={`absolute bg-white bg-opacity-50 rounded-full top-4 right-4 p-2 ${isFavorite ? 'text-red-500' : 'text-gray-500'} hover:text-red-700 transition-colors duration-300`}
+    >
+      {isFavorite ? <AiFillHeart /> : <AiOutlineHeart />}
+    </button>
               {/* Boutons de navigation centrés en dessous de l'image principale */}
               <div className="flex justify-center mt-4">
                 <button 
@@ -128,7 +166,7 @@ const Detail = ({ profile }) => {
               loading='lazy'
             />
             <div className="mt-4 md:mt-0 md:ml-5 text-center md:text-left">
-              <h2 className="text-xl font-bold text-gray-700">{profile.name}</h2>
+              <h2 className="text-xl cursor-pointer font-bold text-gray-700" onClick={handleNameClick} >{profile.name}</h2>
               {annonceLocation && (
                 <div className="flex items-center justify-center md:justify-start text-gray-500 mt-2">
                   <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
@@ -233,24 +271,37 @@ const Detail = ({ profile }) => {
             <span className="text-xl font-bold text-green-600">{price} FCFA</span>
           </div>
 
-          <div className="flex items-center justify-center md:justify-start mt-4">
+          {/* Conteneur des boutons "Voir le numéro" et "Contacter sur WhatsApp" */}
+        <div className="flex flex-col md:flex-row items-center justify-center md:justify-center gap-4 mb-4">
+            {/* Bouton pour voir le numéro */}
             <button 
-              onClick={handlePhoneButtonClick} 
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-transform duration-300 transform hover:scale-105 flex items-center"
+                onClick={handlePhoneButtonClick}
+                className="bg-[#1D4ED8] text-white px-4 py-2 rounded-lg hover:bg-[#1E3A8A] transition-transform duration-300 transform hover:scale-105 flex items-center justify-center"
             >
-              <FontAwesomeIcon icon={faPhone} className="mr-2" />
-              {buttonText}
+                <FontAwesomeIcon icon={faPhone} className="mr-2" />
+                {buttonText}
             </button>
-          </div>
-          <div className="flex items-center justify-center md:justify-start mt-16">
-            <button 
-              onClick={handleReportClick} 
-              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-transform duration-300 transform hover:scale-105 flex items-center"
+
+            {/* Bouton pour contacter sur WhatsApp */}
+            <button
+                onClick={() => window.open(`https://wa.me/${formattedPhoneNumber}`, '_blank')}
+                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-800 transition-transform duration-300 transform hover:scale-105 flex items-center justify-center"
             >
-              <FontAwesomeIcon icon={faThumbsDown} className="mr-2" />
-              Signaler
+                <FaWhatsapp className="mr-2" />
+                WhatsApp
             </button>
-          </div>
+      </div>
+
+        {/* Conteneur du bouton "Signaler" */}
+        <div className="flex justify-center mt-4">
+            <button
+                onClick={handleReportClick}
+                className="border-2 border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-100 transition-transform duration-300 transform hover:scale-105 flex items-center justify-center"
+            >
+                <FontAwesomeIcon icon={faThumbsDown} className="mr-2" />
+                Signaler
+            </button>
+        </div>
         </div>
       </div>
     </div>

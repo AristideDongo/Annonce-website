@@ -85,10 +85,16 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
         ...formData,
       };
       updateAnnonce(updatedAnnonce);
-      console.log("Modification de l'annonce:", updatedAnnonce);
+  
+      // Mettre à jour le localStorage avec l'annonce modifiée
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      const updatedFavorites = favorites.map(fav => fav.id === updatedAnnonce.id ? updatedAnnonce : fav);
+      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+  
       handleCloseEditPopup();
     }
   };
+  
 
   const handleDetailClick = (annonce) => {
     navigate('/Detail/detail', { state: annonce });
@@ -279,7 +285,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
               <li key={annonce.id} className="bg-gray-50 p-5 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                       <h2
                       onClick={() => handleDetailClick(annonce)}
-                      className="text-lg font-bold mb-2 text-black"
+                      className="text-lg font-bold break-words mb-2 text-black"
                       style={{ maxHeight: '3em' }} // Ajuster la hauteur maximale ici pour permettre jusqu'à deux lignes
                     >
                       {truncateText(annonce.title, 50)}

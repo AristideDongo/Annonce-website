@@ -22,6 +22,7 @@ import Vehicule from "./Category/vehicule";
 import Detail from "./Detail/detail";
 import Navbar from "./Navbar/navbar";
 import Footer from "./Footer/Footer";
+import Favoris from "./User/favoris";
 
 const Rout = () => {
   const [annonces, setAnnonces] = useState([]);
@@ -37,23 +38,36 @@ const Rout = () => {
 
   const deleteAnnonce = (id) => {
     console.log("Suppression d'annonce ID:", id);
+  
+    // Mettre à jour les favoris dans le localStorage
+    const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const updatedFavorites = savedFavorites.filter(fav => fav.id !== id);
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+  
+    // Mettre à jour les annonces dans le state
     setAnnonces((prevAnnonces) => {
       const newAnnonces = prevAnnonces.filter((annonce) => annonce.id !== id);
       console.log("Annonces après suppression:", newAnnonces);
       return newAnnonces;
     });
   };
+  
 
   const [profile, setProfile] = useState({
     photoURL: 'https://via.placeholder.com/150',
     name: 'IvoitAgenceAcademy',
     phone: '0000000000',
-    email: 'ivoitagence@gmail.com', // Ajouter l'email au profil
+    email: 'ivoitagence@gmail.com',
   });
 
   const updateProfile = (newProfile) => {
-    setProfile((prevProfile) => ({ ...prevProfile, ...newProfile }));
+    setProfile((prevProfile) => {
+      const updatedProfile = { ...prevProfile, ...newProfile };
+      localStorage.setItem('profile', JSON.stringify(updatedProfile));
+      return updatedProfile;
+    });
   };
+  
 
   return (
     <>
@@ -95,6 +109,7 @@ const Rout = () => {
             />
           }
         />
+        <Route path="User/favoris" element={<Favoris profile={profile} />} />
         <Route path="Confidentilite/conditions" element={<Conditions />} />
         <Route path="Confidentilite/Politique" element={<Politique />} />
         <Route path="Confidentilite/faq" element={<Faq />} />
