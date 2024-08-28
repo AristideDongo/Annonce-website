@@ -50,7 +50,7 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4 text-white">Contact</h3>
             <ul className="text-sm leading-relaxed">
               <li><MdEmail/><a href="mailto:contact@siteannonce.com" className="hover:underline">contact@siteannonce360.com</a></li>
-              <li className='pt-2'><IoIosCall/><a href="tel:+33123456789" className="hover:underline">+225 01 01 01 01 01</a></li>
+              <li className='pt-2'><IoIosCall/><a href="tel:+2250101010101" className="hover:underline">+225 01 01 01 01 01</a></li>
               <li className='pt-2'><FaLocationDot/>Face au camp militaire, bondoukou, Ci</li>
             </ul>
           </div>

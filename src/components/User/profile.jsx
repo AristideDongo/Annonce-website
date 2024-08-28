@@ -213,8 +213,8 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
   };
 
   return (
-    <div className="min-h-screen font-custom bg-[#F4F6F9] flex flex-col items-center p-4 sm:p-6 lg:p-8">
-      <div className="bg-white shadow-lg rounded-lg p-6 sm:p-8 lg:p-10 mt-10 w-full max-w-3xl">
+    <div className="min-h-screen font-custom bg-gray-200 flex flex-col items-center p-4 sm:p-6 lg:p-8">
+      <div className="bg-white mt-16 shadow-lg rounded-lg p-6 sm:p-8 lg:p-10 w-full max-w-3xl">
         <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
           <img
             className="w-32 h-32 sm:w-40 sm:h-40 rounded-full shadow-lg transform transition duration-500 hover:scale-105"
@@ -267,7 +267,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
               id="sort"
               value={sortOption}
               onChange={handleSortChange}
-              className="mt-2 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+              className="mt-2 bg-gray-300 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
             >
               <option value="">Sélectionner une option</option>
               <option value="immobilier">IMMOBILIER</option>

@@ -39,18 +39,37 @@ const Favoris = () => {
     navigate('/Detail/detail', { state: annonce });
   };
 
-  const getElapsedMinutes = (timestamp) => {
-    const annonceTime = new Date(timestamp * 1000);
-    const now = new Date();
-
-    if (isNaN(annonceTime.getTime())) {
+  const getElapsedTime = (timestamp) => {
+    // Vérifiez si le timestamp est valide
+    if (!timestamp || typeof timestamp !== 'number') {
       console.error('Invalid timestamp:', timestamp);
       return 'Invalid date';
     }
-
-    const elapsedTime = Math.floor((now - annonceTime) / 60000);
-    return elapsedTime;
+  
+    const annonceTime = new Date(timestamp * 1000); // Convertir le timestamp en objet Date
+    const now = new Date();
+  
+    if (isNaN(annonceTime.getTime())) {
+      console.error('Invalid date object:', annonceTime);
+      return 'Invalid date';
+    }
+  
+    const elapsedTimeInMinutes = Math.floor((now - annonceTime) / 60000); // Calculer le temps écoulé en minutes
+  
+    // Déterminer le format du temps écoulé
+    const days = Math.floor(elapsedTimeInMinutes / 1440); // Nombre de minutes dans un jour
+    const hours = Math.floor((elapsedTimeInMinutes % 1440) / 60); // Nombre de minutes dans une heure
+    const minutes = elapsedTimeInMinutes % 60; // Minutes restantes
+  
+    if (days > 0) {
+      return `${days} jour${days > 1 ? 's' : ''}`; // Afficher en jours
+    } else if (hours > 0) {
+      return `${hours} heure${hours > 1 ? 's' : ''}`; // Afficher en heures
+    } else {
+      return `${minutes} minute${minutes > 1 ? 's' : ''}`; // Afficher en minutes
+    }
   };
+  
 
   const handleRemoveFavorite = (id) => {
     const updatedFavorites = favorites.filter(fav => fav.id !== id);
@@ -59,7 +78,7 @@ const Favoris = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F6F9] p-6 font-custom">
+    <div className="min-h-screen bg-gray-200 p-6 font-custom">
       <div className="container mx-auto">
         <h2 className="text-3xl font-extrabold text-center mt-16 text-[#333333] mb-8">Mes Favoris</h2>
         {favorites.length > 0 ? (
@@ -77,7 +96,7 @@ const Favoris = () => {
                     />
                     <div className="absolute bottom-2 left-2 bg-black bg-opacity-75 rounded-full p-1">
                       <FontAwesomeIcon icon={faClock} className="text-gray-500" />
-                      <span className="text-white ml-1 text-xs">{getElapsedMinutes(fav.timestamp)} minutes</span>
+                      <span className="text-white ml-1 text-xs">{getElapsedTime(fav.timestamp)} ago</span>
                     </div>
                   </div>
                 ) : (

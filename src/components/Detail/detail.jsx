@@ -3,14 +3,15 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faPhone, faMapMarkerAlt, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import { countries } from '../countries/countries';
-import { FaWhatsapp, FaHeart } from 'react-icons/fa';
+import { FaWhatsapp } from 'react-icons/fa';
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { CiClock2 } from "react-icons/ci";
 
 
 const Detail = ({ profile }) => {
   const navigate = useNavigate()
   const location = useLocation();
-  const { id ,title, description, price, photos, phone, whatsapp, location: annonceLocation } = location.state;
+  const { id ,title, description, price, photos, phone, whatsapp, location: annonceLocation, timestamp } = location.state;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [buttonText, setButtonText] = useState('Voir le numéro');
   const [showPhotoPopup, setShowPhotoPopup] = useState(false);
@@ -18,6 +19,7 @@ const Detail = ({ profile }) => {
   const [showReportForm, setShowReportForm] = useState(false);
   const [showReportSuccess, setShowReportSuccess] = useState(false);
   const [reportReason, setReportReason] = useState('');
+  const [elapsedTime, setElapsedTime] = useState('');
  // État des favoris
  const [favorites, setFavorites] = useState([]);
  const [isFavorite, setIsFavorite] = useState(false);
@@ -96,14 +98,43 @@ const formattedPhoneNumber = `${countryCode}${whatsapp.replace(/\D/g, '')}`;
   const isCurrentlyFavorite = storedFavorites.some(fav => fav.id === id);
   const updatedFavorites = isCurrentlyFavorite
     ? storedFavorites.filter(fav => fav.id !== id)
-    : [...storedFavorites, { id, title, description, price, photos, phone, whatsapp, location: annonceLocation }];
+    : [...storedFavorites, { id, title, description, price, photos, phone, whatsapp, location: annonceLocation, timestamp }];
 
   localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
   setIsFavorite(!isCurrentlyFavorite);
 };
+
+useEffect(() => {
+  // Calculer le temps écoulé depuis la création de l'annonce
+  const calculateElapsedTime = () => {
+    const now = Math.floor(Date.now() / 1000); // Temps actuel en secondes
+    const secondsElapsed = now - timestamp; // Temps écoulé en secondes
+
+    const minutes = Math.floor(secondsElapsed / 60); // Convertir en minutes
+    const hours = Math.floor(minutes / 60); // Convertir en heures
+    const days = Math.floor(hours / 24); // Convertir en jours
+    const months = Math.floor(days / 30.42); // Convertir en mois (approximatif)
+    const years = Math.floor(days / 365); // Convertir en années (approximatif)
+
+    if (years > 0) {
+      setElapsedTime(`${years} année${years > 1 ? 's' : ''} ago`);
+    } else if (months > 0) {
+      setElapsedTime(`${months} mois ago`);
+    } else if (days > 0) {
+      setElapsedTime(`${days} jour${days > 1 ? 's' : ''} ago`);
+    } else if (hours > 0) {
+      setElapsedTime(`${hours} heure${hours > 1 ? 's' : ''} ago`);
+    } else {
+      setElapsedTime(`${minutes} minute${minutes > 1 ? 's' : ''} ago`);
+    }
+  };
+
+  calculateElapsedTime();
+}, [timestamp]);
+
   
   return (
-    <div className="min-h-screen mt-16 font-custom bg-[#F4F6F9] p-4">
+    <div className="min-h-screen mt-16 font-custom bg-gray-200 p-4">
       <div className="container mx-auto flex flex-col md:flex-row">
         {/* Images et boutons de navigation à gauche (50%) */}
         <div className="w-full md:w-1/2 relative mb-6 md:mb-0">
@@ -166,13 +197,17 @@ const formattedPhoneNumber = `${countryCode}${whatsapp.replace(/\D/g, '')}`;
               loading='lazy'
             />
             <div className="mt-4 md:mt-0 md:ml-5 text-center md:text-left">
-              <h2 className="text-xl cursor-pointer font-bold text-gray-700" onClick={handleNameClick} >{profile.name}</h2>
+              <h2 className="text-xl cursor-pointer font-bold text-gray-700" onClick={handleNameClick}>{profile.name}</h2>
               {annonceLocation && (
                 <div className="flex items-center justify-center md:justify-start text-gray-500 mt-2">
                   <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
                   <span className='text-xl'>{annonceLocation.label}</span>
                 </div>
               )}
+              <div className="flex items-center justify-center md:justify-start text-gray-500 mt-2">
+                <CiClock2 className="mr-2" />
+                <span className='text-xl'>{elapsedTime}</span>
+              </div>
             </div>
           </div>
 

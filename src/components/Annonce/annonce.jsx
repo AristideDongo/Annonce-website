@@ -153,7 +153,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
 
   return (
     <>  
-      <div className="min-h-screen pt-16 font-custom flex items-center justify-center bg-[#F4F6F9]">
+      <div className="min-h-screen pt-16 font-custom flex items-center justify-center bg-gray-200">
         <div className="bg-white mt-5 mb-5 p-8 rounded-lg shadow-md w-full max-w-md">
           <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Redigez votre annonce</h2>
           <div className="flex items-center p-4 bg-white shadow-md rounded-lg max-w-sm mx-auto mt-8">

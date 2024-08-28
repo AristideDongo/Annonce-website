@@ -10,7 +10,10 @@ import {
   faHeart,
 } from '@fortawesome/free-solid-svg-icons';
 import { FadeLoader } from 'react-spinners';
+import { FaMapMarkerAlt } from 'react-icons/fa';
 import { useOutsideClick } from '../Navbar/navbarhookperso';
+import { locationOptions } from '../locations/locations';
+
 
 const Home = ({ annonces, searchQuery }) => {
   const navigate = useNavigate();
@@ -22,6 +25,8 @@ const Home = ({ annonces, searchQuery }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(88);
   const [favorites, setFavorites] = useState([]);
+  const [selectedCity, setSelectedCity] = useState(''); // État pour la ville sélectionnée
+
 
   const categoriesRef = useOutsideClick(() => setIsFilterVisible(false));
 
@@ -43,6 +48,9 @@ const Home = ({ annonces, searchQuery }) => {
   const handleSortChange = (order) => {
     setSortOrder(order);
   };
+  const handleCityChange = (e) => {
+    setSelectedCity(e.target.value);
+  };
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
@@ -59,18 +67,36 @@ const Home = ({ annonces, searchQuery }) => {
     return text;
   };
 
-  const getElapsedMinutes = (timestamp) => {
-    const annonceTime = new Date(timestamp * 1000);
+  const getElapsedTime = (timestamp) => {
+    const annonceTime = new Date(timestamp * 1000); // Convertir le timestamp en objet Date
     const now = new Date();
-
+  
     if (isNaN(annonceTime.getTime())) {
       console.error('Invalid timestamp:', timestamp);
       return 'Invalid date';
     }
+  
+    const elapsedTimeInMinutes = Math.floor((now - annonceTime) / 60000); // Calculer le temps écoulé en minutes
+  
+     // Déterminer le format du temps écoulé
+  const years = Math.floor(elapsedTimeInMinutes / 525600); // Nombre de minutes dans une année (approximation)
+  const months = Math.floor((elapsedTimeInMinutes % 525600) / 43800); // Nombre de minutes dans un mois (approximation)
+  const days = Math.floor((elapsedTimeInMinutes % 43800) / 1440); // Nombre de minutes dans un jour
+  const hours = Math.floor((elapsedTimeInMinutes % 1440) / 60); // Nombre de minutes dans une heure
+  const minutes = elapsedTimeInMinutes % 60; // Minutes restantes
 
-    const elapsedTime = Math.floor((now - annonceTime) / 60000);
-    return elapsedTime;
-  };
+  if (years > 0) {
+    return `${years} année${years > 1 ? 's' : ''} ago`; // Afficher en années
+  } else if (months > 0) {
+    return `${months} mois ago`; // Afficher en mois
+  } else if (days > 0) {
+    return `${days} jour${days > 1 ? 's' : ''} ago`; // Afficher en jours
+  } else if (hours > 0) {
+    return `${hours} heure${hours > 1 ? 's' : ''} ago`; // Afficher en heures
+  } else {
+    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`; // Afficher en minutes
+  }
+  };  
 
   const handleFavoriteClick = (annonce) => {
     const isFavorite = favorites.some(fav => fav.id === annonce.id);
@@ -83,8 +109,10 @@ const Home = ({ annonces, searchQuery }) => {
   };
 
   const filteredAnnonces = annonces.filter((annonce) =>
-    annonce.title.toLowerCase().includes(query.toLowerCase())
+    annonce.title.toLowerCase().includes(query.toLowerCase()) &&
+    (!selectedCity || annonce.location.value === selectedCity)
   );
+
 
   const sortedAnnonces = filteredAnnonces
     .filter((annonce) => !selectedCategory || annonce.category === selectedCategory)
@@ -109,7 +137,7 @@ const Home = ({ annonces, searchQuery }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F6F9] p-6 relative font-custom">
+    <div className="min-h-screen bg-gray-200 p-6 relative font-custom">
       <div className="container mx-auto">
         <h1 className="text-4xl font-extrabold text-center mt-16 mb-8 capitalize text-[#333333]">Annonce Récente</h1>
         <button
@@ -171,6 +199,18 @@ const Home = ({ annonces, searchQuery }) => {
             <option value="mode-enfant">Mode Enfant</option>
             <option value="autres">Autres</option>
           </select>
+          <select
+    className="bg-white text-blue-500 w-40 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300"
+    value={selectedCity}
+    onChange={handleCityChange}
+  >
+    <option value="">Tous les lieux</option>
+    {locationOptions.map((city) => (
+      <option key={city.value} value={city.value}>
+        {city.label}
+      </option>
+    ))}
+  </select>
         </div>
 
         {isLoading ? (
@@ -197,8 +237,8 @@ const Home = ({ annonces, searchQuery }) => {
                         />
                         <div className="absolute bottom-2 left-2 bg-black bg-opacity-75 rounded-full p-1">
                           <FontAwesomeIcon icon={faClock} className="text-gray-500" />
-                          <span className="text-white ml-1 text-xs">{getElapsedMinutes(annonce.timestamp)} minutes</span>
-                        </div>
+                          <span className="text-white ml-1 text-xs">{getElapsedTime(annonce.timestamp)}</span>
+                          </div>
                       </div>
                     ) : (
                       <div className="w-full h-40 bg-gray-200 rounded-t-lg flex items-center justify-center">
@@ -209,6 +249,16 @@ const Home = ({ annonces, searchQuery }) => {
                     <h3 className="text-lg break-words font-semibold text-blue-600 mb-2 hover:text-orange-600" 
                     onClick={() => handleDetailClick(annonce)}>{truncateText(annonce.title, 50)}</h3>
                       <p className="text-black mt-auto blue-500 text-xl font-semibold">{annonce.price} FCFA</p>
+                      <div className="flex items-center space-x-2 mt-2">
+                          <FaMapMarkerAlt className="text-gray-500" />
+                          <span className="text-gray-700 font-medium">
+                            {annonce.location && annonce.location.label ? (
+                              annonce.location.label
+                            ) : (
+                          <span className="text-red-500">Localisation non définie</span>
+                            )}
+                          </span>
+                      </div>
                     </div>
                     <div
                       className={`absolute top-2 right-2 p-2 rounded-full bg-white bg-opacity-75 cursor-pointer transition-transform duration-300 ${

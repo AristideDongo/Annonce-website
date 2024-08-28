@@ -67,7 +67,7 @@ const Singin = ({ updateProfile }) => {
 
   return (
     <>
-      <div className="min-h-screen font-custom flex items-center justify-center bg-[#F4F6F9]">
+      <div className="min-h-screen font-custom flex items-center justify-center bg-gray-200 ">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
           <h2 className="text-2xl font-bold mb-6 text-center">CONNEXION</h2>
           <form onSubmit={handleSubmit}>
@@ -121,7 +121,7 @@ const Singin = ({ updateProfile }) => {
                   type="button"
                   className="flex items-center px-4 py-2 bg-white border rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring ml-2"
                 >
-                  <ImFacebook2 className="mr-2" size={20} />
+                  <ImFacebook2 className="mr-2 text-blue-600 " size={20} />
                   Facebook
                 </button>
               </div>

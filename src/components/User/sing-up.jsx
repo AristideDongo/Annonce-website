@@ -156,7 +156,7 @@ const Singup = ({ profile, updateProfile }) => {
 
   return (
     <>
-      <div className="min-h-screen pt-16 font-custom flex items-center justify-center bg-[#F4F6F9]">
+      <div className="min-h-screen pt-16 font-custom flex items-center justify-center bg-gray-200 ">
         <div className="bg-white mt-5 mb-5 p-8 rounded-lg shadow-lg w-full max-w-md">
           <h2 className="text-2xl font-bold mb-6 text-center">INSCRIPTION</h2>
           <form onSubmit={validateForm}>
@@ -263,7 +263,7 @@ const Singup = ({ profile, updateProfile }) => {
               <button className="p-2 rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100">
                 <FcGoogle size={24} />
               </button>
-              <button className="p-2 rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100">
+              <button className="p-2 rounded-full border border-gray-300 text-blue-600 hover:bg-gray-100">
                 <ImFacebook2 size={24} />
               </button>
             </div>

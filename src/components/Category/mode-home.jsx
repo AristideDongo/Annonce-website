@@ -57,17 +57,35 @@ const Mhomme = ({ annonces, searchQuery }) => {
     return text;
   };
 
-  const getElapsedMinutes = (timestamp) => {
-    const annonceTime = new Date(timestamp * 1000);
+  const getElapsedTime = (timestamp) => {
+    const annonceTime = new Date(timestamp * 1000); // Convertir le timestamp en objet Date
     const now = new Date();
-
+  
     if (isNaN(annonceTime.getTime())) {
       console.error('Invalid timestamp:', timestamp);
       return 'Invalid date';
     }
+  
+    const elapsedTimeInMinutes = Math.floor((now - annonceTime) / 60000); // Calculer le temps écoulé en minutes
+  
+     // Déterminer le format du temps écoulé
+  const years = Math.floor(elapsedTimeInMinutes / 525600); // Nombre de minutes dans une année (approximation)
+  const months = Math.floor((elapsedTimeInMinutes % 525600) / 43800); // Nombre de minutes dans un mois (approximation)
+  const days = Math.floor((elapsedTimeInMinutes % 43800) / 1440); // Nombre de minutes dans un jour
+  const hours = Math.floor((elapsedTimeInMinutes % 1440) / 60); // Nombre de minutes dans une heure
+  const minutes = elapsedTimeInMinutes % 60; // Minutes restantes
 
-    const elapsedTime = Math.floor((now - annonceTime) / 60000);
-    return elapsedTime;
+  if (years > 0) {
+    return `${years} année${years > 1 ? 's' : ''} ago`; // Afficher en années
+  } else if (months > 0) {
+    return `${months} mois ago`; // Afficher en mois
+  } else if (days > 0) {
+    return `${days} jour${days > 1 ? 's' : ''} ago`; // Afficher en jours
+  } else if (hours > 0) {
+    return `${hours} heure${hours > 1 ? 's' : ''} ago`; // Afficher en heures
+  } else {
+    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`; // Afficher en minutes
+  }
   };
 
   // Calcul de la pagination
@@ -79,7 +97,7 @@ const Mhomme = ({ annonces, searchQuery }) => {
   };
 
   return (
-    <div className="min-h-screen font-custom bg-[#F4F6F9] p-6 relative">
+    <div className="min-h-screen font-custom bg-gray-200 p-6 relative">
       <div className="container mx-auto p-4">
         <h1 className="text-4xl font-extrabold text-center mb-8 mt-16 text-[#333333]">MODE HOMME</h1>
         <div className="flex justify-between items-center mb-4">
@@ -105,7 +123,7 @@ const Mhomme = ({ annonces, searchQuery }) => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
               {currentItems.length > 0 ? (
                 currentItems.map((annonce) => (
                   <div key={annonce.id} className="bg-white p-1 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -120,7 +138,7 @@ const Mhomme = ({ annonces, searchQuery }) => {
                         />
                         <div className="absolute bottom-2 left-2 bg-black bg-opacity-75 rounded-full p-1">
                           <FontAwesomeIcon icon={faClock} className="text-gray-500" />
-                          <span className="text-white ml-1 text-xs">{getElapsedMinutes(annonce.timestamp)} minutes</span>
+                          <span className="text-white ml-1 text-xs">{getElapsedTime(annonce.timestamp)}</span>
                         </div>
                       </div>
                     ) : (
@@ -136,7 +154,7 @@ const Mhomme = ({ annonces, searchQuery }) => {
                       >
                         {truncateText(annonce.title, 50)}
                       </h2>
-                      <p className="text-[#27AE60] font-bold">{annonce.price} FCFA</p>
+                      <p className="text-black text-lg mt-9 font-bold">{annonce.price} FCFA</p>
                     </div>
                   </div>
                 ))

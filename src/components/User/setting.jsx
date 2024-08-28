@@ -153,7 +153,7 @@ const Setting = ({ profile={}, updateProfile }) => {
   };
 
   return (
-    <div className="mx-auto font-custom p-4 mt-16 bg-[#F4F6F9]">
+    <div className="mx-auto font-custom p-4 mt-16 bg-gray-200 ">
       <h1 className="text-2xl font-bold mb-4">Paramètres du compte</h1>
       
       <div className="flex flex-wrap -mx-2">
