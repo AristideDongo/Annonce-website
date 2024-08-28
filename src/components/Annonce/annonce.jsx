@@ -135,12 +135,24 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
     } else {
       const newAnnonce = {
         ...formData,
-        id: annonces.length + 1,
+        id: annonces.length + 1, // Assurez-vous que cet ID est unique et approprié pour votre cas
         photos: photoPreviews,
         location: formData.location,
         timestamp: Math.floor(Date.now() / 1000) // Ajout du timestamp en secondes
       };
-      setAnnonces([...annonces, newAnnonce]);
+  
+      // Récupérer les annonces existantes depuis localStorage
+      const storedAnnonces = JSON.parse(localStorage.getItem('annonces')) || [];
+      
+      // Ajouter la nouvelle annonce à la liste
+      const updatedAnnonces = [...storedAnnonces, newAnnonce];
+  
+      // Stocker la liste mise à jour dans le localStorage
+      localStorage.setItem('annonces', JSON.stringify(updatedAnnonces));
+  
+      // Mettre à jour l'état des annonces
+      setAnnonces(updatedAnnonces);
+      
       setShowPopup(true);
       setTimeout(() => {
         setShowPopup(false);

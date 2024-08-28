@@ -4,12 +4,13 @@ import { FadeLoader } from 'react-spinners';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
 
-const Vehicule = ({ annonces, searchQuery }) => {
+const Vehicule = ({ searchQuery }) => {
   const navigate = useNavigate();
 
   const [sortOption, setSortOption] = useState('recent');
   const [filteredAnnonces, setFilteredAnnonces] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [annonces, setAnnonces] = useState([]); // État pour les annonces
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(88);
 
@@ -32,18 +33,29 @@ const Vehicule = ({ annonces, searchQuery }) => {
     }
   };
 
-  useEffect(() => {
-    setLoading(true);
+ useEffect(() => {
+  setLoading(true);
+  
+  // Charger les annonces depuis localStorage
+  const storedAnnonces = JSON.parse(localStorage.getItem('annonces')) || [];
+  setAnnonces(Array.isArray(storedAnnonces) ? storedAnnonces : []);
+  
+  // // Charger les favoris depuis localStorage
+  // const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  // setFavorites(savedFavorites);
+  
+  // Filtrer les annonces par catégorie et recherche
+  const filteredByCategory = storedAnnonces.filter(annonce => annonce.category === 'vehicule');
+  const filteredBySearch = filteredByCategory.filter(annonce =>
+    annonce.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-    const filteredByCategory = annonces.filter(annonce => annonce.category === 'vehicule');
-    const filteredBySearch = filteredByCategory.filter(annonce =>
-      annonce.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    const sorted = sortAnnonces(filteredBySearch, sortOption);
-
-    setFilteredAnnonces(sorted);
-    setLoading(false);
-  }, [annonces, searchQuery, sortOption]);
+  // Trier les annonces filtrées
+  const sorted = sortAnnonces(filteredBySearch, sortOption);
+  
+  setFilteredAnnonces(sorted);
+  setLoading(false);
+}, [searchQuery, sortOption]);
 
   const handleSortChange = (e) => {
     setSortOption(e.target.value);

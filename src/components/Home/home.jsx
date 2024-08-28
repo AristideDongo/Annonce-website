@@ -15,7 +15,7 @@ import { useOutsideClick } from '../Navbar/navbarhookperso';
 import { locationOptions } from '../locations/locations';
 
 
-const Home = ({ annonces, searchQuery }) => {
+const Home = ({ searchQuery }) => {
   const navigate = useNavigate();
   const [sortOrder, setSortOrder] = useState('recent');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -26,21 +26,25 @@ const Home = ({ annonces, searchQuery }) => {
   const [itemsPerPage] = useState(88);
   const [favorites, setFavorites] = useState([]);
   const [selectedCity, setSelectedCity] = useState(''); // État pour la ville sélectionnée
+  const [annonces, setAnnonces] = useState([]); // État pour les annonces
+
 
 
   const categoriesRef = useOutsideClick(() => setIsFilterVisible(false));
 
   useEffect(() => {
-    if (annonces) {
-      setIsLoading(false);
-    }
-    setQuery(searchQuery);
-
+    // Charger les annonces depuis localStorage
+    const storedAnnonces = JSON.parse(localStorage.getItem('annonces')) || [];
+    setAnnonces(Array.isArray(storedAnnonces) ? storedAnnonces : []);
+  
     // Charger les favoris depuis localStorage
     const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
     setFavorites(savedFavorites);
-  }, [annonces, searchQuery]);
-
+  
+    setIsLoading(false);
+    setQuery(searchQuery);
+  }, [searchQuery]);
+  
   const handleDetailClick = (annonce) => {
     navigate('Detail/detail', { state: annonce });
   };
@@ -108,7 +112,7 @@ const Home = ({ annonces, searchQuery }) => {
     localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
   };
 
-  const filteredAnnonces = annonces.filter((annonce) =>
+  const filteredAnnonces = (Array.isArray(annonces) ? annonces : []).filter((annonce) =>
     annonce.title.toLowerCase().includes(query.toLowerCase()) &&
     (!selectedCity || annonce.location.value === selectedCity)
   );
@@ -142,7 +146,7 @@ const Home = ({ annonces, searchQuery }) => {
         <h1 className="text-4xl font-extrabold text-center mt-16 mb-8 capitalize text-[#333333]">Annonce Récente</h1>
         <button
           ref={categoriesRef}
-          className="fixed top-16 left-0 ml-4 bg-black text-white p-3 rounded-b-lg shadow-lg flex items-center"
+          className="fixed top-16 left-0 ml-4 z-40 bg-black text-white p-3 rounded-b-lg shadow-lg flex items-center"
           onClick={() => setIsFilterVisible(!isFilterVisible)}
         >
           <FontAwesomeIcon icon={faFilter} className="mr-2" />
