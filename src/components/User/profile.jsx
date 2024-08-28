@@ -10,7 +10,8 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
   const [userInfo, setUserInfo] = useState({
     name: profile.name,
     email: profile.email,
-    phone: profile.phone
+    phone: profile.phone,
+    adress: profile.address
   });
   const [selectedAnnonces, setSelectedAnnonces] = useState([]);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -226,6 +227,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
             <h2 className="text-xl sm:text-4xl font-bold text-gray-800">{userInfo.name}</h2>
             <p className="text-lg text-gray-600">{userInfo.phone}</p>
             <p className="text-lg text-gray-600">{userInfo.email}</p>
+            <p className="text-lg text-gray-600">{userInfo.adress}</p>
           </div>
         </div>
         {showPhotoPopup && (

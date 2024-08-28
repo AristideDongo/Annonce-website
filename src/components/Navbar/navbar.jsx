@@ -30,7 +30,7 @@ const Navbar = ({ setSearchQuery }) => {
    useEffect(() => {
     // Vérifiez l'état de connexion lors du chargement du composant
     const token = localStorage.getItem('authToken');
-    setIsUserLoggedIn(!!token);
+    setIsUserLoggedIn(true);
   }, []);
 
   const handleChange = (e) => {

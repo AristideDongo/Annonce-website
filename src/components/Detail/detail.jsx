@@ -21,7 +21,6 @@ const Detail = ({ profile }) => {
   const [reportReason, setReportReason] = useState('');
   const [elapsedTime, setElapsedTime] = useState('');
  // État des favoris
- const [favorites, setFavorites] = useState([]);
  const [isFavorite, setIsFavorite] = useState(false);
   const handleNextImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % photos.length);
@@ -148,27 +147,27 @@ useEffect(() => {
               />
               {/* Icône de favoris */}
               <button
-      onClick={handleFavoriteToggle}
-      className={`absolute bg-white bg-opacity-50 rounded-full top-4 right-4 p-2 ${isFavorite ? 'text-red-500' : 'text-gray-500'} hover:text-red-700 transition-colors duration-300`}
-    >
-      {isFavorite ? <AiFillHeart /> : <AiOutlineHeart />}
-    </button>
+               onClick={handleFavoriteToggle}
+               className={`absolute bg-white bg-opacity-50 rounded-full top-4 right-4 p-2 ${isFavorite ? 'text-red-500' : 'text-gray-500'} hover:text-red-700 transition-colors duration-300`}
+              >
+               {isFavorite ? <AiFillHeart /> : <AiOutlineHeart />}
+              </button>
               {/* Boutons de navigation centrés en dessous de l'image principale */}
               <div className="flex justify-center mt-4">
-                <button 
+              <button 
                   onClick={handlePrevImage}
                   disabled={currentImageIndex === 0}
-                  className="bg-gray-800 text-white w-10 h-10 rounded-full hover:bg-gray-700 transition duration-300 flex items-center justify-center mx-2"
-                >
+                  className="bg-transparent border border-black text-black w-12 h-12 rounded-full hover:bg-gray-400 transition duration-300 flex items-center justify-center mx-2"
+              >
                   <FontAwesomeIcon icon={faChevronLeft} />
-                </button>
-                <button 
+              </button>
+              <button 
                   onClick={handleNextImage}
                   disabled={currentImageIndex === photos.length - 1}
-                  className="bg-gray-800 text-white w-10 h-10 rounded-full hover:bg-gray-700 transition duration-300 flex items-center justify-center mx-2"
-                >
+                  className="bg-transparent border border-black text-black w-12 h-12 rounded-full hover:bg-gray-400 transition duration-300 flex items-center justify-center mx-2"
+              >
                   <FontAwesomeIcon icon={faChevronRight} />
-                </button>
+              </button>
               </div>
             </div>
           )}
@@ -303,7 +302,7 @@ useEffect(() => {
             <h3 className="text-4xl font-bold text-black break-words ">{title}</h3>
             <h4 className="text-2xl font-semibold text-gray-500 underline mt-5 mb-5" >DESCRIPTION DE L'ANNONCE:</h4>
             <p className="text-gray-500 text-xl mt-2 break-words mb-5 ">{description}</p>
-            <span className="text-xl font-bold text-green-600">{price} FCFA</span>
+            <span className="text-xl font-bold mr-5 text-black">{price} FCFA</span>
           </div>
 
           {/* Conteneur des boutons "Voir le numéro" et "Contacter sur WhatsApp" */}

@@ -142,7 +142,7 @@ const Home = ({ annonces, searchQuery }) => {
         <h1 className="text-4xl font-extrabold text-center mt-16 mb-8 capitalize text-[#333333]">Annonce Récente</h1>
         <button
           ref={categoriesRef}
-          className="absolute top-16 left-0 ml-4 bg-gray-300 p-3 rounded-r-lg shadow-lg flex items-center"
+          className="fixed top-16 left-0 ml-4 bg-black text-white p-3 rounded-b-lg shadow-lg flex items-center"
           onClick={() => setIsFilterVisible(!isFilterVisible)}
         >
           <FontAwesomeIcon icon={faFilter} className="mr-2" />
@@ -151,7 +151,7 @@ const Home = ({ annonces, searchQuery }) => {
 
         <div
           ref={categoriesRef}
-          className={`absolute z-40 mt-32 top-16 left-0 bg-gray-300 p-6 rounded-lg shadow-lg flex flex-col space-y-4 transition-transform duration-300 ${
+          className={`fixed z-40 mt-32 top-16 left-0 bg-gray-300 p-6 rounded-lg shadow-lg flex flex-col space-y-4 transition-transform duration-300 ${
             isFilterVisible ? 'translate-x-0' : '-translate-x-full'
           }`}
           style={{ transform: isFilterVisible ? 'translateX(0)' : 'translateX(-100%)' }}
@@ -204,7 +204,7 @@ const Home = ({ annonces, searchQuery }) => {
     value={selectedCity}
     onChange={handleCityChange}
   >
-    <option value="">Tous les lieux</option>
+    <option value="">Villes</option>
     {locationOptions.map((city) => (
       <option key={city.value} value={city.value}>
         {city.label}

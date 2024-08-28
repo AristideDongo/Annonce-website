@@ -54,10 +54,11 @@ const Rout = () => {
   
 
   const [profile, setProfile] = useState({
-    photoURL: 'https://via.placeholder.com/150',
+    photoURL: 'https://placehold.co/150x150',
     name: 'IvoitAgenceAcademy',
-    phone: '0000000000',
+    phone: '+225 0000000000',
     email: 'ivoitagence@gmail.com',
+    address: '123,Rue,Camp-Militaire'
   });
 
   const updateProfile = (newProfile) => {
@@ -109,7 +110,7 @@ const Rout = () => {
             />
           }
         />
-        <Route path="User/favoris" element={<Favoris profile={profile} />} />
+        <Route path="User/favoris" element={<Favoris profile={profile} searchQuery={searchQuery} />} />
         <Route path="Confidentilite/conditions" element={<Conditions />} />
         <Route path="Confidentilite/Politique" element={<Politique />} />
         <Route path="Confidentilite/faq" element={<Faq />} />

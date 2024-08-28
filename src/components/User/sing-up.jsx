@@ -33,10 +33,13 @@ const PasswordRequirements = ({ requirements }) => {
 };
 
 const Singup = ({ profile, updateProfile }) => {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [address, setAddress] = useState(""); // Nouveau champ
+  const [birthDate, setBirthDate] = useState("");
   const [selectedCountryCode, setSelectedCountryCode] = useState("+225");
   const [errors, setErrors] = useState({});
   const [passwordStrength, setPasswordStrength] = useState(0);
@@ -49,12 +52,17 @@ const Singup = ({ profile, updateProfile }) => {
     specialChar: false,
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [isPolicyAccepted, setIsPolicyAccepted] = useState(false);
+  const [areTermsAccepted, setAreTermsAccepted] = useState(false);
 
   useEffect(() => {
     if (profile) {
+      setUsername(profile.name || "");
       setEmail(profile.email || "");
       setPhoneNumber(profile.phone || "");
+      setAddress(profile.address || ""); // Nouveau champ
       setSelectedCountryCode(profile.countryCode || "+225");
+      setBirthDate(profile.birthDate || "");
     }
   }, [profile]);
 
@@ -71,6 +79,22 @@ const Singup = ({ profile, updateProfile }) => {
       formErrors.email = "L'email n'est pas valide.";
     }
 
+    if (!birthDate) {
+      formErrors.birthDate = "La date de naissance est requise.";
+    }
+
+    if (!address) {
+      formErrors.address = "L'adresse est requise.";
+    }
+
+    if (!isPolicyAccepted) {
+      formErrors.policy = "Vous devez accepter la politique du site.";
+    }
+
+    if (!areTermsAccepted) {
+      formErrors.terms = "Vous devez accepter les termes et conditions.";
+    }
+
     setErrors(formErrors);
 
     if (Object.keys(formErrors).length === 0) {
@@ -81,9 +105,12 @@ const Singup = ({ profile, updateProfile }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            name: username,
             email,
             password,
             phoneNumber: `${selectedCountryCode}${phoneNumber}`,
+            birthDate,
+            address, // Nouveau champ
           }),
         });
 
@@ -93,7 +120,7 @@ const Singup = ({ profile, updateProfile }) => {
 
         const result = await response.json();
         console.log("Inscription réussie", result);
-        updateProfile({ email, phone: phoneNumber, countryCode: selectedCountryCode });
+        updateProfile({ name: username ,email, phone: phoneNumber, countryCode: selectedCountryCode, birthDate, address });
         // Rediriger ou afficher un message de succès
       } catch (error) {
         console.error("Erreur d'inscription", error);
@@ -125,6 +152,13 @@ const Singup = ({ profile, updateProfile }) => {
     }
   };
 
+  const handleUsernameChange = (e) => { // Nouveau gestionnaire
+    setUsername(e.target.value);
+    if (errors.username) {
+      setErrors((prevErrors) => ({ ...prevErrors, username: "" }));
+    }
+  };
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
     if (errors.email) {
@@ -139,6 +173,26 @@ const Singup = ({ profile, updateProfile }) => {
   const handleCountryCodeChange = (e) => {
     setSelectedCountryCode(e.target.value);
   };
+
+  const handleBirthDateChange = (e) => {
+    setBirthDate(e.target.value);
+  };
+
+  const handleAddressChange = (e) => { // Nouveau gestionnaire
+    setAddress(e.target.value);
+    if (errors.address) {
+      setErrors((prevErrors) => ({ ...prevErrors, address: "" }));
+    }
+  };
+
+  const handlePolicyChange = () => {
+    setIsPolicyAccepted(!isPolicyAccepted);
+  };
+
+  const handleTermsChange = () => {
+    setAreTermsAccepted(!areTermsAccepted);
+  };
+
 
   const calculatePasswordStrength = (password) => {
     let strength = 0;
@@ -156,32 +210,44 @@ const Singup = ({ profile, updateProfile }) => {
 
   return (
     <>
-      <div className="min-h-screen pt-16 font-custom flex items-center justify-center bg-gray-200 ">
+      <div className="min-h-screen pt-16 font-custom flex items-center justify-center bg-gray-200">
         <div className="bg-white mt-5 mb-5 p-8 rounded-lg shadow-lg w-full max-w-md">
           <h2 className="text-2xl font-bold mb-6 text-center">INSCRIPTION</h2>
           <form onSubmit={validateForm}>
-            {/* Form fields */}
             <div className="mb-4">
-              <label className="block text-gray-700">Nom</label>
+              <label className="block text-gray-700">Nom d'utilisateur</label>
               <input
                 type="text"
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-                placeholder="Votre nom"
-                defaultValue={""}
+                placeholder="Nom d'utilisateur"
+                value={username}
+                onChange={handleUsernameChange} // Nouveau gestionnaire
                 required
               />
+              {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700">Email</label>
               <input
                 type="email"
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-                placeholder="Votre email"
-                 defaultValue={""}
+                placeholder="Email"
+                value={email}
                 onChange={handleEmailChange}
                 required
               />
               {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Date de naissance</label>
+              <input
+                type="date"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+                value={birthDate}
+                onChange={handleBirthDateChange}
+                required
+              />
+              {errors.birthDate && <p className="text-red-500 text-sm">{errors.birthDate}</p>}
             </div>
             <div className="mb-4 flex">
               <div className="w-1/4">
@@ -199,19 +265,29 @@ const Singup = ({ profile, updateProfile }) => {
                   ))}
                 </select>
               </div>
-              <div className="w-3/4 ml-4">
-                <label className="block text-gray-700">Numéro</label>
+              <div className="w-3/4 pl-4">
+                <label className="block text-gray-700">Numéro de téléphone</label>
                 <input
-                  type="text"
+                  type="tel"
                   className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-                  placeholder="Votre numéro"
-                  defaultValue={""}
+                  placeholder="Numéro de téléphone"
+                  value={phoneNumber}
                   onChange={handlePhoneNumberChange}
-                  pattern="\d*"
-                  title="Le numéro doit contenir uniquement des chiffres."
                   required
                 />
               </div>
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Adresse</label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+                placeholder="Votre adresse"
+                value={address}
+                onChange={handleAddressChange}
+                required
+              />
+              {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700">Mot de passe</label>
@@ -224,24 +300,24 @@ const Singup = ({ profile, updateProfile }) => {
                   onChange={handlePasswordChange}
                   onFocus={() => setIsPasswordFocused(true)}
                   onBlur={() => setIsPasswordFocused(false)}
-                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                  title="Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre."
                   required
                 />
                 <button
                   type="button"
+                  className="absolute inset-y-0 right-0 flex items-center px-3"
                   onClick={toggleShowPassword}
-                  className="absolute right-3 top-2.5"
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
-              {isPasswordFocused && <PasswordRequirements requirements={passwordRequirements} />}
             </div>
+            {isPasswordFocused && (
+              <PasswordRequirements requirements={passwordRequirements} />
+            )}
             <div className="mb-4">
               <label className="block text-gray-700">Confirmer le mot de passe</label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Confirmer le mot de passe"
                 value={confirmPassword}
@@ -250,27 +326,63 @@ const Singup = ({ profile, updateProfile }) => {
               />
               {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
             </div>
+            <div className="mb-4 flex items-center">
+              <input
+                type="checkbox"
+                id="policy"
+                checked={isPolicyAccepted}
+                onChange={handlePolicyChange}
+                className="mr-2"
+                required
+              />
+              <label htmlFor="policy" className="text-gray-700">
+                J'accepte la <a href="../Confidentilite/Politique" className="text-blue-500">politique de confidentialité</a>
+              </label>
+            </div>
+            {errors.policy && <p className="text-red-500 text-sm">{errors.policy}</p>}
+            <div className="mb-4 flex items-center">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={areTermsAccepted}
+                onChange={handleTermsChange}
+                className="mr-2"
+                required
+              />
+              <label htmlFor="terms" className="text-gray-700">
+                J'accepte les <a href="../Confidentilite/conditions" className="text-blue-500">termes et conditions</a>
+              </label>
+            </div>
+            {errors.terms && <p className="text-red-500 text-sm">{errors.terms}</p>}
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+              className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               S'inscrire
             </button>
           </form>
           <div className="mt-6 text-center">
             <p className="text-gray-600">Ou inscrivez-vous avec</p>
-            <div className="flex justify-center gap-4 mt-4">
-              <button className="p-2 rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100">
-                <FcGoogle size={24} />
-              </button>
-              <button className="p-2 rounded-full border border-gray-300 text-blue-600 hover:bg-gray-100">
-                <ImFacebook2 size={24} />
-              </button>
-            </div>
+            <div className="flex justify-center mt-2">
+                <button
+                  type="button"
+                  className="flex items-center px-4 py-2 bg-white border rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring"
+                >
+                  <FcGoogle className="mr-2" size={20} />
+                  Google
+                </button>
+                <button
+                  type="button"
+                  className="flex items-center px-4 py-2 bg-white border rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring ml-2"
+                >
+                  <ImFacebook2 className="mr-2 text-blue-600 " size={20} />
+                  Facebook
+                </button>
+              </div>
           </div>
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              Vous avez déjà un compte ? <Link to="/User/sing-in" className="text-blue-500 hover:underline">Connectez-vous</Link>
+          <div className="mt-4 text-center">
+            <p>
+              Vous avez déjà un compte ? <Link to="/User/sing-in" className="text-blue-500">Se connecter</Link>
             </p>
           </div>
         </div>
