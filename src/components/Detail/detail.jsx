@@ -9,89 +9,100 @@ import { CiClock2 } from "react-icons/ci";
 
 
 const Detail = ({ profile }) => {
-  const navigate = useNavigate()
-  const location = useLocation();
-  const { id ,title, description, price, photos, phone, whatsapp, location: annonceLocation, timestamp } = location.state;
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [buttonText, setButtonText] = useState('Voir le numéro');
-  const [showPhotoPopup, setShowPhotoPopup] = useState(false);
-  const [showReportConfirm, setShowReportConfirm] = useState(false);
-  const [showReportForm, setShowReportForm] = useState(false);
-  const [showReportSuccess, setShowReportSuccess] = useState(false);
-  const [reportReason, setReportReason] = useState('');
-  const [elapsedTime, setElapsedTime] = useState('');
- // État des favoris
- const [isFavorite, setIsFavorite] = useState(false);
-  const handleNextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % photos.length);
-  };
-
-  const handlePrevImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + photos.length) % photos.length);
-  };
-
-  const handleImageClick = (index) => {
-    setCurrentImageIndex(index);
-  };
-
-  const handlePhoneButtonClick = () => {
-    if (buttonText === 'Voir le numéro') {
-      setButtonText(phone);
-    } else {
-      setButtonText('Voir le numéro');
-    }
-  };
-
-  const handlePhotoClick = () => {
-    if (profile.photoURL) {
-      setShowPhotoPopup(true);
-    }
-  };
-
-  const handleNameClick = () =>{
-    navigate('/User/profile')
-  }
-
-  const handleClosePopup = () => {
-    setShowPhotoPopup(false);
-  };
-
-  const handleReportClick = () => {
-    setShowReportConfirm(true);
-  };
-
-  const handleReportConfirm = (confirm) => {
-    if (confirm) {
-      setShowReportConfirm(false);
-      setShowReportForm(true);
-    } else {
-      setShowReportConfirm(false);
-    }
-  };
-
-  const handleReportSubmit = () => {
-    // Handle report submission logic here
-    setShowReportForm(false);
-    setShowReportSuccess(true);
-  };
-
-  const handleCloseSuccessPopup = () => {
-    setShowReportSuccess(false);
-  };
-
-  const handleCloseReportForm = () => {
-    setShowReportForm(false);
-  };
+const navigate = useNavigate();  // Hook pour naviguer vers d'autres routes
+const location = useLocation(); // Hook pour obtenir des informations sur la route actuelle
+const { id, title, description, price, photos, phone, whatsapp, location: annonceLocation, timestamp } = location.state; // Extraction des données de l'état de la location (transmises par la navigation)
+const [currentImageIndex, setCurrentImageIndex] = useState(0); // État pour suivre l'index de l'image actuelle dans le carrousel
+const [buttonText, setButtonText] = useState('Voir le numéro');// État pour gérer le texte du bouton de numéro de téléphone (initialement 'Voir le numéro')
+const [showPhotoPopup, setShowPhotoPopup] = useState(false); // État pour afficher ou masquer le popup de la photo de profil
+const [showReportConfirm, setShowReportConfirm] = useState(false); // État pour afficher ou masquer la confirmation de signalement
+const [showReportForm, setShowReportForm] = useState(false); // État pour afficher ou masquer le formulaire de signalement
+const [showReportSuccess, setShowReportSuccess] = useState(false); // État pour afficher ou masquer la confirmation de succès de signalement
+const [reportReason, setReportReason] = useState(''); // État pour stocker la raison du signalement
+const [elapsedTime, setElapsedTime] = useState(''); // État pour calculer et afficher le temps écoulé depuis la publication de l'annonce
+const [isFavorite, setIsFavorite] = useState(false); // État pour suivre si l'annonce est marquée comme favorite ou non
   
+ // Fonction pour passer à l'image suivante
+ const handleNextImage = () => {
+  setCurrentImageIndex((prevIndex) => (prevIndex + 1) % photos.length);
+};
 
-  // Trouver le code du pays pour la Côte d'Ivoire
+// Fonction pour revenir à l'image précédente
+const handlePrevImage = () => {
+  setCurrentImageIndex((prevIndex) => (prevIndex - 1 + photos.length) % photos.length);
+};
+
+// Fonction pour afficher l'image sélectionnée
+const handleImageClick = (index) => {
+  setCurrentImageIndex(index);
+};
+
+// Fonction pour afficher ou masquer le numéro de téléphone
+const handlePhoneButtonClick = () => {
+  if (buttonText === 'Voir le numéro') {
+    setButtonText(phone);
+  } else {
+    setButtonText('Voir le numéro');
+  }
+};
+
+// Fonction pour afficher le popup de la photo de profil
+const handlePhotoClick = () => {
+  if (profile.photoURL) {
+    setShowPhotoPopup(true);
+  }
+};
+
+// Fonction pour naviguer vers le profil utilisateur
+const handleNameClick = () => {
+  navigate('/User/profile');
+};
+
+// Fonction pour fermer le popup de la photo
+const handleClosePopup = () => {
+  setShowPhotoPopup(false);
+};
+
+// Fonction pour afficher la confirmation de signalement
+const handleReportClick = () => {
+  setShowReportConfirm(true);
+};
+
+// Fonction pour confirmer ou annuler le signalement
+const handleReportConfirm = (confirm) => {
+  if (confirm) {
+    setShowReportConfirm(false);
+    setShowReportForm(true);
+  } else {
+    setShowReportConfirm(false);
+  }
+};
+
+// Fonction pour soumettre le formulaire de signalement
+const handleReportSubmit = () => {
+  // Handle report submission logic here
+  setShowReportForm(false);
+  setShowReportSuccess(true);
+};
+
+// Fonction pour fermer le popup de succès de signalement
+const handleCloseSuccessPopup = () => {
+  setShowReportSuccess(false);
+};
+
+// Fonction pour fermer le formulaire de signalement
+const handleCloseReportForm = () => {
+  setShowReportForm(false);
+};
+
+// Trouver le code du pays pour la Côte d'Ivoire
 const countryCode = countries.find(country => country.name === "Côte d'Ivoire")?.code || '';
 
 // Format du numéro de téléphone pour WhatsApp
 const formattedPhoneNumber = `${countryCode}${whatsapp.replace(/\D/g, '')}`;
 
- // Fonction pour gérer les favoris
- const handleFavoriteToggle = () => {
+// Fonction pour gérer les favoris
+const handleFavoriteToggle = () => {
   const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
   
   const isCurrentlyFavorite = storedFavorites.some(fav => fav.id === id);
@@ -103,8 +114,8 @@ const formattedPhoneNumber = `${countryCode}${whatsapp.replace(/\D/g, '')}`;
   setIsFavorite(!isCurrentlyFavorite);
 };
 
+// Calculer le temps écoulé depuis la création de l'annonce
 useEffect(() => {
-  // Calculer le temps écoulé depuis la création de l'annonce
   const calculateElapsedTime = () => {
     const now = Math.floor(Date.now() / 1000); // Temps actuel en secondes
     const secondsElapsed = now - timestamp; // Temps écoulé en secondes

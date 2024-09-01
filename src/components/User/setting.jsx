@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 // Composant Modal pour afficher les erreurs
 const Modal = ({ isOpen, onClose, message }) => {

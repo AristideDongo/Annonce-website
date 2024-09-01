@@ -10,81 +10,91 @@ import { SlUser, SlUserFemale } from 'react-icons/sl';
 import { CiLogout } from 'react-icons/ci';
 import { AiOutlineDown, AiOutlineSearch } from 'react-icons/ai';
 import { FaSadTear } from 'react-icons/fa'
+import { GiHamburgerMenu } from "react-icons/gi";
 import { useOutsideClick } from './navbarhookperso'
 
 const Navbar = ({ setSearchQuery }) => {
-  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
-  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
-  const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false);
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-  const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Nouveau état pour le sidebar
-  const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false); // État pour les catégories dans le sidebar mobile
-  const [query, setQuery] = useState("");
-  const navigate = useNavigate();
-
-   // Références pour les menus
+const [isCategoriesOpen, setIsCategoriesOpen] = useState(false); // État pour gérer l'ouverture ou la fermeture du menu des catégories
+const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false); // État pour gérer l'ouverture ou la fermeture du menu du compte utilisateur
+const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false); // État pour gérer l'ouverture ou la fermeture du popup de déconnexion
+const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // État pour vérifier si l'utilisateur est connecté ou non
+const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false); // État pour gérer l'ouverture ou la fermeture du popup d'informations
+const [isSidebarOpen, setIsSidebarOpen] = useState(false); // État pour gérer l'ouverture ou la fermeture du sidebar
+const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false); // État pour gérer l'ouverture ou la fermeture des catégories dans le sidebar mobile
+const [query, setQuery] = useState(""); // État pour stocker la requête de recherche ou les filtres appliqués
+const navigate = useNavigate(); // Hook pour naviguer entre les pages
+ 
+   // Références pour fermer les menus lorsqu'on clique à l'extérieur
    const categoriesRef = useOutsideClick(() => setIsCategoriesOpen(false));
    const accountMenuRef = useOutsideClick(() => setIsAccountMenuOpen(false));
-
+ 
    useEffect(() => {
-    // Vérifiez l'état de connexion lors du chargement du composant
-    const token = localStorage.getItem('authToken');
-    setIsUserLoggedIn(true);
-  }, []);
-
-  const handleChange = (e) => {
-    setQuery(e.target.value);
-    setSearchQuery(e.target.value);
-  };
-
-  const handleToggleCategories = () => {
-    setIsCategoriesOpen(!isCategoriesOpen);
-    setIsAccountMenuOpen(false);
-  };
-
-  const handleToggleAccount = () => {
-    setIsAccountMenuOpen(!isAccountMenuOpen);
-    setIsCategoriesOpen(false);
-  };
-
-  const handleCloseMenus = () => {
-    setIsCategoriesOpen(false);
-    setIsAccountMenuOpen(false);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('authToken'); // Supprimer le token de localStorage
-    setIsUserLoggedIn(false);
-    setIsLogoutPopupOpen(false);
-  };
-
-  const handlePostAd = () => {
-    if (isUserLoggedIn) {
-      navigate("/Annonce/annonce");
-    } else {
-      setIsInfoPopupOpen(true);
-    }
-  };
-
-  const handleCloseInfoPopup = () => {
-    setIsInfoPopupOpen(false);
-  };
-
-  const handleLoginRedirect = () => {
-    handleCloseInfoPopup();
-    navigate("/User/sing-in");
-  };
-
-  // Fonction pour ouvrir et fermer le sidebar
-  const handleToggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  // Fonction pour ouvrir et fermer les catégories dans le sidebar mobile
-  const handleToggleMobileCategories = () => {
-    setIsMobileCategoriesOpen(!isMobileCategoriesOpen);
-  };
+     // Vérifiez l'état de connexion lors du chargement du composant
+     const token = localStorage.getItem('authToken');
+     setIsUserLoggedIn(true); // Vérifie si le token existe pour définir l'état de connexion
+   }, []);
+ 
+   // Fonction pour mettre à jour la recherche
+   const handleChange = (e) => {
+     setQuery(e.target.value);
+     setSearchQuery(e.target.value);
+   };
+ 
+   // Fonction pour ouvrir/fermer le menu des catégories
+   const handleToggleCategories = () => {
+     setIsCategoriesOpen(!isCategoriesOpen);
+     setIsAccountMenuOpen(false);
+   };
+ 
+   // Fonction pour ouvrir/fermer le menu du compte utilisateur
+   const handleToggleAccount = () => {
+     setIsAccountMenuOpen(!isAccountMenuOpen);
+     setIsCategoriesOpen(false);
+   };
+ 
+   // Fonction pour fermer les menus
+   const handleCloseMenus = () => {
+     setIsCategoriesOpen(false);
+     setIsAccountMenuOpen(false);
+   };
+ 
+   // Fonction pour se déconnecter
+   const handleLogout = () => {
+     localStorage.removeItem('authToken'); // Supprime le token de localStorage
+     setIsUserLoggedIn(false);
+     setIsLogoutPopupOpen(false);
+   };
+ 
+   // Fonction pour aller à la page de dépôt d'annonce ou ouvrir un popup d'information
+   const handlePostAd = () => {
+     if (isUserLoggedIn) {
+       navigate("/Annonce/annonce");
+     } else {
+       setIsInfoPopupOpen(true);
+     }
+   };
+ 
+   // Fonction pour fermer le popup d'information
+   const handleCloseInfoPopup = () => {
+     setIsInfoPopupOpen(false);
+   };
+ 
+   // Fonction pour rediriger vers la page de connexion
+   const handleLoginRedirect = () => {
+     handleCloseInfoPopup();
+     navigate("/User/sing-in");
+   };
+ 
+   // Fonction pour ouvrir/fermer le sidebar
+   const handleToggleSidebar = () => {
+     setIsSidebarOpen(!isSidebarOpen);
+   };
+ 
+   // Fonction pour ouvrir/fermer les catégories dans le sidebar mobile
+   const handleToggleMobileCategories = () => {
+     setIsMobileCategoriesOpen(!isMobileCategoriesOpen);
+   };
+ 
 
   return (
     <>
@@ -99,7 +109,7 @@ const Navbar = ({ setSearchQuery }) => {
               placeholder="Rechercher..."
               value={query}
               onChange={handleChange}
-              className="p-1 pl-8 rounded-lg border border-gray-300 bg-transparent text-white"
+              className="p-1 pl-8 rounded-lg border w-40 border-gray-300 bg-transparent text-white"
             />
             <AiOutlineSearch className="absolute top-1/2 left-2 transform -translate-y-1/2 text-white" />
           </div>
@@ -162,15 +172,15 @@ const Navbar = ({ setSearchQuery }) => {
           </div>
           {/* Icône pour ouvrir la sidebar sur mobile */}
           <div className="md:hidden flex items-center">
-            <button className="text-white" onClick={handleToggleSidebar}>
-              <FaRegUserCircle className="text-2xl"/>
+            <button className="text-white hover:text-orange-500 " onClick={handleToggleSidebar}>
+              <GiHamburgerMenu className="text-2xl"/>
             </button>
           </div>
         </div>
       </nav>
 
       {/* Sidebar pour mobile */}
-      <div className={`fixed inset-0 z-40 transition-transform transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className={`fixed inset-0 z-50 transition-transform transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="bg-gray-800 bg-opacity-75 w-full h-full" onClick={handleToggleSidebar}></div>
         <div className="absolute left-0 top-0 h-full w-64 bg-gray-200 shadow-lg p-4">
           <button onClick={handleToggleSidebar} className="text-black">

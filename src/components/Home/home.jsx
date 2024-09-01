@@ -16,54 +16,61 @@ import { locationOptions } from '../locations/locations';
 
 
 const Home = ({ searchQuery }) => {
-  const navigate = useNavigate();
-  const [sortOrder, setSortOrder] = useState('recent');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [query, setQuery] = useState(searchQuery);
-  const [isFilterVisible, setIsFilterVisible] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(88);
-  const [favorites, setFavorites] = useState([]);
-  const [selectedCity, setSelectedCity] = useState(''); // État pour la ville sélectionnée
-  const [annonces, setAnnonces] = useState([]); // État pour les annonces
+  const navigate = useNavigate(); // Pour la navigation entre les pages
 
+  // États locaux
+  const [sortOrder, setSortOrder] = useState('recent'); // Ordre de tri des annonces
+  const [selectedCategory, setSelectedCategory] = useState(''); // Catégorie sélectionnée
+  const [isLoading, setIsLoading] = useState(true); // État de chargement
+  const [query, setQuery] = useState(searchQuery); // Requête de recherche
+  const [isFilterVisible, setIsFilterVisible] = useState(false); // Affichage du menu de filtrage
+  const [currentPage, setCurrentPage] = useState(1); // Page courante pour la pagination
+  const [itemsPerPage] = useState(88); // Nombre d'annonces par page
+  const [favorites, setFavorites] = useState([]); // Liste des annonces favorites
+  const [selectedCity, setSelectedCity] = useState(''); // Ville sélectionnée
+  const [annonces, setAnnonces] = useState([]); // Liste des annonces
 
-
+  // Référence pour le composant de filtrage
   const categoriesRef = useOutsideClick(() => setIsFilterVisible(false));
 
+  // Chargement des annonces et des favoris depuis le localStorage
   useEffect(() => {
-    // Charger les annonces depuis localStorage
     const storedAnnonces = JSON.parse(localStorage.getItem('annonces')) || [];
     setAnnonces(Array.isArray(storedAnnonces) ? storedAnnonces : []);
   
-    // Charger les favoris depuis localStorage
     const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
     setFavorites(savedFavorites);
   
-    setIsLoading(false);
-    setQuery(searchQuery);
+    setIsLoading(false); // Désactiver l'état de chargement
+    setQuery(searchQuery); // Mettre à jour la requête de recherche
   }, [searchQuery]);
-  
+
+  // Gestionnaire de clic pour afficher les détails d'une annonce
   const handleDetailClick = (annonce) => {
     navigate('Detail/detail', { state: annonce });
   };
 
+  // Gestionnaire de changement d'ordre de tri
   const handleSortChange = (order) => {
     setSortOrder(order);
   };
+
+  // Gestionnaire de changement de ville sélectionnée
   const handleCityChange = (e) => {
     setSelectedCity(e.target.value);
   };
 
+  // Gestionnaire de changement de catégorie sélectionnée
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
   };
 
+  // Gestionnaire de changement de la requête de recherche
   const handleSearchChange = (e) => {
     setQuery(e.target.value);
   };
 
+  // Fonction pour tronquer le texte trop long
   const truncateText = (text, maxLength) => {
     if (text.length > maxLength) {
       return text.slice(0, maxLength) + '...';
@@ -71,6 +78,7 @@ const Home = ({ searchQuery }) => {
     return text;
   };
 
+  // Fonction pour calculer le temps écoulé depuis la publication d'une annonce
   const getElapsedTime = (timestamp) => {
     const annonceTime = new Date(timestamp * 1000); // Convertir le timestamp en objet Date
     const now = new Date();
@@ -82,26 +90,27 @@ const Home = ({ searchQuery }) => {
   
     const elapsedTimeInMinutes = Math.floor((now - annonceTime) / 60000); // Calculer le temps écoulé en minutes
   
-     // Déterminer le format du temps écoulé
-  const years = Math.floor(elapsedTimeInMinutes / 525600); // Nombre de minutes dans une année (approximation)
-  const months = Math.floor((elapsedTimeInMinutes % 525600) / 43800); // Nombre de minutes dans un mois (approximation)
-  const days = Math.floor((elapsedTimeInMinutes % 43800) / 1440); // Nombre de minutes dans un jour
-  const hours = Math.floor((elapsedTimeInMinutes % 1440) / 60); // Nombre de minutes dans une heure
-  const minutes = elapsedTimeInMinutes % 60; // Minutes restantes
+    // Déterminer le format du temps écoulé
+    const years = Math.floor(elapsedTimeInMinutes / 525600); // Nombre de minutes dans une année (approximation)
+    const months = Math.floor((elapsedTimeInMinutes % 525600) / 43800); // Nombre de minutes dans un mois (approximation)
+    const days = Math.floor((elapsedTimeInMinutes % 43800) / 1440); // Nombre de minutes dans un jour
+    const hours = Math.floor((elapsedTimeInMinutes % 1440) / 60); // Nombre de minutes dans une heure
+    const minutes = elapsedTimeInMinutes % 60; // Minutes restantes
 
-  if (years > 0) {
-    return `${years} année${years > 1 ? 's' : ''} ago`; // Afficher en années
-  } else if (months > 0) {
-    return `${months} mois ago`; // Afficher en mois
-  } else if (days > 0) {
-    return `${days} jour${days > 1 ? 's' : ''} ago`; // Afficher en jours
-  } else if (hours > 0) {
-    return `${hours} heure${hours > 1 ? 's' : ''} ago`; // Afficher en heures
-  } else {
-    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`; // Afficher en minutes
-  }
-  };  
+    if (years > 0) {
+      return `${years} année${years > 1 ? 's' : ''} ago`; // Afficher en années
+    } else if (months > 0) {
+      return `${months} mois ago`; // Afficher en mois
+    } else if (days > 0) {
+      return `${days} jour${days > 1 ? 's' : ''} ago`; // Afficher en jours
+    } else if (hours > 0) {
+      return `${hours} heure${hours > 1 ? 's' : ''} ago`; // Afficher en heures
+    } else {
+      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`; // Afficher en minutes
+    }
+  };
 
+  // Gestionnaire de clic pour ajouter/supprimer une annonce des favoris
   const handleFavoriteClick = (annonce) => {
     const isFavorite = favorites.some(fav => fav.id === annonce.id);
     const updatedFavorites = isFavorite
@@ -112,12 +121,13 @@ const Home = ({ searchQuery }) => {
     localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
   };
 
+  // Filtrer les annonces en fonction de la requête de recherche et des filtres sélectionnés
   const filteredAnnonces = (Array.isArray(annonces) ? annonces : []).filter((annonce) =>
     annonce.title.toLowerCase().includes(query.toLowerCase()) &&
     (!selectedCity || annonce.location.value === selectedCity)
   );
 
-
+  // Trier les annonces filtrées en fonction de l'ordre de tri sélectionné
   const sortedAnnonces = filteredAnnonces
     .filter((annonce) => !selectedCategory || annonce.category === selectedCategory)
     .sort((a, b) => {
@@ -133,9 +143,12 @@ const Home = ({ searchQuery }) => {
       return 0;
     });
 
+  // Calcul du nombre total de pages pour la pagination
   const totalPages = Math.ceil(sortedAnnonces.length / itemsPerPage);
+  // Sélection des annonces à afficher sur la page courante
   const currentItems = sortedAnnonces.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+  // Gestionnaire de changement de page
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -146,7 +159,7 @@ const Home = ({ searchQuery }) => {
         <h1 className="text-4xl font-extrabold text-center mt-16 mb-8 capitalize text-[#333333]">Annonce Récente</h1>
         <button
           ref={categoriesRef}
-          className="fixed top-16 left-0 ml-4 z-40 bg-black text-white p-3 rounded-b-lg shadow-lg flex items-center"
+          className="absolute top-16 left-0 ml-4 bg-black text-white p-3 rounded-b-lg shadow-lg flex items-center"
           onClick={() => setIsFilterVisible(!isFilterVisible)}
         >
           <FontAwesomeIcon icon={faFilter} className="mr-2" />
@@ -155,7 +168,7 @@ const Home = ({ searchQuery }) => {
 
         <div
           ref={categoriesRef}
-          className={`fixed z-40 mt-32 top-16 left-0 bg-gray-300 p-6 rounded-lg shadow-lg flex flex-col space-y-4 transition-transform duration-300 ${
+          className={`absolute z-40 mt-32 top-16 left-0 bg-gray-300 p-6 rounded-lg shadow-lg flex flex-col space-y-4 transition-transform duration-300 ${
             isFilterVisible ? 'translate-x-0' : '-translate-x-full'
           }`}
           style={{ transform: isFilterVisible ? 'translateX(0)' : 'translateX(-100%)' }}

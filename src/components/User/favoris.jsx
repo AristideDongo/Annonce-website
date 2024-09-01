@@ -4,13 +4,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const Favoris = ({searchQuery}) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate();   // Hook pour naviguer vers d'autres routes
+  // États pour gérer les favoris, options de tri, page actuelle, et favoris filtrés
   const [favorites, setFavorites] = useState([]);
   const [sortOption, setSortOption] = useState('recent');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
   const [filteredFavorites, setFilteredFavorites] = useState([]);
 
+  // Effet pour charger les favoris depuis le localStorage et écouter les changements de stockage
   useEffect(() => {
     const fetchFavorites = () => {
       const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -19,17 +21,20 @@ const Favoris = ({searchQuery}) => {
 
     fetchFavorites();
 
+    // Met à jour les favoris lorsque le localStorage change
     const handleStorageChange = () => {
       fetchFavorites();
     };
 
     window.addEventListener('storage', handleStorageChange);
 
+    // Nettoyage de l'écouteur d'événement lors du démontage du composant
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
 
+  // Effet pour filtrer et trier les favoris en fonction de la recherche et des options de tri
   useEffect(() => {
     const filteredBySearch = favorites.filter(fav =>
       fav.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -39,6 +44,7 @@ const Favoris = ({searchQuery}) => {
     setFilteredFavorites(sortedFavorites);
   }, [favorites, searchQuery, sortOption]);
 
+  // Fonction pour trier les favoris en fonction de l'option sélectionnée
   const sortFavorites = (favorites, option) => {
     switch (option) {
       case 'recent':
@@ -54,10 +60,12 @@ const Favoris = ({searchQuery}) => {
     }
   };
 
+  // Fonction pour naviguer vers la page de détails d'une annonce
   const handleDetailClick = (annonce) => {
     navigate('/Detail/detail', { state: annonce });
   };
 
+  // Fonction pour calculer le temps écoulé depuis la publication de l'annonce
   const getElapsedTime = (timestamp) => {
     if (!timestamp || typeof timestamp !== 'number') {
       console.error('Invalid timestamp:', timestamp);
@@ -86,23 +94,28 @@ const Favoris = ({searchQuery}) => {
     }
   };
 
+  // Fonction pour retirer un favori de la liste et du localStorage
   const handleRemoveFavorite = (id) => {
     const updatedFavorites = favorites.filter(fav => fav.id !== id);
     setFavorites(updatedFavorites);
     localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
   };
 
+  // Fonction pour gérer le changement d'option de tri
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
   };
 
+  // Fonction pour gérer le changement de page
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
+  // Calcul du nombre total de pages et des éléments de la page actuelle
   const totalPages = Math.ceil(filteredFavorites.length / itemsPerPage);
   const currentItems = filteredFavorites.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+  // Fonction pour tronquer le texte si nécessaire
   const truncateText = (text, maxLength) => {
     if (text.length > maxLength) {
       return text.slice(0, maxLength) + '...';

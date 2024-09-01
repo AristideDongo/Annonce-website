@@ -5,6 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { countries } from "../countries/countries";
 
+// Composant pour afficher les exigences du mot de passe
 const PasswordRequirements = ({ requirements }) => {
   return (
     <div className="mt-2">
@@ -32,7 +33,9 @@ const PasswordRequirements = ({ requirements }) => {
   );
 };
 
+// Composant principal d'inscription
 const Singup = ({ profile, updateProfile }) => {
+  // États pour gérer les données du formulaire et les erreurs
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -55,38 +58,33 @@ const Singup = ({ profile, updateProfile }) => {
   const [isPolicyAccepted, setIsPolicyAccepted] = useState(false);
   const [areTermsAccepted, setAreTermsAccepted] = useState(false);
 
-  useEffect(() => {
-    if (profile) {
-      setUsername(profile.name || "");
-      setEmail(profile.email || "");
-      setPhoneNumber(profile.phone || "");
-      setAddress(profile.address || ""); // Nouveau champ
-      setSelectedCountryCode(profile.countryCode || "+225");
-      setBirthDate(profile.birthDate || "");
-    }
-  }, [profile]);
-
+  // Fonction pour valider le formulaire
   const validateForm = async (e) => {
     e.preventDefault();
     let formErrors = {};
 
+    // Validation des mots de passe
     if (password !== confirmPassword) {
       formErrors.confirmPassword = "Les mots de passe ne correspondent pas.";
     }
 
+    // Validation de l'email
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
       formErrors.email = "L'email n'est pas valide.";
     }
 
+    // Validation de la date de naissance
     if (!birthDate) {
       formErrors.birthDate = "La date de naissance est requise.";
     }
 
+    // Validation de l'adresse
     if (!address) {
       formErrors.address = "L'adresse est requise.";
     }
 
+    // Validation de l'acceptation des politiques
     if (!isPolicyAccepted) {
       formErrors.policy = "Vous devez accepter la politique du site.";
     }
@@ -97,6 +95,7 @@ const Singup = ({ profile, updateProfile }) => {
 
     setErrors(formErrors);
 
+    // Si aucune erreur, envoie des données au serveur
     if (Object.keys(formErrors).length === 0) {
       try {
         const response = await fetch("https://example.com/api/signup", {
@@ -110,7 +109,7 @@ const Singup = ({ profile, updateProfile }) => {
             password,
             phoneNumber: `${selectedCountryCode}${phoneNumber}`,
             birthDate,
-            address, // Nouveau champ
+            address,
           }),
         });
 
@@ -120,7 +119,7 @@ const Singup = ({ profile, updateProfile }) => {
 
         const result = await response.json();
         console.log("Inscription réussie", result);
-        updateProfile({ name: username ,email, phone: phoneNumber, countryCode: selectedCountryCode, birthDate, address });
+        updateProfile({ name: username, email, phone: phoneNumber, countryCode: selectedCountryCode, birthDate, address });
         // Rediriger ou afficher un message de succès
       } catch (error) {
         console.error("Erreur d'inscription", error);
@@ -129,6 +128,7 @@ const Singup = ({ profile, updateProfile }) => {
     }
   };
 
+  // Fonction pour gérer le changement de mot de passe et mettre à jour les exigences
   const handlePasswordChange = (e) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
@@ -145,6 +145,7 @@ const Singup = ({ profile, updateProfile }) => {
     }
   };
 
+  // Fonction pour gérer le changement du mot de passe de confirmation
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
     if (errors.confirmPassword) {
@@ -152,6 +153,7 @@ const Singup = ({ profile, updateProfile }) => {
     }
   };
 
+  // Fonction pour gérer le changement du nom d'utilisateur
   const handleUsernameChange = (e) => { // Nouveau gestionnaire
     setUsername(e.target.value);
     if (errors.username) {
@@ -159,6 +161,7 @@ const Singup = ({ profile, updateProfile }) => {
     }
   };
 
+  // Fonction pour gérer le changement de l'email
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
     if (errors.email) {
@@ -166,18 +169,22 @@ const Singup = ({ profile, updateProfile }) => {
     }
   };
 
+  // Fonction pour gérer le changement du numéro de téléphone
   const handlePhoneNumberChange = (e) => {
     setPhoneNumber(e.target.value);
   };
 
+  // Fonction pour gérer le changement du code de pays
   const handleCountryCodeChange = (e) => {
     setSelectedCountryCode(e.target.value);
   };
 
+  // Fonction pour gérer le changement de la date de naissance
   const handleBirthDateChange = (e) => {
     setBirthDate(e.target.value);
   };
 
+  // Fonction pour gérer le changement de l'adresse
   const handleAddressChange = (e) => { // Nouveau gestionnaire
     setAddress(e.target.value);
     if (errors.address) {
@@ -185,15 +192,17 @@ const Singup = ({ profile, updateProfile }) => {
     }
   };
 
+  // Fonction pour gérer l'acceptation de la politique de confidentialité
   const handlePolicyChange = () => {
     setIsPolicyAccepted(!isPolicyAccepted);
   };
 
+  // Fonction pour gérer l'acceptation des termes et conditions
   const handleTermsChange = () => {
     setAreTermsAccepted(!areTermsAccepted);
   };
 
-
+  // Fonction pour calculer la force du mot de passe
   const calculatePasswordStrength = (password) => {
     let strength = 0;
     if (password.length >= 8) strength += 1;
@@ -204,6 +213,7 @@ const Singup = ({ profile, updateProfile }) => {
     return strength;
   };
 
+  // Fonction pour basculer l'affichage du mot de passe
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };

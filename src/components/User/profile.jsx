@@ -3,32 +3,36 @@ import {  useNavigate } from 'react-router-dom';
 
 const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfile }) => {
   const navigate = useNavigate();
-  const [sortOption, setSortOption] = useState('');
-  const [profilePhoto, setProfilePhoto] = useState(null);
-  const [sortedAnnonces, setSortedAnnonces] = useState(annonces);
-  const [photoURL, setPhotoURL] = useState(profile.photoURL);
+  const [sortOption, setSortOption] = useState('');   // État pour les options de tri
+  const [profilePhoto, setProfilePhoto] = useState(null);   // État pour la photo de profil
+  const [sortedAnnonces, setSortedAnnonces] = useState(annonces);   // État pour les annonces triées
+  const [photoURL, setPhotoURL] = useState(profile.photoURL);   // État pour l'URL de la photo de profil
+  // État pour les informations utilisateur
   const [userInfo, setUserInfo] = useState({
     name: profile.name,
     email: profile.email,
     phone: profile.phone,
     adress: profile.address
   });
-  const [selectedAnnonces, setSelectedAnnonces] = useState([]);
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [showPhotoPopup, setShowPhotoPopup] = useState(false);
-  const [editAnnonce, setEditAnnonce] = useState(null);
-  const [showEditPopup, setShowEditPopup] = useState(false);
+  const [selectedAnnonces, setSelectedAnnonces] = useState([]);   // État pour les annonces sélectionnées pour suppression
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);   // État pour afficher la confirmation de suppression
+  const [showPhotoPopup, setShowPhotoPopup] = useState(false);   // État pour afficher le popup de photo
+  const [editAnnonce, setEditAnnonce] = useState(null);   // État pour l'annonce en cours de modification
+  const [showEditPopup, setShowEditPopup] = useState(false);   // État pour afficher le popup de modification
+  // État pour les données du formulaire de modification d'annonce
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     price: '',
   });
+  // État pour les erreurs de validation du formulaire
   const [errors, setErrors] = useState({
     title: '',
     description: '',
     price: '',
   });
 
+  // Effet pour mettre à jour la photo de profil et les informations utilisateur lorsque le profil change
   useEffect(() => {
     setPhotoURL(profile.photoURL);
     setUserInfo(prevUserInfo => ({
@@ -37,6 +41,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
     }));
   }, [profile]);
 
+  // Fonction pour ouvrir le popup de modification d'annonce
   const handleEditClick = (annonce) => {
     setFormData({
       title: annonce.title,
@@ -47,11 +52,13 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
     setShowEditPopup(true);
   };
 
+  // Fonction pour fermer le popup de modification d'annonce
   const handleCloseEditPopup = () => {
     setShowEditPopup(false);
     setEditAnnonce(null);
   };
 
+  // Fonction de validation du formulaire de modification
   const validateForm = () => {
     const newErrors = {
       title: '',
@@ -79,6 +86,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
     return isValid;
   };
 
+  // Fonction pour confirmer la modification de l'annonce
   const handleConfirmEdit = () => {
     if (validateForm() && editAnnonce) {
       const updatedAnnonce = {
@@ -95,22 +103,25 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
       handleCloseEditPopup();
     }
   };
-  
 
+  // Fonction pour naviguer vers les détails de l'annonce
   const handleDetailClick = (annonce) => {
     navigate('/Detail/detail', { state: annonce });
   };
 
+  // Fonction pour ouvrir le popup de photo
   const handlePhotoClick = () => {
     if (photoURL) {
       setShowPhotoPopup(true);
     }
   };
 
+  // Fonction pour fermer le popup de photo
   const handleClosePopup = () => {
     setShowPhotoPopup(false);
   };
 
+  // Effet pour charger la photo de profil et les informations utilisateur depuis le localStorage
   useEffect(() => {
     const savedPhotoURL = localStorage.getItem('photoURL');
     if (savedPhotoURL) {
@@ -123,6 +134,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
     }
   }, []);
 
+  // Effet pour trier les annonces en fonction de l'option de tri sélectionnée
   useEffect(() => {
     let sorted = [...annonces];
     switch (sortOption) {
@@ -156,10 +168,12 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
     setSortedAnnonces(sorted);
   }, [sortOption, annonces]);
 
+  // Fonction pour gérer le changement d'option de tri
   const handleSortChange = (event) => {
     setSortOption(event.target.value);
   };
 
+  // Fonction pour gérer le changement de photo de profil
   const handlePhotoChange = (event) => {
     const file = event.target.files[0];
     setProfilePhoto(file);
@@ -168,10 +182,12 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
     updateProfile({ photoURL: newPhotoURL });
   };
 
+  // Fonction pour gérer le téléchargement de la photo de profil
   const handlePhotoUpload = () => {
     console.log('Profile photo uploaded:', profilePhoto);
   };
 
+  // Fonction pour sélectionner ou désélectionner une annonce
   const handleSelectAnnonce = (annonceId) => {
     if (selectedAnnonces.includes(annonceId)) {
       setSelectedAnnonces(selectedAnnonces.filter(id => id !== annonceId));
@@ -180,14 +196,17 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
     }
   };
 
+  // Fonction pour afficher la confirmation de suppression
   const handleDeleteConfirmation = () => {
     setShowDeleteConfirmation(true);
   };
 
+  // Fonction pour annuler la suppression
   const handleCancelDelete = () => {
     setShowDeleteConfirmation(false);
   };
 
+  // Fonction pour confirmer la suppression des annonces sélectionnées
   const handleConfirmDelete = () => {
     console.log("Annonces sélectionnées pour suppression:", selectedAnnonces);
     selectedAnnonces.forEach(id => {
@@ -198,6 +217,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
     setShowDeleteConfirmation(false);
   };
 
+  // Fonction pour gérer les changements dans le formulaire de modification d'annonce
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
@@ -206,6 +226,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
     });
   };
 
+  // Fonction pour tronquer le texte au-dessus d'une certaine longueur
   const truncateText = (text, maxLength) => {
     if (text.length > maxLength) {
       return text.slice(0, maxLength) + '...';

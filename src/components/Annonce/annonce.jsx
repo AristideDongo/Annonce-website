@@ -5,6 +5,7 @@ import { locationOptions } from '../locations/locations'
 import { countries } from '../countries/countries';
 
 const Annonce = ({ setAnnonces, annonces, profile }) => {
+ // État pour gérer les données du formulaire
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -16,14 +17,22 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
     location: null
   });
 
+  // Code du pays pour Côte d'Ivoire
   const countryCode = countries.find(country => country.name === "Côte d'Ivoire").code;
 
+  // État pour gérer les erreurs de validation du formulaire
   const [errors, setErrors] = useState({});
+  
+  // État pour les prévisualisations des photos
   const [photoPreviews, setPhotoPreviews] = useState(['', '', '', '', '']);
+
+  // État pour afficher ou non le popup de succès
   const [showPopup, setShowPopup] = useState(false);
 
+  // Hook pour naviguer entre les pages
   const navigate = useNavigate();
 
+  // Fonction pour gérer les changements dans les champs de texte
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -36,7 +45,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
     });
   };
   
-
+  // Fonction pour gérer les changements dans les champs de photos
   const handlePhotoChange = (index, e) => {
     const file = e.target.files[0];
     const newPhotos = [...formData.photos];
@@ -62,6 +71,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
     });
   };
 
+  // Fonction pour gérer les changements dans les sélecteurs
   const handleSelectChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -74,6 +84,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
     });
   };
 
+  // Fonction pour gérer les changements dans le sélecteur de localisation
   const handleLocationChange = (selectedOption) => {
     setFormData({
       ...formData,
@@ -85,6 +96,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
     });
   };
 
+  // Fonction pour valider les données du formulaire
   const validateForm = () => {
     const newErrors = {};
     if (!formData.title) {
@@ -127,6 +139,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
     return newErrors;
   };
 
+  // Fonction pour gérer la soumission du formulaire
   const handleSubmit = (e) => {
     e.preventDefault();
     const formErrors = validateForm();
@@ -153,6 +166,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
       // Mettre à jour l'état des annonces
       setAnnonces(updatedAnnonces);
       
+      // Afficher le popup de succès
       setShowPopup(true);
       setTimeout(() => {
         setShowPopup(false);

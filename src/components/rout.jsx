@@ -43,13 +43,16 @@ const Rout = () => {
     const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
     const updatedFavorites = savedFavorites.filter(fav => fav.id !== id);
     localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+    
+    // Mettre à jour les annonces dans le localStorage
+    const savedAnnonces = JSON.parse(localStorage.getItem('annonces')) || [];
+    const updatedAnnonces = savedAnnonces.filter(annonce => annonce.id !== id);
+    localStorage.setItem('annonces', JSON.stringify(updatedAnnonces));
   
-    // Mettre à jour les annonces dans le state
-    setAnnonces((prevAnnonces) => {
-      const newAnnonces = prevAnnonces.filter((annonce) => annonce.id !== id);
-      console.log("Annonces après suppression:", newAnnonces);
-      return newAnnonces;
-    });
+    // Mettre à jour le state des annonces si nécessaire
+    setAnnonces(updatedAnnonces);
+  
+    console.log("Annonces après suppression:", updatedAnnonces);
   };
   
 
