@@ -58,10 +58,10 @@ const Rout = () => {
 
   const [profile, setProfile] = useState({
     photoURL: 'https://placehold.co/150x150',
-    name: 'IvoitAgenceAcademy',
-    phone: '+225 0000000000',
-    email: 'ivoitagence@gmail.com',
-    address: '123,Rue,Camp-Militaire'
+    name: '',
+    phone: '',
+    email: '',
+    location: ''
   });
 
   const updateProfile = (newProfile) => {

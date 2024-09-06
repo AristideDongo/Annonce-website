@@ -31,8 +31,8 @@ const navigate = useNavigate(); // Hook pour naviguer entre les pages
    useEffect(() => {
      // Vérifiez l'état de connexion lors du chargement du composant
      const token = localStorage.getItem('authToken');
-     setIsUserLoggedIn(true); // Vérifie si le token existe pour définir l'état de connexion
-   }, []);
+     setIsUserLoggedIn(!!token); // Vérifie si le token existe pour définir l'état de connexion
+   }, [localStorage.getItem('authToken')]);
  
    // Fonction pour mettre à jour la recherche
    const handleChange = (e) => {
@@ -60,10 +60,12 @@ const navigate = useNavigate(); // Hook pour naviguer entre les pages
  
    // Fonction pour se déconnecter
    const handleLogout = () => {
-     localStorage.removeItem('authToken'); // Supprime le token de localStorage
-     setIsUserLoggedIn(false);
-     setIsLogoutPopupOpen(false);
-   };
+    localStorage.removeItem('authToken'); // Supprime le token de localStorage
+    setIsUserLoggedIn(false);
+    setIsLogoutPopupOpen(false);
+    window.location.reload(); // Recharge la page
+  };
+  
  
    // Fonction pour aller à la page de dépôt d'annonce ou ouvrir un popup d'information
    const handlePostAd = () => {

@@ -4,6 +4,7 @@ import { FaFacebook, FaInstagram, FaWhatsapp, FaArrowUp } from 'react-icons/fa';
 import { FaLocationDot, FaXTwitter } from 'react-icons/fa6';
 import { IoIosCall } from 'react-icons/io';
 import { MdEmail } from 'react-icons/md';
+import { BsSend } from "react-icons/bs";
 
 const Footer = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -51,7 +52,7 @@ const Footer = () => {
             <ul className="text-sm leading-relaxed">
               <li><MdEmail/><a href="mailto:contact@siteannonce.com" className="hover:underline">contact@siteannonce360.com</a></li>
               <li className='pt-2'><IoIosCall/><a href="tel:+2250101010101" className="hover:underline">+225 01 01 01 01 01</a></li>
-              <li className='pt-2'><FaLocationDot/>Face au camp militaire, bondoukou, Ci</li>
+              <li className='pt-2'><FaLocationDot/>Face au camp militaire, Bondoukou, CI</li>
             </ul>
           </div>
 
@@ -69,7 +70,7 @@ const Footer = () => {
           {/* Suivez-nous */}
           <div>
             <h3 className="text-lg font-semibold mb-4 text-white">Suivez-nous</h3>
-            <ul className="flex space-x-4">
+            <ul className="flex space-x-4 mb-4">
               <li>
                 <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="transition-transform duration-200 hover:scale-110">
                   <FaFacebook className="inline-block text-xl text-white hover:text-blue-800" />
@@ -91,12 +92,31 @@ const Footer = () => {
                 </a>
               </li>
             </ul>
+            {/* Newsletter */}
+            <div>
+              <h3 className="text-lg mt-3 font-semibold mb-2 text-white">Restez Informer</h3>
+              <form className="flex items-center space-x-1">
+                <input
+                  type="email"
+                  placeholder="Entrez votre email"
+                  className="w-full px-4 py-2 rounded-md text-black"
+                />
+                <button
+                  type="submit"
+                  className="bg-transparent border-2 border-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-all duration-300"
+                >
+                  <BsSend size={20} />
+                </button>
+              </form>
+            </div>
           </div>
         </div>
+
         <div className="text-center mt-8 text-sm text-gray-500">
           &copy; {new Date().getFullYear()} Annonces360°. Tous droits réservés.
         </div>
       </div>
+
       {/* Scroll to top button */}
       {showScrollTop && (
         <button

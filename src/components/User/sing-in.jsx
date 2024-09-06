@@ -21,55 +21,56 @@ const Singin = ({ updateProfile }) => {
  
    // Fonction pour gérer la soumission du formulaire
    const handleSubmit = async (event) => {
-     event.preventDefault(); // Empêche le comportement par défaut du formulaire (rechargement de la page)
- 
-     // Validation simple pour s'assurer que les champs ne sont pas vides
-     if (!email || !password) {
-       setErrorMessage("Veuillez remplir tous les champs.");
-       setErrorPopupVisible(true);
-       setTimeout(() => setErrorPopupVisible(false), 2000); // Masque le popup après 2 secondes
-       return;
-     }
- 
-     try {
-       // Envoi de la requête de connexion au serveur
-       const response = await fetch('/api/login', { // Remplacez '/api/login' par votre URL d'API
-         method: 'POST',
-         headers: {
-           'Content-Type': 'application/json',
-         },
-         body: JSON.stringify({ email, password }),
-       });
- 
-       const data = await response.json(); // Analyse la réponse JSON
- 
-       if (response.ok) { // Si la réponse est OK, c'est-à-dire que la connexion a réussi
-         // Stocker le token et les informations de l'utilisateur dans le localStorage
-         localStorage.setItem('token', data.token);
-         localStorage.setItem('user', JSON.stringify(data.user)); // Supposons que l'API renvoie un objet utilisateur
- 
-         // Mise à jour du profil utilisateur via la fonction passée en props
-         updateProfile(data.user);
- 
-         // Afficher le popup de succès et rediriger vers la page d'accueil
-         setPopupVisible(true); 
-         setTimeout(() => {
-           setPopupVisible(false); 
-           navigate("/"); 
-         }, 2000); 
-       } else {
-         // Afficher un message d'erreur si la réponse n'est pas OK
-         setErrorMessage(data.message || "Connexion échouée.");
-         setErrorPopupVisible(true);
-         setTimeout(() => setErrorPopupVisible(false), 2000);
-       }
-     } catch (error) {
-       // Gérer les erreurs de la requête
-       setErrorMessage("Une erreur est survenue. Veuillez réessayer.");
-       setErrorPopupVisible(true);
-       setTimeout(() => setErrorPopupVisible(false), 2000);
-     }
-   };
+    event.preventDefault(); // Empêche le comportement par défaut du formulaire (rechargement de la page)
+  
+    // Validation simple pour s'assurer que les champs ne sont pas vides
+    if (!email || !password) {
+      setErrorMessage("Veuillez remplir tous les champs.");
+      setErrorPopupVisible(true);
+      setTimeout(() => setErrorPopupVisible(false), 2000); // Masque le popup après 2 secondes
+      return;
+    }
+  
+    try {
+      // Envoi de la requête de connexion au serveur
+      const response = await fetch('http://localhost:3000/api/auth/login', { // Remplacez '/api/auth/login' par votre URL d'API
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      const data = await response.json(); // Analyse la réponse JSON
+  
+      if (response.ok) { // Si la réponse est OK, c'est-à-dire que la connexion a réussi
+        // Stocker le token et les informations de l'utilisateur dans le localStorage
+        localStorage.setItem('authToken', data.token); // Utilisation de 'authToken' pour stocker le token
+        localStorage.setItem('user', JSON.stringify(data.user)); // Supposons que l'API renvoie un objet utilisateur
+  
+        // Mise à jour du profil utilisateur via la fonction passée en props
+        updateProfile(data.user);
+  
+        // Afficher le popup de succès et rediriger vers la page d'accueil
+        setPopupVisible(true); 
+        setTimeout(() => {
+          setPopupVisible(false); 
+          navigate("/"); 
+        }, 2000); 
+      } else {
+        // Afficher un message d'erreur si la réponse n'est pas OK
+        setErrorMessage(data.message || "Connexion échouée.");
+        setErrorPopupVisible(true);
+        setTimeout(() => setErrorPopupVisible(false), 2000);
+      }
+    } catch (error) {
+      // Gérer les erreurs de la requête
+      setErrorMessage("Une erreur est survenue. Veuillez réessayer.");
+      setErrorPopupVisible(true);
+      setTimeout(() => setErrorPopupVisible(false), 2000);
+    }
+  };
+  
 
   return (
     <>

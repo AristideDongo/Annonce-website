@@ -71,7 +71,7 @@ const Setting = ({ profile={}, updateProfile }) => {
   // Mise à jour des paramètres utilisateur
   const updateUserSettings = async () => {
     try {
-      const response = await fetch('/api/updateUserSettings', {
+      const response = await fetch('http://localhost:3000/api/settings/update', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -93,8 +93,8 @@ const Setting = ({ profile={}, updateProfile }) => {
   // Mise à jour du mot de passe
   const updatePassword = async () => {
     try {
-      const response = await fetch('/api/updatePassword', {
-        method: 'POST',
+      const response = await fetch('http://localhost:3000/api/settings/update', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -113,8 +113,8 @@ const Setting = ({ profile={}, updateProfile }) => {
   // Mise à jour des préférences de notification
   const updateNotificationPreferences = async () => {
     try {
-      const response = await fetch('/api/updateNotificationPreferences', {
-        method: 'POST',
+      const response = await fetch('http://localhost:3000/api/settings/notifications', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },

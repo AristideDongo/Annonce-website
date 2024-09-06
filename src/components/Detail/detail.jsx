@@ -311,8 +311,8 @@ useEffect(() => {
 
           <div className="mb-4">
             <h3 className="text-4xl font-bold text-black break-words ">{title}</h3>
-            <h4 className="text-2xl font-semibold text-gray-500 underline mt-5 mb-5" >DESCRIPTION DE L'ANNONCE:</h4>
-            <p className="text-gray-500 text-xl mt-2 break-words mb-5 ">{description}</p>
+            <h4 className="text-xl font-semibold text-gray-700 underline mt-5 mb-5" >DESCRIPTION DE L'ANNONCE:</h4>
+            <p className="text-gray-500 text-2xl mt-2 break-words mb-5 ">{description}</p>
             <span className="text-xl font-bold mr-5 text-black">{price} FCFA</span>
           </div>
 

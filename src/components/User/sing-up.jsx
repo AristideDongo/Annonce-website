@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { ImFacebook2 } from "react-icons/im";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { countries } from "../countries/countries";
 
 // Composant pour afficher les exigences du mot de passe
@@ -36,12 +36,12 @@ const PasswordRequirements = ({ requirements }) => {
 // Composant principal d'inscription
 const Singup = ({ profile, updateProfile }) => {
   // États pour gérer les données du formulaire et les erreurs
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState(""); // Nouveau champ
+  const [location, setAddress] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [selectedCountryCode, setSelectedCountryCode] = useState("+225");
   const [errors, setErrors] = useState({});
@@ -57,6 +57,7 @@ const Singup = ({ profile, updateProfile }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isPolicyAccepted, setIsPolicyAccepted] = useState(false);
   const [areTermsAccepted, setAreTermsAccepted] = useState(false);
+  const navigate = useNavigate();
 
   // Fonction pour valider le formulaire
   const validateForm = async (e) => {
@@ -80,7 +81,7 @@ const Singup = ({ profile, updateProfile }) => {
     }
 
     // Validation de l'adresse
-    if (!address) {
+    if (!location) {
       formErrors.address = "L'adresse est requise.";
     }
 
@@ -98,34 +99,35 @@ const Singup = ({ profile, updateProfile }) => {
     // Si aucune erreur, envoie des données au serveur
     if (Object.keys(formErrors).length === 0) {
       try {
-        const response = await fetch("https://example.com/api/signup", {
+        const response = await fetch("http://localhost:3000/api/auth/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            name: username,
-            email,
-            password,
-            phoneNumber: `${selectedCountryCode}${phoneNumber}`,
-            birthDate,
-            address,
+            name: name,
+            email: email,
+            password: password,
+            phone: `${selectedCountryCode}${phoneNumber}`,
+            birthDate: birthDate,
+            location: location,
           }),
         });
-
+    
         if (!response.ok) {
           throw new Error("Erreur lors de l'inscription");
         }
-
+    
         const result = await response.json();
-        console.log("Inscription réussie", result);
-        updateProfile({ name: username, email, phone: phoneNumber, countryCode: selectedCountryCode, birthDate, address });
-        // Rediriger ou afficher un message de succès
+        console.log("Inscription réussie", result);    
+        navigate("/User/sing-in"); 
+    
       } catch (error) {
         console.error("Erreur d'inscription", error);
         // Afficher un message d'erreur à l'utilisateur
       }
     }
+    
   };
 
   // Fonction pour gérer le changement de mot de passe et mettre à jour les exigences
@@ -155,7 +157,7 @@ const Singup = ({ profile, updateProfile }) => {
 
   // Fonction pour gérer le changement du nom d'utilisateur
   const handleUsernameChange = (e) => { // Nouveau gestionnaire
-    setUsername(e.target.value);
+    setName(e.target.value);
     if (errors.username) {
       setErrors((prevErrors) => ({ ...prevErrors, username: "" }));
     }
@@ -230,7 +232,7 @@ const Singup = ({ profile, updateProfile }) => {
                 type="text"
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Nom d'utilisateur"
-                value={username}
+                value={name}
                 onChange={handleUsernameChange} // Nouveau gestionnaire
                 required
               />
@@ -288,16 +290,16 @@ const Singup = ({ profile, updateProfile }) => {
               </div>
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700">Adresse</label>
+              <label className="block text-gray-700">Ville</label>
               <input
                 type="text"
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Votre adresse"
-                value={address}
+                value={location}
                 onChange={handleAddressChange}
                 required
               />
-              {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
+              {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700">Mot de passe</label>

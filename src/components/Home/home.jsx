@@ -33,16 +33,35 @@ const Home = ({ searchQuery }) => {
   // Référence pour le composant de filtrage
   const categoriesRef = useOutsideClick(() => setIsFilterVisible(false));
 
-  // Chargement des annonces et des favoris depuis le localStorage
+  // Chargement des annonces et des favoris
   useEffect(() => {
-    const storedAnnonces = JSON.parse(localStorage.getItem('annonces')) || [];
-    setAnnonces(Array.isArray(storedAnnonces) ? storedAnnonces : []);
-  
-    const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    setFavorites(savedFavorites);
-  
-    setIsLoading(false); // Désactiver l'état de chargement
-    setQuery(searchQuery); // Mettre à jour la requête de recherche
+    const fetchAnnonces = async () => {
+      try {
+        const annoncesResponse = await fetch('http://localhost:3000/api/annonces');
+        if (!annoncesResponse.ok) {
+          throw new Error('Erreur lors de la récupération des annonces');
+        }
+        const annoncesData = await annoncesResponse.json();
+        setAnnonces(annoncesData);
+    
+        const favoritesResponse = await fetch('http://localhost:3000/api/favoris');
+        if (!favoritesResponse.ok) {
+          throw new Error('Erreur lors de la récupération des favoris');
+        }
+        const favoritesData = await favoritesResponse.json();
+        setFavorites(favoritesData);
+    
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données:', error);
+        // Gérez l'erreur ici, par exemple en affichant un message d'erreur
+        setIsLoading(false); // Assurez-vous de désactiver le chargement même en cas d'erreur
+      }
+    };
+    
+    fetchAnnonces();
+
+    setQuery(searchQuery); // Mettre à jour la requête de recherche si nécessaire
+
   }, [searchQuery]);
 
   // Gestionnaire de clic pour afficher les détails d'une annonce
@@ -263,7 +282,7 @@ const Home = ({ searchQuery }) => {
                       </div>
                     )}
                     <div className="p-4">
-                    <h3 className="text-lg break-words font-semibold text-blue-600 mb-2 hover:text-orange-600" 
+                    <h3 className="text-lg break-words cursor-pointer font-semibold text-blue-600 mb-2 hover:text-orange-600" 
                     onClick={() => handleDetailClick(annonce)}>{truncateText(annonce.title, 50)}</h3>
                       <p className="text-black mt-auto blue-500 text-xl font-semibold">{annonce.price} FCFA</p>
                       <div className="flex items-center space-x-2 mt-2">

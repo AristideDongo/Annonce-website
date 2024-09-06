@@ -140,7 +140,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
   };
 
   // Fonction pour gérer la soumission du formulaire
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length > 0) {
@@ -148,32 +148,49 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
     } else {
       const newAnnonce = {
         ...formData,
-        id: annonces.length + 1, // Assurez-vous que cet ID est unique et approprié pour votre cas
         photos: photoPreviews,
         location: formData.location,
         timestamp: Math.floor(Date.now() / 1000) // Ajout du timestamp en secondes
       };
   
-      // Récupérer les annonces existantes depuis localStorage
-      const storedAnnonces = JSON.parse(localStorage.getItem('annonces')) || [];
-      
-      // Ajouter la nouvelle annonce à la liste
-      const updatedAnnonces = [...storedAnnonces, newAnnonce];
+      try {
+        // Assurez-vous que le token est inclus dans les en-têtes
+        const token = localStorage.getItem('authToken');
+        console.log(token) // Remplacez par la manière dont vous stockez le token
   
-      // Stocker la liste mise à jour dans le localStorage
-      localStorage.setItem('annonces', JSON.stringify(updatedAnnonces));
+        await fetch('http://localhost:3000/api/annonces', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Inclure le token dans l'en-tête Authorization
+          },
+          body: JSON.stringify(newAnnonce)
+        });
   
-      // Mettre à jour l'état des annonces
-      setAnnonces(updatedAnnonces);
-      
-      // Afficher le popup de succès
-      setShowPopup(true);
-      setTimeout(() => {
-        setShowPopup(false);
-        navigate('/');
-      }, 2000);
+        // Récupérer les annonces mises à jour depuis l'API
+        const response = await fetch('http://localhost:3000/api/annonces');
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des annonces');
+        }
+        const updatedAnnonces = await response.json();
+  
+        // Mettre à jour l'état des annonces
+        setAnnonces(updatedAnnonces);
+        
+        // Afficher le popup de succès
+        setShowPopup(true);
+        setTimeout(() => {
+          setShowPopup(false);
+          navigate('/');
+        }, 2000);
+  
+      } catch (error) {
+        console.error('Erreur lors de l\'envoi de l\'annonce:', error);
+        // Gérez l'erreur ici, comme afficher un message d'erreur
+      }
     }
   };
+  
   
   
 
