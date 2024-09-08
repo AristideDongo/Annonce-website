@@ -63,39 +63,46 @@ const Singup = ({ profile, updateProfile }) => {
   const validateForm = async (e) => {
     e.preventDefault();
     let formErrors = {};
-
+  
     // Validation des mots de passe
     if (password !== confirmPassword) {
       formErrors.confirmPassword = "Les mots de passe ne correspondent pas.";
     }
-
+  
     // Validation de l'email
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
       formErrors.email = "L'email n'est pas valide.";
     }
-
+  
     // Validation de la date de naissance
     if (!birthDate) {
       formErrors.birthDate = "La date de naissance est requise.";
     }
-
-    // Validation de l'adresse
+  
+    // Validation de l'adresse (location)
     if (!location) {
-      formErrors.address = "L'adresse est requise.";
+      formErrors.location = "L'adresse est requise.";
     }
-
+  
+    // Validation du numéro de téléphone
+    if (!phoneNumber) {
+      formErrors.phoneNumber = "Le numéro de téléphone est requis.";
+    } else if (!/^\d+$/.test(phoneNumber)) {
+      formErrors.phoneNumber = "Le numéro de téléphone n'est pas valide.";
+    }
+  
     // Validation de l'acceptation des politiques
     if (!isPolicyAccepted) {
       formErrors.policy = "Vous devez accepter la politique du site.";
     }
-
+  
     if (!areTermsAccepted) {
       formErrors.terms = "Vous devez accepter les termes et conditions.";
     }
-
+  
     setErrors(formErrors);
-
+  
     // Si aucune erreur, envoie des données au serveur
     if (Object.keys(formErrors).length === 0) {
       try {
@@ -113,22 +120,23 @@ const Singup = ({ profile, updateProfile }) => {
             location: location,
           }),
         });
-    
+  
         if (!response.ok) {
-          throw new Error("Erreur lors de l'inscription");
+          const errorResult = await response.json();
+          throw new Error(errorResult.error || "Erreur lors de l'inscription");
         }
-    
+  
         const result = await response.json();
-        console.log("Inscription réussie", result);    
-        navigate("/User/sing-in"); 
-    
+        console.log("Inscription réussie", result);
+        navigate("/User/sing-in"); // Corriger la route si nécessaire
+  
       } catch (error) {
         console.error("Erreur d'inscription", error);
         // Afficher un message d'erreur à l'utilisateur
       }
     }
-    
   };
+  
 
   // Fonction pour gérer le changement de mot de passe et mettre à jour les exigences
   const handlePasswordChange = (e) => {

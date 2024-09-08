@@ -37,32 +37,42 @@ const Home = ({ searchQuery }) => {
   useEffect(() => {
     const fetchAnnonces = async () => {
       try {
+        // Récupération des annonces
         const annoncesResponse = await fetch('http://localhost:3000/api/annonces');
         if (!annoncesResponse.ok) {
           throw new Error('Erreur lors de la récupération des annonces');
         }
         const annoncesData = await annoncesResponse.json();
         setAnnonces(annoncesData);
-    
-        const favoritesResponse = await fetch('http://localhost:3000/api/favoris');
+        
+        // Récupération des favoris avec authentification
+        const token = localStorage.getItem('token');
+        console.log('Token:', token)
+        const favoritesResponse = await fetch('http://localhost:3000/api/favoris', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         if (!favoritesResponse.ok) {
           throw new Error('Erreur lors de la récupération des favoris');
         }
         const favoritesData = await favoritesResponse.json();
         setFavorites(favoritesData);
-    
+   
       } catch (error) {
         console.error('Erreur lors de la récupération des données:', error);
         // Gérez l'erreur ici, par exemple en affichant un message d'erreur
+      } finally {
         setIsLoading(false); // Assurez-vous de désactiver le chargement même en cas d'erreur
       }
     };
     
     fetchAnnonces();
-
+  
     setQuery(searchQuery); // Mettre à jour la requête de recherche si nécessaire
-
+  
   }, [searchQuery]);
+  
 
   // Gestionnaire de clic pour afficher les détails d'une annonce
   const handleDetailClick = (annonce) => {

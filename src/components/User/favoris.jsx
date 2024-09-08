@@ -12,27 +12,25 @@ const Favoris = ({searchQuery}) => {
   const [itemsPerPage] = useState(8);
   const [filteredFavorites, setFilteredFavorites] = useState([]);
 
-  // Effet pour charger les favoris depuis le localStorage et écouter les changements de stockage
+
+  // Effet pour charger les favoris depuis l'API
   useEffect(() => {
-    const fetchFavorites = () => {
-      const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
-      setFavorites(savedFavorites);
+    const fetchFavorites = async () => {
+      try {
+        const response = await fetch(' http://localhost:3000/api/favoris'); // Remplacez par l'URL de votre API
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des favoris');
+        }
+        const data = await response.json();
+        setFavorites(data);
+      } catch (error) {
+        console.error('Erreur:', error);
+      }
     };
 
     fetchFavorites();
-
-    // Met à jour les favoris lorsque le localStorage change
-    const handleStorageChange = () => {
-      fetchFavorites();
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-
-    // Nettoyage de l'écouteur d'événement lors du démontage du composant
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
   }, []);
+
 
   // Effet pour filtrer et trier les favoris en fonction de la recherche et des options de tri
   useEffect(() => {

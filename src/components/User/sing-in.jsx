@@ -45,7 +45,7 @@ const Singin = ({ updateProfile }) => {
   
       if (response.ok) { // Si la réponse est OK, c'est-à-dire que la connexion a réussi
         // Stocker le token et les informations de l'utilisateur dans le localStorage
-        localStorage.setItem('authToken', data.token); // Utilisation de 'authToken' pour stocker le token
+        localStorage.setItem('token', data.token); // Utilisation de 'authToken' pour stocker le token
         localStorage.setItem('user', JSON.stringify(data.user)); // Supposons que l'API renvoie un objet utilisateur
   
         // Mise à jour du profil utilisateur via la fonction passée en props
@@ -55,7 +55,7 @@ const Singin = ({ updateProfile }) => {
         setPopupVisible(true); 
         setTimeout(() => {
           setPopupVisible(false); 
-          navigate("/"); 
+          navigate("/User/profile"); 
         }, 2000); 
       } else {
         // Afficher un message d'erreur si la réponse n'est pas OK

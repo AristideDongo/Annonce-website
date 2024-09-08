@@ -30,9 +30,9 @@ const navigate = useNavigate(); // Hook pour naviguer entre les pages
  
    useEffect(() => {
      // Vérifiez l'état de connexion lors du chargement du composant
-     const token = localStorage.getItem('authToken');
+     const token = localStorage.getItem('token');
      setIsUserLoggedIn(!!token); // Vérifie si le token existe pour définir l'état de connexion
-   }, [localStorage.getItem('authToken')]);
+   }, [localStorage.getItem('token')]);
  
    // Fonction pour mettre à jour la recherche
    const handleChange = (e) => {
@@ -60,7 +60,7 @@ const navigate = useNavigate(); // Hook pour naviguer entre les pages
  
    // Fonction pour se déconnecter
    const handleLogout = () => {
-    localStorage.removeItem('authToken'); // Supprime le token de localStorage
+    localStorage.removeItem('token'); // Supprime le token de localStorage
     setIsUserLoggedIn(false);
     setIsLogoutPopupOpen(false);
     window.location.reload(); // Recharge la page
