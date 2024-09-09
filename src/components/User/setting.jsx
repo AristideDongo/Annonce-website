@@ -71,10 +71,12 @@ const Setting = ({ profile={}, updateProfile }) => {
   // Mise à jour des paramètres utilisateur
   const updateUserSettings = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/settings/update', {
-        method: 'POST',
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:3000/api/settings', {
+        method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${'token'}`
         },
         body: JSON.stringify(userInfo)
       });
@@ -93,10 +95,12 @@ const Setting = ({ profile={}, updateProfile }) => {
   // Mise à jour du mot de passe
   const updatePassword = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/settings/update', {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:3000/api/settings', {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${'token'}`
         },
         body: JSON.stringify(password)
       });
@@ -113,10 +117,12 @@ const Setting = ({ profile={}, updateProfile }) => {
   // Mise à jour des préférences de notification
   const updateNotificationPreferences = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/settings/notifications', {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:3000/api/settings', {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${'token'}`
         },
         body: JSON.stringify(notifications)
       });

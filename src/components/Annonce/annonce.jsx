@@ -155,7 +155,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
   
       try {
         // Assurez-vous que le token est inclus dans les en-têtes
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem('token');
         console.log(token) // Remplacez par la manière dont vous stockez le token
   
         await fetch('http://localhost:3000/api/annonces', {
