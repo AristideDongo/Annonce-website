@@ -12,7 +12,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
     name: profile.name,
     email: profile.email,
     phone: profile.phone,
-    adress: profile.address
+    location: profile.location
   });
   const [selectedAnnonces, setSelectedAnnonces] = useState([]);   // État pour les annonces sélectionnées pour suppression
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);   // État pour afficher la confirmation de suppression
@@ -87,22 +87,35 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
   };
 
   // Fonction pour confirmer la modification de l'annonce
-  const handleConfirmEdit = () => {
+  const handleConfirmEdit = async () => {
     if (validateForm() && editAnnonce) {
       const updatedAnnonce = {
         ...editAnnonce,
         ...formData,
       };
-      updateAnnonce(updatedAnnonce);
   
-      // Mettre à jour le localStorage avec l'annonce modifiée
-      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-      const updatedFavorites = favorites.map(fav => fav.id === updatedAnnonce.id ? updatedAnnonce : fav);
-      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      try {
+        await fetch(`http://localhost:3000/api/annonces/getId/:id`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedAnnonce),
+        });
+        
+        // Mise à jour locale après succès
+        updateAnnonce(updatedAnnonce);
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const updatedFavorites = favorites.map(fav => fav.id === updatedAnnonce.id ? updatedAnnonce : fav);
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      } catch (error) {
+        console.error('Erreur lors de la mise à jour de l\'annonce:', error);
+      }
   
       handleCloseEditPopup();
     }
   };
+  
 
   // Fonction pour naviguer vers les détails de l'annonce
   const handleDetailClick = (annonce) => {
@@ -183,9 +196,25 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
   };
 
   // Fonction pour gérer le téléchargement de la photo de profil
-  const handlePhotoUpload = () => {
-    console.log('Profile photo uploaded:', profilePhoto);
+  const handlePhotoUpload = async () => {
+    if (!profilePhoto) return;
+  
+    const formData = new FormData();
+    formData.append('photo', profilePhoto);
+  
+    try {
+      const response = await fetch('http://localhost:3000/api/upload-photo', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+      setPhotoURL(data.photoURL);
+      updateProfile({ photoURL: data.photoURL });
+    } catch (error) {
+      console.error('Erreur lors du téléchargement de la photo:', error);
+    }
   };
+  
 
   // Fonction pour sélectionner ou désélectionner une annonce
   const handleSelectAnnonce = (annonceId) => {
@@ -207,15 +236,23 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
   };
 
   // Fonction pour confirmer la suppression des annonces sélectionnées
-  const handleConfirmDelete = () => {
-    console.log("Annonces sélectionnées pour suppression:", selectedAnnonces);
-    selectedAnnonces.forEach(id => {
-      console.log("Suppression de l'annonce avec l'id:", id);
-      deleteAnnonce(id);
-    });
-    setSelectedAnnonces([]); // Réinitialiser les annonces sélectionnées après suppression
+  const handleConfirmDelete = async () => {
+    try {
+      await Promise.all(selectedAnnonces.map(id => 
+        fetch(`http://localhost:3000/api/annonces/delete/:id`, {
+          method: 'DELETE',
+        })
+      ));
+      selectedAnnonces.forEach(id => {
+        deleteAnnonce(id);
+      });
+      setSelectedAnnonces([]);
+    } catch (error) {
+      console.error('Erreur lors de la suppression des annonces:', error);
+    }
     setShowDeleteConfirmation(false);
   };
+  
 
   // Fonction pour gérer les changements dans le formulaire de modification d'annonce
   const handleInputChange = (event) => {
@@ -248,7 +285,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
             <h2 className="text-xl sm:text-4xl font-bold text-gray-800">{userInfo.name}</h2>
             <p className="text-lg text-gray-600">{userInfo.phone}</p>
             <p className="text-lg text-gray-600">{userInfo.email}</p>
-            <p className="text-lg text-gray-600">{userInfo.adress}</p>
+            <p className="text-lg text-gray-600">{userInfo.location}</p>
           </div>
         </div>
         {showPhotoPopup && (

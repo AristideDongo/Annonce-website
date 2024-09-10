@@ -14,7 +14,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
     price: '',
     phone: '',
     whatsapp: '',
-    location: null
+    location: ''
   });
 
   // Code du pays pour Côte d'Ivoire
@@ -132,9 +132,9 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
       newErrors.phone = 'Le numéro de téléphone doit comporter 10 chiffres';
     }
 
-    if (!formData.location) {
-      newErrors.location = 'La localisation est requise';
-    }
+    if (!formData.location || !locationOptions.some(option => option.value === formData.location.value)) {
+      newErrors.location = 'La localisation sélectionnée n\'est pas valide';
+    }    
 
     return newErrors;
   };
@@ -158,7 +158,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
         const token = localStorage.getItem('token');
         console.log(token) // Remplacez par la manière dont vous stockez le token
   
-        await fetch('http://localhost:3000/api/annonces', {
+        await fetch('http://localhost:3000/api/annonces/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -168,7 +168,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
         });
   
         // Récupérer les annonces mises à jour depuis l'API
-        const response = await fetch('http://localhost:3000/api/annonces');
+        const response = await fetch('http://localhost:3000/api/annonces/getAll');
         if (!response.ok) {
           throw new Error('Erreur lors de la récupération des annonces');
         }

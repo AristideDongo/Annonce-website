@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClock,
   faSortAmountDown,
@@ -8,26 +8,25 @@ import {
   faDollarSign,
   faFilter,
   faHeart,
-} from '@fortawesome/free-solid-svg-icons';
-import { FadeLoader } from 'react-spinners';
-import { FaMapMarkerAlt } from 'react-icons/fa';
-import { useOutsideClick } from '../Navbar/navbarhookperso';
-import { locationOptions } from '../locations/locations';
-
+} from "@fortawesome/free-solid-svg-icons";
+import { FadeLoader } from "react-spinners";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { useOutsideClick } from "../Navbar/navbarhookperso";
+import { locationOptions } from "../locations/locations";
 
 const Home = ({ searchQuery }) => {
   const navigate = useNavigate(); // Pour la navigation entre les pages
 
   // États locaux
-  const [sortOrder, setSortOrder] = useState('recent'); // Ordre de tri des annonces
-  const [selectedCategory, setSelectedCategory] = useState(''); // Catégorie sélectionnée
+  const [sortOrder, setSortOrder] = useState("recent"); // Ordre de tri des annonces
+  const [selectedCategory, setSelectedCategory] = useState(""); // Catégorie sélectionnée
   const [isLoading, setIsLoading] = useState(true); // État de chargement
   const [query, setQuery] = useState(searchQuery); // Requête de recherche
   const [isFilterVisible, setIsFilterVisible] = useState(false); // Affichage du menu de filtrage
   const [currentPage, setCurrentPage] = useState(1); // Page courante pour la pagination
   const [itemsPerPage] = useState(88); // Nombre d'annonces par page
   const [favorites, setFavorites] = useState([]); // Liste des annonces favorites
-  const [selectedCity, setSelectedCity] = useState(''); // Ville sélectionnée
+  const [selectedCity, setSelectedCity] = useState(""); // Ville sélectionnée
   const [annonces, setAnnonces] = useState([]); // Liste des annonces
 
   // Référence pour le composant de filtrage
@@ -38,45 +37,50 @@ const Home = ({ searchQuery }) => {
     const fetchAnnonces = async () => {
       try {
         // Récupération des annonces
-        const annoncesResponse = await fetch('http://localhost:3000/api/annonces');
+        const annoncesResponse = await fetch(
+          "http://localhost:3000/api/annonces/getAll",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (!annoncesResponse.ok) {
-          throw new Error('Erreur lors de la récupération des annonces');
+          throw new Error("Erreur lors de la récupération des annonces");
         }
         const annoncesData = await annoncesResponse.json();
         setAnnonces(annoncesData);
-        
+
         // Récupération des favoris avec authentification
-        const token = localStorage.getItem('token');
-        console.log('Token:', token)
-        const favoritesResponse = await fetch('http://localhost:3000/api/favoris', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        if (!favoritesResponse.ok) {
-          throw new Error('Erreur lors de la récupération des favoris');
-        }
-        const favoritesData = await favoritesResponse.json();
-        setFavorites(favoritesData);
-   
+        // const token = localStorage.getItem('token');
+        // const favoritesResponse = await fetch('http://localhost:3000/api/favoris', {
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     'Authorization': `Bearer ${token}`
+        //   }
+        // });
+        // if (!favoritesResponse.ok) {
+        //   throw new Error('Erreur lors de la récupération des favoris');
+        // }
+        // const favoritesData = await favoritesResponse.json();
+        // setFavorites(favoritesData);
       } catch (error) {
-        console.error('Erreur lors de la récupération des données:', error);
+        console.error("Erreur lors de la récupération des données:", error);
         // Gérez l'erreur ici, par exemple en affichant un message d'erreur
       } finally {
         setIsLoading(false); // Assurez-vous de désactiver le chargement même en cas d'erreur
       }
     };
-    
+
     fetchAnnonces();
-  
+
     setQuery(searchQuery); // Mettre à jour la requête de recherche si nécessaire
-  
   }, [searchQuery]);
-  
 
   // Gestionnaire de clic pour afficher les détails d'une annonce
   const handleDetailClick = (annonce) => {
-    navigate('Detail/detail', { state: annonce });
+    navigate("Detail/detail", { state: annonce });
   };
 
   // Gestionnaire de changement d'ordre de tri
@@ -102,21 +106,15 @@ const Home = ({ searchQuery }) => {
   // Fonction pour tronquer le texte trop long
   const truncateText = (text, maxLength) => {
     if (text.length > maxLength) {
-      return text.slice(0, maxLength) + '...';
+      return text.slice(0, maxLength) + "...";
     }
     return text;
   };
 
   // Fonction pour calculer le temps écoulé depuis la publication d'une annonce
-  const getElapsedTime = (timestamp) => {
-    const annonceTime = new Date(timestamp * 1000); // Convertir le timestamp en objet Date
+  const getElapsedTime = (timestampInMilliseconds) => {
+    const annonceTime = new Date(timestampInMilliseconds);
     const now = new Date();
-  
-    if (isNaN(annonceTime.getTime())) {
-      console.error('Invalid timestamp:', timestamp);
-      return 'Invalid date';
-    }
-  
     const elapsedTimeInMinutes = Math.floor((now - annonceTime) / 60000); // Calculer le temps écoulé en minutes
   
     // Déterminer le format du temps écoulé
@@ -125,7 +123,7 @@ const Home = ({ searchQuery }) => {
     const days = Math.floor((elapsedTimeInMinutes % 43800) / 1440); // Nombre de minutes dans un jour
     const hours = Math.floor((elapsedTimeInMinutes % 1440) / 60); // Nombre de minutes dans une heure
     const minutes = elapsedTimeInMinutes % 60; // Minutes restantes
-
+  
     if (years > 0) {
       return `${years} année${years > 1 ? 's' : ''} ago`; // Afficher en années
     } else if (months > 0) {
@@ -138,35 +136,57 @@ const Home = ({ searchQuery }) => {
       return `${minutes} minute${minutes > 1 ? 's' : ''} ago`; // Afficher en minutes
     }
   };
+  
 
   // Gestionnaire de clic pour ajouter/supprimer une annonce des favoris
-  const handleFavoriteClick = (annonce) => {
-    const isFavorite = favorites.some(fav => fav.id === annonce.id);
-    const updatedFavorites = isFavorite
-      ? favorites.filter(fav => fav.id !== annonce.id)
-      : [...favorites, annonce];
+  const handleFavoriteClick = async (annonce) => {
+    const isFavorite = favorites.some((fav) => fav.id === annonce.id);
 
-    setFavorites(updatedFavorites);
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+    try {
+      // Appel à l'API pour ajouter ou retirer des favoris
+      const response = await fetch(`localhost:3000/api/favoris`, {
+        method: isFavorite ? "DELETE" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ annonceId: annonce.id }),
+      });
+
+      if (response.ok) {
+        // Mettre à jour la liste des favoris
+        const updatedFavorites = isFavorite
+          ? favorites.filter((fav) => fav.id !== annonce.id)
+          : [...favorites, annonce];
+
+        setFavorites(updatedFavorites);
+      } else {
+        console.error("Erreur lors de la mise à jour des favoris");
+      }
+    } catch (error) {
+      console.error("Erreur réseau", error);
+    }
   };
 
   // Filtrer les annonces en fonction de la requête de recherche et des filtres sélectionnés
-  const filteredAnnonces = (Array.isArray(annonces) ? annonces : []).filter((annonce) =>
-    annonce.title.toLowerCase().includes(query.toLowerCase()) &&
-    (!selectedCity || annonce.location.value === selectedCity)
+  const filteredAnnonces = (Array.isArray(annonces) ? annonces : []).filter(
+    (annonce) =>
+      annonce.title.toLowerCase().includes(query.toLowerCase()) &&
+      (!selectedCity || annonce.location.value === selectedCity)
   );
 
   // Trier les annonces filtrées en fonction de l'ordre de tri sélectionné
   const sortedAnnonces = filteredAnnonces
-    .filter((annonce) => !selectedCategory || annonce.category === selectedCategory)
+    .filter(
+      (annonce) => !selectedCategory || annonce.category === selectedCategory
+    )
     .sort((a, b) => {
-      if (sortOrder === 'recent') {
+      if (sortOrder === "recent") {
         return b.timestamp - a.timestamp;
-      } else if (sortOrder === 'oldest') {
+      } else if (sortOrder === "oldest") {
         return a.timestamp - b.timestamp;
-      } else if (sortOrder === 'priceHigh') {
+      } else if (sortOrder === "priceHigh") {
         return b.price - a.price;
-      } else if (sortOrder === 'priceLow') {
+      } else if (sortOrder === "priceLow") {
         return a.price - b.price;
       }
       return 0;
@@ -175,7 +195,10 @@ const Home = ({ searchQuery }) => {
   // Calcul du nombre total de pages pour la pagination
   const totalPages = Math.ceil(sortedAnnonces.length / itemsPerPage);
   // Sélection des annonces à afficher sur la page courante
-  const currentItems = sortedAnnonces.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const currentItems = sortedAnnonces.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   // Gestionnaire de changement de page
   const handlePageChange = (page) => {
@@ -185,7 +208,9 @@ const Home = ({ searchQuery }) => {
   return (
     <div className="min-h-screen bg-gray-200 p-6 relative font-custom">
       <div className="container mx-auto">
-        <h1 className="text-4xl font-extrabold text-center mt-16 mb-8 capitalize text-[#333333]">Annonce Récente</h1>
+        <h1 className="text-4xl font-extrabold text-center mt-16 mb-8 capitalize text-[#333333]">
+          Annonce Récente
+        </h1>
         <button
           ref={categoriesRef}
           className="absolute top-16 left-0 ml-4 bg-black text-white p-3 rounded-b-lg shadow-lg flex items-center"
@@ -198,34 +223,36 @@ const Home = ({ searchQuery }) => {
         <div
           ref={categoriesRef}
           className={`absolute z-40 mt-32 top-16 left-0 bg-gray-300 p-6 rounded-lg shadow-lg flex flex-col space-y-4 transition-transform duration-300 ${
-            isFilterVisible ? 'translate-x-0' : '-translate-x-full'
+            isFilterVisible ? "translate-x-0" : "-translate-x-full"
           }`}
-          style={{ transform: isFilterVisible ? 'translateX(0)' : 'translateX(-100%)' }}
+          style={{
+            transform: isFilterVisible ? "translateX(0)" : "translateX(-100%)",
+          }}
         >
           <button
             className="bg-white text-blue-500 w-40 px-4 py-2 rounded-lg hover:bg-gray-300 flex items-center justify-center transition-colors duration-300"
-            onClick={() => handleSortChange('recent')}
+            onClick={() => handleSortChange("recent")}
           >
             <FontAwesomeIcon icon={faClock} className="mr-2" />
             Plus Récente
           </button>
           <button
             className="bg-white text-blue-500 w-40 px-4 py-2 rounded-lg hover:bg-gray-300 flex items-center justify-center transition-colors duration-300"
-            onClick={() => handleSortChange('oldest')}
+            onClick={() => handleSortChange("oldest")}
           >
             <FontAwesomeIcon icon={faSortAmountUp} className="mr-2" />
             Plus Ancienne
           </button>
           <button
             className="bg-white text-blue-500 w-40 px-4 py-2 rounded-lg hover:bg-gray-300 flex items-center justify-center transition-colors duration-300"
-            onClick={() => handleSortChange('priceHigh')}
+            onClick={() => handleSortChange("priceHigh")}
           >
             <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
             Prix Haut
           </button>
           <button
             className="bg-white text-blue-500 w-40 px-4 py-2 rounded-lg hover:bg-gray-300 flex items-center justify-center transition-colors duration-300"
-            onClick={() => handleSortChange('priceLow')}
+            onClick={() => handleSortChange("priceLow")}
           >
             <FontAwesomeIcon icon={faSortAmountDown} className="mr-2" />
             Prix Bas
@@ -246,17 +273,17 @@ const Home = ({ searchQuery }) => {
             <option value="autres">Autres</option>
           </select>
           <select
-    className="bg-white text-blue-500 w-40 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300"
-    value={selectedCity}
-    onChange={handleCityChange}
-  >
-    <option value="">Villes</option>
-    {locationOptions.map((city) => (
-      <option key={city.value} value={city.value}>
-        {city.label}
-      </option>
-    ))}
-  </select>
+            className="bg-white text-blue-500 w-40 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300"
+            value={selectedCity}
+            onChange={handleCityChange}
+          >
+            <option value="">Villes</option>
+            {locationOptions.map((city) => (
+              <option key={city.value} value={city.value}>
+                {city.label}
+              </option>
+            ))}
+          </select>
         </div>
 
         {isLoading ? (
@@ -282,9 +309,14 @@ const Home = ({ searchQuery }) => {
                           loading="lazy"
                         />
                         <div className="absolute bottom-2 left-2 bg-black bg-opacity-75 rounded-full p-1">
-                          <FontAwesomeIcon icon={faClock} className="text-gray-500" />
-                          <span className="text-white ml-1 text-xs">{getElapsedTime(annonce.timestamp)}</span>
-                          </div>
+                          <FontAwesomeIcon
+                            icon={faClock}
+                            className="text-gray-500"
+                          />
+                          <span className="text-white ml-1 text-xs">
+                            {getElapsedTime(annonce.timestamps)}
+                          </span>
+                        </div>
                       </div>
                     ) : (
                       <div className="w-full h-40 bg-gray-200 rounded-t-lg flex items-center justify-center">
@@ -292,23 +324,33 @@ const Home = ({ searchQuery }) => {
                       </div>
                     )}
                     <div className="p-4">
-                    <h3 className="text-lg break-words cursor-pointer font-semibold text-blue-600 mb-2 hover:text-orange-600" 
-                    onClick={() => handleDetailClick(annonce)}>{truncateText(annonce.title, 50)}</h3>
-                      <p className="text-black mt-auto blue-500 text-xl font-semibold">{annonce.price} FCFA</p>
+                      <h3
+                        className="text-lg break-words cursor-pointer font-semibold text-blue-600 mb-2 hover:text-orange-600"
+                        onClick={() => handleDetailClick(annonce)}
+                      >
+                        {truncateText(annonce.title, 50)}
+                      </h3>
+                      <p className="text-black mt-auto blue-500 text-xl font-semibold">
+                        {annonce.price} FCFA
+                      </p>
                       <div className="flex items-center space-x-2 mt-2">
-                          <FaMapMarkerAlt className="text-gray-500" />
-                          <span className="text-gray-700 font-medium">
-                            {annonce.location && annonce.location.label ? (
-                              annonce.location.label
-                            ) : (
-                          <span className="text-red-500">Localisation non définie</span>
-                            )}
-                          </span>
+                        <FaMapMarkerAlt className="text-gray-500" />
+                        <span className="text-gray-700 font-medium">
+                          {annonce.location && annonce.location.label ? (
+                            annonce.location.label
+                          ) : (
+                            <span className="text-red-500">
+                              Localisation non définie
+                            </span>
+                          )}
+                        </span>
                       </div>
                     </div>
                     <div
                       className={`absolute top-2 right-2 p-2 rounded-full bg-white bg-opacity-75 cursor-pointer transition-transform duration-300 ${
-                        favorites.some(fav => fav.id === annonce.id) ? 'text-red-500' : 'text-gray-500'
+                        favorites.some((fav) => fav.id === annonce.id)
+                          ? "text-red-500"
+                          : "text-gray-500"
                       }`}
                       onClick={() => handleFavoriteClick(annonce)}
                     >
@@ -317,7 +359,9 @@ const Home = ({ searchQuery }) => {
                   </div>
                 ))
               ) : (
-                <p className="text-center text-gray-500 text-2xl w-full mt-40">Aucune annonce disponible.</p>
+                <p className="text-center text-gray-500 text-2xl w-full mt-40">
+                  Aucune annonce disponible.
+                </p>
               )}
             </div>
 
@@ -327,7 +371,11 @@ const Home = ({ searchQuery }) => {
                   {[...Array(totalPages).keys()].map((page) => (
                     <button
                       key={page}
-                      className={`px-4 py-2 rounded-lg border ${currentPage === page + 1 ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'} transition-colors duration-300`}
+                      className={`px-4 py-2 rounded-lg border ${
+                        currentPage === page + 1
+                          ? "bg-blue-500 text-white"
+                          : "bg-white text-blue-500"
+                      } transition-colors duration-300`}
                       onClick={() => handlePageChange(page + 1)}
                     >
                       {page + 1}

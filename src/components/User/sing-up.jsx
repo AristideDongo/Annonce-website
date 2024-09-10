@@ -118,6 +118,8 @@ const Singup = ({ profile, updateProfile }) => {
             phone: `${selectedCountryCode}${phoneNumber}`,
             birthDate: birthDate,
             location: location,
+            isPolicyAccepted: isPolicyAccepted,
+            areTermsAccepted: areTermsAccepted
           }),
         });
   
