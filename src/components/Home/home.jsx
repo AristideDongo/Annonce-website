@@ -52,19 +52,6 @@ const Home = ({ searchQuery }) => {
         const annoncesData = await annoncesResponse.json();
         setAnnonces(annoncesData);
 
-        // Récupération des favoris avec authentification
-        // const token = localStorage.getItem('token');
-        // const favoritesResponse = await fetch('http://localhost:3000/api/favoris', {
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //     'Authorization': `Bearer ${token}`
-        //   }
-        // });
-        // if (!favoritesResponse.ok) {
-        //   throw new Error('Erreur lors de la récupération des favoris');
-        // }
-        // const favoritesData = await favoritesResponse.json();
-        // setFavorites(favoritesData);
       } catch (error) {
         console.error("Erreur lors de la récupération des données:", error);
         // Gérez l'erreur ici, par exemple en affichant un message d'erreur
@@ -302,7 +289,7 @@ const Home = ({ searchQuery }) => {
                     {annonce.photos && annonce.photos[0] ? (
                       <div className="relative">
                         <img
-                          src={annonce.photos[0]}
+                          src="http://localhost:3000/uploads/annonce/photos-1725983879493-712254103.jpg"
                           alt="Annonce"
                           onClick={() => handleDetailClick(annonce)}
                           className="cursor-pointer w-full h-48 object-cover object-center rounded-t-lg"

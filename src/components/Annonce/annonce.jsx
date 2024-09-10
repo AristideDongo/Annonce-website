@@ -141,58 +141,62 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
 
   // Fonction pour gérer la soumission du formulaire
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formErrors = validateForm();
-    if (Object.keys(formErrors).length > 0) {
-      setErrors(formErrors);
-    } else {
-      const newAnnonce = {
-        ...formData,
-        photos: photoPreviews,
-        location: formData.location,
-        timestamp: Math.floor(Date.now() / 1000) // Ajout du timestamp en secondes
-      };
+  e.preventDefault();
   
-      try {
-        // Assurez-vous que le token est inclus dans les en-têtes
-        const token = localStorage.getItem('token');
-        console.log(token) // Remplacez par la manière dont vous stockez le token
-  
-        await fetch('http://localhost:3000/api/annonces/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Inclure le token dans l'en-tête Authorization
-          },
-          body: JSON.stringify(newAnnonce)
-        });
-  
-        // Récupérer les annonces mises à jour depuis l'API
-        const response = await fetch('http://localhost:3000/api/annonces/getAll');
-        if (!response.ok) {
-          throw new Error('Erreur lors de la récupération des annonces');
-        }
-        const updatedAnnonces = await response.json();
-  
-        // Mettre à jour l'état des annonces
-        setAnnonces(updatedAnnonces);
-        
-        // Afficher le popup de succès
-        setShowPopup(true);
-        setTimeout(() => {
-          setShowPopup(false);
-          navigate('/');
-        }, 2000);
-  
-      } catch (error) {
-        console.error('Erreur lors de l\'envoi de l\'annonce:', error);
-        // Gérez l'erreur ici, comme afficher un message d'erreur
-      }
+  // Valider le formulaire
+  const formErrors = validateForm();
+  if (Object.keys(formErrors).length > 0) {
+    setErrors(formErrors);
+    return;
+  }
+
+  // Créer un objet FormData pour l'envoi des données
+  const formDataToSend = new FormData();
+  formDataToSend.append('title', formData.title);
+  formDataToSend.append('description', formData.description);
+  formDataToSend.append('category', formData.category);
+  formDataToSend.append('price', formData.price);
+  formDataToSend.append('phone', formData.phone);
+  formDataToSend.append('whatsapp', formData.whatsapp);
+  formDataToSend.append('location[value]', formData.location.value); // Envoyer la valeur de la localisation
+  formDataToSend.append('location[label]', formData.location.label); // Envoyer le label de la localisation
+
+  // Ajouter les photos au FormData
+  formData.photos.forEach((photo, index) => {
+    if (photo) {
+      formDataToSend.append(`photos`, photo); // Utiliser le fichier réel
     }
-  };
-  
-  
-  
+  });
+
+  try {
+    const token = localStorage.getItem('token');
+
+    // Effectuer la requête avec FormData
+    const response = await fetch('http://localhost:3000/api/annonces/create', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formDataToSend // Envoyer les données sous forme de FormData
+    });
+
+    if (!response.ok) {
+      throw new Error('Erreur lors de la soumission de l\'annonce');
+    }
+
+    const updatedAnnonces = await response.json();
+    setAnnonces(updatedAnnonces);
+
+    // Afficher le popup de succès
+    setShowPopup(true);
+    setTimeout(() => {
+      setShowPopup(false);
+      navigate('/');
+    }, 2000);
+  } catch (error) {
+    console.error('Erreur lors de l\'envoi de l\'annonce:', error);
+  }
+};
 
   return (
     <>  
@@ -271,6 +275,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
                       )}
                       <input
                         type="file"
+                        name="photos"
                         onChange={(e) => handlePhotoChange(index, e)}
                         className="absolute inset-0 opacity-0 cursor-pointer"
                       />

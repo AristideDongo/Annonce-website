@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Home from "./Home/home";
 import Profile from "./User/profile";
 import Setting from "./User/setting";
@@ -56,21 +56,26 @@ const Rout = () => {
   };
   
 
-  const [profile, setProfile] = useState({
-    photoURL: 'https://placehold.co/150x150',
-    name: '',
-    phone: '',
-    email: '',
-    location: ''
+  const [profile, setProfile] = useState(() => {
+    const savedProfile = localStorage.getItem('profile');
+    return savedProfile ? JSON.parse(savedProfile) : {
+      photoURL: 'https://placehold.co/150x150',
+      name: 'Nom de l\'utilisateur',
+      phone: '+225 20 20 20 20 20',
+      email: 'Email de l\'utilisateur',
+      location: 'Localisation de l\'utilisateur',
+    };
   });
 
+  useEffect(() => {
+    // Met à jour le localStorage lorsque le profil change
+    localStorage.setItem('profile', JSON.stringify(profile));
+  }, [profile]);
+
   const updateProfile = (newProfile) => {
-    setProfile((prevProfile) => {
-      const updatedProfile = { ...prevProfile, ...newProfile };
-      localStorage.setItem('profile', JSON.stringify(updatedProfile));
-      return updatedProfile;
-    });
+    setProfile((prevProfile) => ({ ...prevProfile, ...newProfile }));
   };
+
   
 
   return (

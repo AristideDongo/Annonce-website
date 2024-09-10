@@ -61,6 +61,8 @@ const navigate = useNavigate(); // Hook pour naviguer entre les pages
    // Fonction pour se déconnecter
    const handleLogout = () => {
     localStorage.removeItem('token'); // Supprime le token de localStorage
+    localStorage.removeItem('user');
+    localStorage.removeItem('profile');
     setIsUserLoggedIn(false);
     setIsLogoutPopupOpen(false);
     window.location.reload(); // Recharge la page
