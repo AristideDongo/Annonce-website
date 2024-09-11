@@ -34,18 +34,43 @@ const Autres = ({ searchQuery }) => {
   };
 
   useEffect(() => {
-    setLoading(true);
-    
-    // Charger les annonces depuis localStorage
-    const storedAnnonces = JSON.parse(localStorage.getItem('annonces')) || [];
-    setAnnonces(Array.isArray(storedAnnonces) ? storedAnnonces : []);
-    
-    // // Charger les favoris depuis localStorage
-    // const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    // setFavorites(savedFavorites);
-    
+    const fetchAnnonces = async () => {
+      try {
+        // Récupération des annonces
+        const annoncesResponse = await fetch(
+          "http://localhost:3000/api/annonces/getAll",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!annoncesResponse.ok) {
+          throw new Error("Erreur lors de la récupération des annonces");
+        }
+        const annoncesData = await annoncesResponse.json();
+        setAnnonces(annoncesData);
+
+        console.log(annoncesData);
+
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données:", error);
+        // Gérez l'erreur ici, par exemple en affichant un message d'erreur
+      } finally {
+        setLoading(false); // Assurez-vous de désactiver le chargement même en cas d'erreur
+      }
+    };
+
+    fetchAnnonces();
+
+  }, []);
+
+  useEffect(() => {
+    if (annonces.length === 0) return;
+
     // Filtrer les annonces par catégorie et recherche
-    const filteredByCategory = storedAnnonces.filter(annonce => annonce.category === 'autres');
+    const filteredByCategory = annonces.filter(annonce => annonce.category === 'autres');
     const filteredBySearch = filteredByCategory.filter(annonce =>
       annonce.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -54,8 +79,7 @@ const Autres = ({ searchQuery }) => {
     const sorted = sortAnnonces(filteredBySearch, sortOption);
     
     setFilteredAnnonces(sorted);
-    setLoading(false);
-  }, [searchQuery, sortOption]);
+  }, [annonces, searchQuery, sortOption]);
 
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
@@ -68,35 +92,29 @@ const Autres = ({ searchQuery }) => {
     return text;
   };
 
-  const getElapsedTime = (timestamp) => {
-    const annonceTime = new Date(timestamp * 1000); // Convertir le timestamp en objet Date
+  const getElapsedTime = (timestampInMilliseconds) => {
+    const annonceTime = new Date(timestampInMilliseconds);
     const now = new Date();
-  
-    if (isNaN(annonceTime.getTime())) {
-      console.error('Invalid timestamp:', timestamp);
-      return 'Invalid date';
-    }
-  
     const elapsedTimeInMinutes = Math.floor((now - annonceTime) / 60000); // Calculer le temps écoulé en minutes
   
-     // Déterminer le format du temps écoulé
-  const years = Math.floor(elapsedTimeInMinutes / 525600); // Nombre de minutes dans une année (approximation)
-  const months = Math.floor((elapsedTimeInMinutes % 525600) / 43800); // Nombre de minutes dans un mois (approximation)
-  const days = Math.floor((elapsedTimeInMinutes % 43800) / 1440); // Nombre de minutes dans un jour
-  const hours = Math.floor((elapsedTimeInMinutes % 1440) / 60); // Nombre de minutes dans une heure
-  const minutes = elapsedTimeInMinutes % 60; // Minutes restantes
-
-  if (years > 0) {
-    return `${years} année${years > 1 ? 's' : ''} ago`; // Afficher en années
-  } else if (months > 0) {
-    return `${months} mois ago`; // Afficher en mois
-  } else if (days > 0) {
-    return `${days} jour${days > 1 ? 's' : ''} ago`; // Afficher en jours
-  } else if (hours > 0) {
-    return `${hours} heure${hours > 1 ? 's' : ''} ago`; // Afficher en heures
-  } else {
-    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`; // Afficher en minutes
-  }
+    // Déterminer le format du temps écoulé
+    const years = Math.floor(elapsedTimeInMinutes / 525600); // Nombre de minutes dans une année (approximation)
+    const months = Math.floor((elapsedTimeInMinutes % 525600) / 43800); // Nombre de minutes dans un mois (approximation)
+    const days = Math.floor((elapsedTimeInMinutes % 43800) / 1440); // Nombre de minutes dans un jour
+    const hours = Math.floor((elapsedTimeInMinutes % 1440) / 60); // Nombre de minutes dans une heure
+    const minutes = elapsedTimeInMinutes % 60; // Minutes restantes
+  
+    if (years > 0) {
+      return `${years} année${years > 1 ? 's' : ''} ago`; // Afficher en années
+    } else if (months > 0) {
+      return `${months} mois ago`; // Afficher en mois
+    } else if (days > 0) {
+      return `${days} jour${days > 1 ? 's' : ''} ago`; // Afficher en jours
+    } else if (hours > 0) {
+      return `${hours} heure${hours > 1 ? 's' : ''} ago`; // Afficher en heures
+    } else {
+      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`; // Afficher en minutes
+    }
   };
 
   const totalPages = Math.ceil(filteredAnnonces.length / itemsPerPage);
@@ -140,7 +158,7 @@ const Autres = ({ searchQuery }) => {
                     {annonce.photos && annonce.photos[0] ? (
                       <div className="relative">
                         <img
-                          src={annonce.photos[0]}
+                          src={`http://localhost:3000/uploads/annonce/${annonce.photos[0]}`}
                           onClick={() => handleDetailClick(annonce)}
                           alt="Photo de l'annonce"
                           className="cursor-pointer w-full h-48 object-cover object-center rounded-t-lg"

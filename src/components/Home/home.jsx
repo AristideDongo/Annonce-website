@@ -32,7 +32,7 @@ const Home = ({ searchQuery }) => {
   // Référence pour le composant de filtrage
   const categoriesRef = useOutsideClick(() => setIsFilterVisible(false));
 
-  // Chargement des annonces et des favoris
+  // Chargement des annonces
   useEffect(() => {
     const fetchAnnonces = async () => {
       try {
