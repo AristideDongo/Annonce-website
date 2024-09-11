@@ -17,7 +17,7 @@ const Favoris = ({searchQuery}) => {
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const response = await fetch(' http://localhost:3000/api/favoris'); // Remplacez par l'URL de votre API
+        const response = await fetch(' http://localhost:3000/api/favoris/get'); // Remplacez par l'URL de votre API
         if (!response.ok) {
           throw new Error('Erreur lors de la récupération des favoris');
         }

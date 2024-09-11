@@ -21,7 +21,7 @@ const [showReportSuccess, setShowReportSuccess] = useState(false); // État pour
 const [reportReason, setReportReason] = useState(''); // État pour stocker la raison du signalement
 const [elapsedTime, setElapsedTime] = useState(''); // État pour calculer et afficher le temps écoulé depuis la publication de l'annonce
 const [isFavorite, setIsFavorite] = useState(false); // État pour suivre si l'annonce est marquée comme favorite ou non
-  
+ const [favorites, setFavorites] = useState([]);
  // Fonction pour passer à l'image suivante
  const handleNextImage = () => {
   setCurrentImageIndex((prevIndex) => (prevIndex + 1) % photos.length);
@@ -114,11 +114,12 @@ const handleFavoriteToggle = () => {
   setIsFavorite(!isCurrentlyFavorite);
 };
 
+
 // Calculer le temps écoulé depuis la création de l'annonce
 useEffect(() => {
   const calculateElapsedTime = () => {
     const now = Math.floor(Date.now() / 1000); // Temps actuel en secondes
-    const secondsElapsed = now - timestamp; // Temps écoulé en secondes
+    const secondsElapsed = now - Math.floor(timestamp / 1000); // Convertir le timestamp de millisecondes en secondes
 
     const minutes = Math.floor(secondsElapsed / 60); // Convertir en minutes
     const hours = Math.floor(minutes / 60); // Convertir en heures
@@ -142,6 +143,7 @@ useEffect(() => {
   calculateElapsedTime();
 }, [timestamp]);
 
+
   
   return (
     <div className="min-h-screen mt-16 font-custom bg-gray-200 p-4">
@@ -151,7 +153,7 @@ useEffect(() => {
           {photos && photos.length > 0 && (
             <div className="relative">
               <img 
-                src={photos[currentImageIndex]} 
+                src={`http://localhost:3000/uploads/annonce/${photos[currentImageIndex]}`}
                 alt="Annonce" 
                 className="w-full h-64 md:h-80 lg:h-96 object-contain rounded-lg mb-4" 
                 loading='lazy'
@@ -186,7 +188,7 @@ useEffect(() => {
             {photos.map((photo, index) => (
               <img 
                 key={index} 
-                src={photo} 
+                src={ `http://localhost:3000/uploads/annonce/${photo}`} 
                 alt={`Aperçu ${index}`} 
                 className={`w-20 h-20 object-cover rounded-lg cursor-pointer ${index === currentImageIndex ? 'border-4 border-blue-500' : 'border-2 border-gray-300'}`} 
                 onClick={() => handleImageClick(index)}

@@ -129,24 +129,24 @@ const Home = ({ searchQuery }) => {
 
   // Gestionnaire de clic pour ajouter/supprimer une annonce des favoris
   const handleFavoriteClick = async (annonce) => {
-    const isFavorite = favorites.some((fav) => fav.id === annonce.id);
-
+    const isFavorite = favorites.some((fav) => fav.uniqueId === annonce.uniqueId);
+    const token = localStorage.getItem("token");
+  
     try {
-      // Appel à l'API pour ajouter ou retirer des favoris
-      const response = await fetch(`http://localhost:3000/api/favoris`, {
+      const response = await fetch(`http://localhost:3000/api/favoris/${isFavorite ? "delete" : "add"}/${annonce.uniqueId}`, {
         method: isFavorite ? "DELETE" : "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify({ annonceId: annonce.id }),
+        body: JSON.stringify({ annonceId: annonce.uniqueId }),
       });
-
+  
       if (response.ok) {
-        // Mettre à jour la liste des favoris
         const updatedFavorites = isFavorite
-          ? favorites.filter((fav) => fav.id !== annonce.id)
+          ? favorites.filter((fav) => fav.uniqueId !== annonce.uniqueId)
           : [...favorites, annonce];
-
+  
         setFavorites(updatedFavorites);
       } else {
         console.error("Erreur lors de la mise à jour des favoris");
@@ -155,6 +155,7 @@ const Home = ({ searchQuery }) => {
       console.error("Erreur réseau", error);
     }
   };
+  
 
   // Filtrer les annonces en fonction de la requête de recherche et des filtres sélectionnés
   const filteredAnnonces = (Array.isArray(annonces) ? annonces : []).filter(
@@ -285,7 +286,7 @@ const Home = ({ searchQuery }) => {
               {currentItems.length > 0 ? (
                 currentItems.map((annonce) => (
                   <div
-                    key={annonce.id}
+                    key={annonce.uniqueId}
                     className="bg-white p-1 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 relative"
                   >
                     {annonce.photos && annonce.photos[0] ? (
@@ -303,7 +304,7 @@ const Home = ({ searchQuery }) => {
                             className="text-gray-500"
                           />
                           <span className="text-white ml-1 text-xs">
-                            {getElapsedTime(annonce.timestamps)}
+                            {getElapsedTime(annonce.timestamp)}
                           </span>
                         </div>
                       </div>
@@ -337,7 +338,7 @@ const Home = ({ searchQuery }) => {
                     </div>
                     <div
                       className={`absolute top-2 right-2 p-2 rounded-full bg-white bg-opacity-75 cursor-pointer transition-transform duration-300 ${
-                        favorites.some((fav) => fav.id === annonce.id)
+                        favorites.some((fav) => fav.uniqueId === annonce.uniqueId)
                           ? "text-red-500"
                           : "text-gray-500"
                       }`}

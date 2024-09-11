@@ -169,7 +169,7 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
   });
 
   // Ajouter le timestamp en millisecondes au FormData
-  formDataToSend.append('timestamp', Date.now()); // Ajouter le timestamp en millisecondes
+  formDataToSend.append('timestamp', Math.floor(Date.now() / 1000));
 
 
   try {
