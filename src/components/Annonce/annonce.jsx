@@ -168,6 +168,10 @@ const Annonce = ({ setAnnonces, annonces, profile }) => {
     }
   });
 
+  // Ajouter le timestamp en millisecondes au FormData
+  formDataToSend.append('timestamp', Date.now()); // Ajouter le timestamp en millisecondes
+
+
   try {
     const token = localStorage.getItem('token');
 

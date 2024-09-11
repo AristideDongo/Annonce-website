@@ -5,7 +5,7 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
   const navigate = useNavigate();
   const [sortOption, setSortOption] = useState('');   // État pour les options de tri
   const [profilePhoto, setProfilePhoto] = useState(null);   // État pour la photo de profil
-  const [sortedAnnonces, setSortedAnnonces] = useState(annonces);   // État pour les annonces triées
+  const [sortedAnnonces, setSortedAnnonces] = useState([]);   // État pour les annonces triées
   const [photoURL, setPhotoURL] = useState(profile.photoURL);   // État pour l'URL de la photo de profil
   // État pour les informations utilisateur
   const [userInfo, setUserInfo] = useState({
@@ -39,12 +39,29 @@ useEffect(() => {
   if (token) {
     // Si un token est présent, nous considérons l'utilisateur comme authentifié
     setIsAuthenticated(true);
+    fetchUserAnnonces();
   } else {
     // Sinon, rediriger l'utilisateur vers la page de connexion
     setIsAuthenticated(false);
     navigate('/User/sing-in');
   }
 }, [navigate]);
+
+const fetchUserAnnonces = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/api/annonces/getAll', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    const data = await response.json();
+    setSortedAnnonces(data); // Assuming response is the array of annonces
+  } catch (error) {
+    console.error('Erreur lors de la récupération des annonces:', error);
+  }
+};
 
 
   // Effet pour mettre à jour la photo de profil et les informations utilisateur lorsque le profil change
@@ -81,25 +98,27 @@ useEffect(() => {
       price: '',
     };
     let isValid = true;
-
+  
     if (!formData.title.trim()) {
       newErrors.title = 'Le titre est requis.';
       isValid = false;
     }
-
+  
     if (!formData.description.trim()) {
       newErrors.description = 'La description est requise.';
       isValid = false;
     }
-
-    if (!formData.price.trim() || isNaN(formData.price) || Number(formData.price) <= 0) {
+  
+    const priceString = String(formData.price).trim(); // Convertir en chaîne de caractères
+    if (!priceString || isNaN(priceString) || Number(priceString) <= 0) {
       newErrors.price = 'Le prix doit être un nombre positif.';
       isValid = false;
     }
-
+  
     setErrors(newErrors);
     return isValid;
   };
+  
 
   // Fonction pour confirmer la modification de l'annonce
   const handleConfirmEdit = async () => {
@@ -108,12 +127,19 @@ useEffect(() => {
         ...editAnnonce,
         ...formData,
       };
+
+
+    if (!editAnnonce.id) {
+      console.error('ID de l\'annonce est manquant.');
+      return;
+    }
   
       try {
-        await fetch(`http://localhost:3000/api/annonces/getId/${editAnnonce.id}`, {
+        await fetch(`http://localhost:3000/api/annonces/update/${editAnnonce.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
           },
           body: JSON.stringify(updatedAnnonce),
         });
@@ -164,6 +190,11 @@ useEffect(() => {
 
   // Effet pour trier les annonces en fonction de l'option de tri sélectionnée
   useEffect(() => {
+    if (!Array.isArray(annonces)) {
+      console.error('annonces is not an array:', annonces);
+      return;
+    }
+  
     let sorted = [...annonces];
     switch (sortOption) {
       case 'immobilier':

@@ -52,6 +52,8 @@ const Home = ({ searchQuery }) => {
         const annoncesData = await annoncesResponse.json();
         setAnnonces(annoncesData);
 
+        console.log(annoncesData);
+
       } catch (error) {
         console.error("Erreur lors de la récupération des données:", error);
         // Gérez l'erreur ici, par exemple en affichant un message d'erreur
@@ -131,7 +133,7 @@ const Home = ({ searchQuery }) => {
 
     try {
       // Appel à l'API pour ajouter ou retirer des favoris
-      const response = await fetch(`localhost:3000/api/favoris`, {
+      const response = await fetch(`http://localhost:3000/api/favoris`, {
         method: isFavorite ? "DELETE" : "POST",
         headers: {
           "Content-Type": "application/json",
@@ -289,7 +291,7 @@ const Home = ({ searchQuery }) => {
                     {annonce.photos && annonce.photos[0] ? (
                       <div className="relative">
                         <img
-                          src="http://localhost:3000/uploads/annonce/photos-1725983879493-712254103.jpg"
+                          src={`http://localhost:3000/uploads/annonce/${annonce.photos[0]}`}
                           alt="Annonce"
                           onClick={() => handleDetailClick(annonce)}
                           className="cursor-pointer w-full h-48 object-cover object-center rounded-t-lg"
