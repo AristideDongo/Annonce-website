@@ -17,22 +17,22 @@ const Profile = ({ annonces, deleteAnnonce, updateAnnonce, profile, updateProfil
   const [selectedAnnonces, setSelectedAnnonces] = useState([]);   // État pour les annonces sélectionnées pour suppression
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);   // État pour afficher la confirmation de suppression
   const [showPhotoPopup, setShowPhotoPopup] = useState(false);   // État pour afficher le popup de photo
-  // const [editAnnonce, setEditAnnonce] = useState(null);   // État pour l'annonce en cours de modification
-  // const [showEditPopup, setShowEditPopup] = useState(false);   // État pour afficher le popup de modification
+  const [editAnnonce, setEditAnnonce] = useState(null);   // État pour l'annonce en cours de modification
+  const [showEditPopup, setShowEditPopup] = useState(false);   // État pour afficher le popup de modification
  
-  // // État pour les données du formulaire de modification d'annonce
-  // const [formData, setFormData] = useState({
-  //   title: '',
-  //   description: '',
-  //   price: '',
-  // });
+  // État pour les données du formulaire de modification d'annonce
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    price: '',
+  });
 
   // État pour les erreurs de validation du formulaire
-  // const [errors, setErrors] = useState({
-  //   title: '',
-  //   description: '',
-  //   price: '',
-  // });
+  const [errors, setErrors] = useState({
+    title: '',
+    description: '',
+    price: '',
+  });
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -76,92 +76,92 @@ const fetchUserAnnonces = async () => {
   }, [profile]);
 
   // Fonction pour ouvrir le popup de modification d'annonce
-  // const handleEditClick = (annonce) => {
-  //   setFormData({
-  //     title: annonce.title,
-  //     description: annonce.description,
-  //     price: annonce.price,
-  //   });
-  //   setEditAnnonce(annonce);
-  //   setShowEditPopup(true);
-  // };
+  const handleEditClick = (annonce) => {
+    setFormData({
+      title: annonce.title,
+      description: annonce.description,
+      price: annonce.price,
+    });
+    setEditAnnonce(annonce);
+    setShowEditPopup(true);
+  };
 
   // Fonction pour fermer le popup de modification d'annonce
-  // const handleCloseEditPopup = () => {
-  //   setShowEditPopup(false);
-  //   setEditAnnonce(null);
-  // };
+  const handleCloseEditPopup = () => {
+    setShowEditPopup(false);
+    setEditAnnonce(null);
+  };
 
   // Fonction de validation du formulaire de modification
-  // const validateForm = () => {
-  //   const newErrors = {
-  //     title: '',
-  //     description: '',
-  //     price: '',
-  //   };
-  //   let isValid = true;
+  const validateForm = () => {
+    const newErrors = {
+      title: '',
+      description: '',
+      price: '',
+    };
+    let isValid = true;
   
-  //   if (!formData.title.trim()) {
-  //     newErrors.title = 'Le titre est requis.';
-  //     isValid = false;
-  //   }
+    if (!formData.title.trim()) {
+      newErrors.title = 'Le titre est requis.';
+      isValid = false;
+    }
   
-  //   if (!formData.description.trim()) {
-  //     newErrors.description = 'La description est requise.';
-  //     isValid = false;
-  //   }
+    if (!formData.description.trim()) {
+      newErrors.description = 'La description est requise.';
+      isValid = false;
+    }
   
-  //   const priceString = String(formData.price).trim(); // Convertir en chaîne de caractères
-  //   if (!priceString || isNaN(priceString) || Number(priceString) <= 0) {
-  //     newErrors.price = 'Le prix doit être un nombre positif.';
-  //     isValid = false;
-  //   }
+    const priceString = String(formData.price).trim(); // Convertir en chaîne de caractères
+    if (!priceString || isNaN(priceString) || Number(priceString) <= 0) {
+      newErrors.price = 'Le prix doit être un nombre positif.';
+      isValid = false;
+    }
   
-  //   setErrors(newErrors);
-  //   return isValid;
-  // };
+    setErrors(newErrors);
+    return isValid;
+  };
   
 
   // Fonction pour confirmer la modification de l'annonce
-  // const handleConfirmEdit = async () => {
-  //   if (validateForm() && editAnnonce) {
-  //     const updatedAnnonce = {
-  //       ...editAnnonce,
-  //       title: formData.title,
-  //       description: formData.description,
-  //       price: formData.price,
-  //       photos: editAnnonce.photos || [],
-  //     };
+  const handleConfirmEdit = async () => {
+    if (validateForm() && editAnnonce) {
+      const updatedAnnonce = {
+        ...editAnnonce,
+        title: formData.title,
+        description: formData.description,
+        price: formData.price,
+        photos: editAnnonce.photos || [],
+      };
   
-  //     const annonceId = editAnnonce.id || editAnnonce._id;
+      const annonceId = editAnnonce.id || editAnnonce._id;
   
-  //     if (!annonceId) {
-  //       console.error("ID de l'annonce est manquant.");
-  //       return;
-  //     }
+      if (!annonceId) {
+        console.error("ID de l'annonce est manquant.");
+        return;
+      }
   
-  //     try {
-  //       await fetch(`http://localhost:3000/api/annonces/update/${annonceId}`, {
-  //         method: 'PUT',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           'Authorization': `Bearer ${localStorage.getItem('token')}`,
-  //         },
-  //         body: JSON.stringify(updatedAnnonce),
-  //       });
+      try {
+        await fetch(`http://localhost:3000/api/annonces/update/${annonceId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
+          body: JSON.stringify(updatedAnnonce),
+        });
   
-  //       // Mise à jour locale après succès
-  //       updateAnnonce(updatedAnnonce);
-  //       const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-  //       const updatedFavorites = favorites.map(fav => fav.id === annonceId ? updatedAnnonce : fav);
-  //       localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-  //     } catch (error) {
-  //       console.error("Erreur lors de la mise à jour de l'annonce:", error);
-  //     }
+        // Mise à jour locale après succès
+        updateAnnonce(updatedAnnonce);
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const updatedFavorites = favorites.map(fav => fav.id === annonceId ? updatedAnnonce : fav);
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      } catch (error) {
+        console.error("Erreur lors de la mise à jour de l'annonce:", error);
+      }
   
-  //     handleCloseEditPopup();
-  //   }
-  // };
+      handleCloseEditPopup();
+    }
+  };
   
   
 
@@ -194,50 +194,6 @@ const fetchUserAnnonces = async () => {
       setUserInfo(JSON.parse(savedUserInfo));
     }
   }, []);
-
-  // Effet pour trier les annonces en fonction de l'option de tri sélectionnée
-  useEffect(() => {
-    if (!Array.isArray(annonces)) {
-      console.error('annonces is not an array:', annonces);
-      return;
-    }
-  
-    let sorted = [...annonces];
-    switch (sortOption) {
-      case 'immobilier':
-        sorted = sorted.filter(annonce => annonce.category === 'immobilier');
-        break;
-      case 'vehicule':
-        sorted = sorted.filter(annonce => annonce.category === 'vehicule');
-        break;
-      case 'electronique':
-        sorted = sorted.filter(annonce => annonce.category === 'electronique');
-        break;
-      case 'electromenager':
-        sorted = sorted.filter(annonce => annonce.category === 'electromenager');
-        break;
-      case 'mode-homme':
-        sorted = sorted.filter(annonce => annonce.category === 'mode-homme');
-        break;
-      case 'mode-femme':
-        sorted = sorted.filter(annonce => annonce.category === 'mode-femme');
-        break;
-      case 'mode-enfant':
-        sorted = sorted.filter(annonce => annonce.category === 'mode-enfant');
-        break;
-      case 'autres':
-        sorted = sorted.filter(annonce => annonce.category === 'autres');
-        break;
-      default:
-        sorted = annonces;
-    }
-    setSortedAnnonces(sorted);
-  }, [sortOption, annonces]);
-
-  // Fonction pour gérer le changement d'option de tri
-  const handleSortChange = (event) => {
-    setSortOption(event.target.value);
-  };
 
   // Fonction pour gérer le changement de photo de profil
   const handlePhotoChange = (event) => {
@@ -294,13 +250,17 @@ const fetchUserAnnonces = async () => {
   // Fonction pour confirmer la suppression des annonces sélectionnées
   const handleConfirmDelete = async () => {
     try {
-      await Promise.all(selectedAnnonces.map(id => 
-        fetch(`http://localhost:3000/api/annonces/delete/${id}`, {
+      await Promise.all(selectedAnnonces.map(_id => 
+        fetch(`http://localhost:3000/api/annonces/delete/${_id}`, {
           method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
         })
       ));
-      selectedAnnonces.forEach(id => {
-        deleteAnnonce(id);
+      selectedAnnonces.forEach(_id => {
+        deleteAnnonce(_id);
       });
       setSelectedAnnonces([]);
     } catch (error) {
@@ -311,13 +271,13 @@ const fetchUserAnnonces = async () => {
   
 
   // Fonction pour gérer les changements dans le formulaire de modification d'annonce
-  // const handleInputChange = (event) => {
-  //   const { name, value } = event.target;
-  //   setFormData({
-  //     ...formData,
-  //     [name]: value,
-  //   });
-  // };
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   // Fonction pour tronquer le texte au-dessus d'une certaine longueur
   const truncateText = (text, maxLength) => {
@@ -379,28 +339,9 @@ const fetchUserAnnonces = async () => {
           </div>
           <div className="mt-8">
             <h3 className="text-2xl font-bold text-gray-800">Mes annonces</h3>
-            <div className="mt-4">
-              <label htmlFor="sort" className="block text-gray-700 font-semibold">Trier par:</label>
-              <select
-                id="sort"
-                value={sortOption}
-                onChange={handleSortChange}
-                className="mt-2 bg-gray-300 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-              >
-                <option value="">Sélectionner une option</option>
-                <option value="immobilier">IMMOBILIER</option>
-                <option value="vehicule">VEHICULE</option>
-                <option value="electronique">ELECTRONIQUE</option>
-                <option value="electromenager">ELECTROMENAGER</option>
-                <option value="mode-homme">MODE HOMME</option>
-                <option value="mode-femme">MODE FEMME</option>
-                <option value="mode-enfant">MODE ENFANT</option>
-                <option value="autres">AUTRES</option>
-              </select>
-            </div>
             <ul className="mt-6 space-y-4">
               {sortedAnnonces.map((annonce) => (
-                <li key={annonce.id} className="bg-gray-50 p-5 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <li key={annonce._id} className="bg-gray-50 p-5 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                   <h2
                     onClick={() => handleDetailClick(annonce)}
                     className="text-lg font-bold break-words mb-2 text-black"
@@ -415,16 +356,16 @@ const fetchUserAnnonces = async () => {
                   >
                     Détail
                   </button>
-                  {/* <button
+                  <button
                     onClick={() => handleEditClick(annonce)}
                     className="mt-3 ml-5 px-4 py-2 bg-[#3498DB] text-white rounded-lg hover:bg-[#2980B9] transition-transform duration-300 transform hover:scale-105"
                   >
                     Modifier
-                  </button> */}
+                  </button>
                   <input
                     type="checkbox"
-                    checked={selectedAnnonces.includes(annonce.id)}
-                    onChange={() => handleSelectAnnonce(annonce.id)}
+                    checked={selectedAnnonces.includes(annonce._id)}
+                    onChange={() => handleSelectAnnonce(annonce._id)}
                     className="ml-4 transform scale-125"
                   />
                 </li>
@@ -459,7 +400,7 @@ const fetchUserAnnonces = async () => {
                 </div>
               </div>
             )}
-            {/* {showEditPopup && (
+            {showEditPopup && (
               <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div className="bg-white p-8 rounded-lg shadow-lg text-center">
                   <h2 className="text-2xl font-semibold mb-4 text-yellow-600">Modifier l'annonce</h2>
@@ -519,7 +460,7 @@ const fetchUserAnnonces = async () => {
                   </form>
                 </div>
               </div>
-            )} */}
+            )}
           </div>
         </div>
       </div>

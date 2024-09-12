@@ -154,7 +154,7 @@ const Immobilier = ({ searchQuery }) => {
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
               {currentItems.length > 0 ? (
                 currentItems.map((annonce) => (
-                  <div key={annonce.id} className="bg-white p-1 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                  <div key={annonce._id} className="bg-white p-1 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                     {annonce.photos && annonce.photos[0] ? (
                       <div className="relative">
                         <img

@@ -17,19 +17,33 @@ const Favoris = ({searchQuery}) => {
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const response = await fetch(' http://localhost:3000/api/favoris/get'); // Remplacez par l'URL de votre API
+        const token = localStorage.getItem('token'); // Assurez-vous que le token est stocké dans le localStorage
+        const response = await fetch('http://localhost:3000/api/favoris/get', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, // Ajout du token JWT dans l'en-tête
+          },
+        });
+  
         if (!response.ok) {
           throw new Error('Erreur lors de la récupération des favoris');
         }
+  
         const data = await response.json();
-        setFavorites(data);
+        if (Array.isArray(data)) {
+          setFavorites(data); // Assurez-vous que data est un tableau
+        } else {
+          console.error('Les données récupérées ne sont pas un tableau');
+        }
       } catch (error) {
         console.error('Erreur:', error);
       }
     };
-
+  
     fetchFavorites();
   }, []);
+  
 
 
   // Effet pour filtrer et trier les favoris en fonction de la recherche et des options de tri

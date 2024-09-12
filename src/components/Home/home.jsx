@@ -129,28 +129,29 @@ const Home = ({ searchQuery }) => {
 
   // Gestionnaire de clic pour ajouter/supprimer une annonce des favoris
   const handleFavoriteClick = async (annonce) => {
-    const isFavorite = favorites.some((fav) => fav.uniqueId === annonce.uniqueId);
-    const token = localStorage.getItem("token");
-  
+    const isFavorite = favorites.some((fav) => fav._id === annonce._id);
+    
     try {
-      const response = await fetch(`http://localhost:3000/api/favoris/${isFavorite ? "delete" : "add"}/${annonce.uniqueId}`, {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:3000/api/favoris/${isFavorite ? "delete" : "add"}/${annonce._id}`, {
         method: isFavorite ? "DELETE" : "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify({ annonceId: annonce.uniqueId }),
-      });
+        ...(isFavorite ? {} : { body: JSON.stringify({ annonceId: annonce._id }) }), // Ajoutez le corps uniquement pour POST
+      });      
   
       if (response.ok) {
         const updatedFavorites = isFavorite
-          ? favorites.filter((fav) => fav.uniqueId !== annonce.uniqueId)
+          ? favorites.filter((fav) => fav._id !== annonce._id)
           : [...favorites, annonce];
-  
         setFavorites(updatedFavorites);
       } else {
-        console.error("Erreur lors de la mise à jour des favoris");
+        const errorData = await response.json();
+        console.error("Erreur lors de la mise à jour des favoris:", errorData);
       }
+      
     } catch (error) {
       console.error("Erreur réseau", error);
     }
@@ -286,7 +287,7 @@ const Home = ({ searchQuery }) => {
               {currentItems.length > 0 ? (
                 currentItems.map((annonce) => (
                   <div
-                    key={annonce.uniqueId}
+                    key={annonce._id}
                     className="bg-white p-1 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 relative"
                   >
                     {annonce.photos && annonce.photos[0] ? (
